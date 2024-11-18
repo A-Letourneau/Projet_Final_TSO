@@ -1,18 +1,19 @@
-/*********
-  Rui Santos
-  Complete project details at https://randomnerdtutorials.com  
-*********/
+#include <Wire.h> 
 #include <Arduino.h>
-#include <Wire.h>
 #include <WiFi.h>
 #include <string.h>
-#include <ArduinoJson.h>
 #include <time.h>
 #include <chrono>
+#include <list>
 
-#define I2C_DEV_ADDR 0x08
+#define SLAVE_ADDR 0x0a  // Adresse de l'esclave 
 
+void requestData();
 
+// Tableau de données à envoyer au maître 
+char dataToSend[] = "Bonjour Master!"; 
+char charToSend[100] = "";
+ 
 // NTP server to request epoch time
 const char* ntpServer = "pool.ntp.org";
 
@@ -35,12 +36,14 @@ String sw2Name = "sw2";
 String btn1Name = "btn1";
 
 String myName = "enigmeTest1";
+String stringOfAllData = "";
 
 const char *mqtt_broker = "broker.emqx.io";
 const char *topic = "emqx/esp32";
 const char *mqtt_username = "emqx";
 const char *mqtt_password = "public";
 const int mqtt_port = 1883;
+
 
 unsigned long getTime() {
   time_t now;
@@ -60,15 +63,25 @@ void initWiFi() {
   Serial.print("Connecting to WiFi ..");
   while (WiFi.status() != WL_CONNECTED) {
     Serial.print('.');
-    delay(1000);
+    delay(500);
   }
   Serial.println(WiFi.localIP());
 }
 
-void setup() {
-  Serial.begin(115200);
-  Wire.setPins(8,9);
-  Wire.begin();
+void setup() { 
+
+  // Initialisation du port série pour le debug 
+  Serial.begin(115200); 
+
+  // Initialisation de l'I2C en tant qu'esclave avec l'adresse définie 
+  Wire.setPins(17, 18);
+  Wire.begin(SLAVE_ADDR); 
+
+  // Attacher une fonction de demande (request) pour le maître 
+  Wire.onRequest(requestData); 
+
+  Serial.println("Slave prêt, en attente de requêtes du maître..."); 
+
   pinMode(sw1Pin, INPUT);
   pinMode(sw2Pin, INPUT);
   pinMode(btn1Pin, INPUT);
@@ -78,17 +91,18 @@ void setup() {
   btn1State = digitalRead(btn1Pin);
   initWiFi();
   configTime(0, 0, ntpServer);
-}
+} 
+ 
 
-void loop() {
-
+void loop() { 
+  
   while(sw1State == digitalRead(sw1Pin) && sw2State == digitalRead(sw2Pin) && btn1State == digitalRead(btn1Pin))
   {
     sw1State = digitalRead(sw1Pin);
     sw2State = digitalRead(sw2Pin);
     btn1State = digitalRead(btn1Pin);
   }
-  String stringOfAllData = "";
+
 
   String stringOfInteractable = "{\"" + sw1Name + "\":\"" + sw1State + "\",\"" 
                                     + sw2Name + "\":\"" + sw2State + "\",\"" 
@@ -98,28 +112,37 @@ void loop() {
 
   Serial.println(stringOfAllData);
 
+  /*for (int i = 0; i < sizeof(stringOfAllData); i++) {
+    charToSend[i] = stringOfAllData[i];
+    Serial.println(charToSend[i]);
+  }*/
+
+  for (int i = 0; i < 100; i++) {
+    charToSend[i] = stringOfAllData[i];
+    Serial.print(charToSend[i]);
+    Serial.print(" ");
+  }
+
+
   delay(10);
 
   sw1State = digitalRead(sw1Pin);
   sw2State = digitalRead(sw2Pin);
   btn1State = digitalRead(btn1Pin);
+} 
 
+ 
+// Fonction appelée lorsque le maître demande des données 
 
+void requestData() { 
 
-// Write message to the slave
-Wire.beginTransmission(I2C_DEV_ADDR);
-Wire.printf("Hello World! %lu", i++);
-uint8_t error = Wire.endTransmission(true);
-Serial.printf("endTransmission: %u\n", error);
+  Serial.println("request");
+  // Envoyer les données du tableau `dataToSend` au maître 
+  Serial.println(sizeof(charToSend));
+  for (int i = 0; i < sizeof(charToSend); i++) { 
+    Serial.println(charToSend[i]);
+    Wire.write(charToSend[i]);  // Envoyer chaque caractère 
+  } 
+  // Vous pouvez aussi envoyer d'autres types de données comme des entiers, des flottants, etc. 
 
-// Read 16 bytes from the slave
-uint8_t bytesReceived = Wire.requestFrom(I2C_DEV_ADDR, 16);
-
-Serial.printf("requestFrom: %u\n", bytesReceived);
-if ((bool)bytesReceived) {  //If received more than zero bytes
-  uint8_t temp[bytesReceived];
-  Wire.readBytes(temp, bytesReceived);
-  log_print_buf(temp, bytesReceived);
-  }
-}
-
+} 
