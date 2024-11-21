@@ -35,7 +35,7 @@ et les matières vues en classe. Explorez une mallette remplit de mystère et d�
 Pour toute question ou suggestion :
 
 Pour contacté Louis :
-- Email : a21.202135365@cegepsherbroke.qc.ca
+- Email : A21.louis.boisvert@cegepsherbrooke.qc.ca
 - GitHub : https://github.com/L3MMINGS
 
 Pour Contacté Alexis :
