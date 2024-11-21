@@ -34,11 +34,11 @@ et les matières vues en classe. Explorez une mallette remplit de mystère et d�
 📧 Contact
 Pour toute question ou suggestion :
 
-Pour contacté Louis :
+**Pour contacté Louis :**
 - Email : A21.louis.boisvert@cegepsherbrooke.qc.ca
 - GitHub : https://github.com/L3MMINGS
 
-Pour Contacté Alexis :
+**Pour contacté Alexis :**
 - Email : a22.alexis.letourneau@cegepsherbrooke.qc.ca
 - GitHub : https://github.com/A-Letourneau
 
