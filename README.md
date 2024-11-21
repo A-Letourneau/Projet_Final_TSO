@@ -35,11 +35,11 @@ et les matières vues en classe. Explorez une mallette remplit de mystère et d�
 Pour toute question ou suggestion :
 
 Pour contacté Louis :
-- Email : A21.202135365@cegepsherbroke.qc.ca
+- Email : a21.202135365@cegepsherbroke.qc.ca
 - GitHub : https://github.com/L3MMINGS
 
 Pour Contacté Alexis :
-- Email : votre.email@example.com
-- GitHub : https://github.com/nom-utilisateur
+- Email : a22.alexis.letourneau@cegepsherbrooke.qc.ca
+- GitHub : https://github.com/A-Letourneau
 
 Bon jeu et amusez-vous à vous échapper ! 🚪✨
