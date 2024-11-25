@@ -26,9 +26,6 @@ et les matières vues en classe. Explorez une mallette remplit de mystère et d�
 - Les outils nécessaires : [Python, C++, SimpleGUI]
 - Matériel physique : [Raspberry Pi4b, esp32C3 DevKit2, bouton, potentiomètre, switch]
 
-### Étapes
-1. ...à définir
-
 ---
 
 📧 Contact
