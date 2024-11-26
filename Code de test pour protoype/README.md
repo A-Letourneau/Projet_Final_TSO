@@ -1,18 +1,28 @@
-# Collection des codes pour le prototype de la mallette 
+# Collection des Codes pour le Prototype de la Mallette 🚀🌙
 
-Cette Partie est composé de 3 documents importants servant au fonctionnalité du prototype, les fichiers simple présent sont les codes qui ont servis de base pour le prototype:
+Ce dépôt regroupe trois ensembles de fichiers essentiels pour le fonctionnement du prototype. En plus, il inclut des fichiers individuels qui ont servi de base pour le développement.
 
-## I2C et Json du ESP32 🚀🌙
- Ce dossier contient le code C++ qui est inséré dans les ESP32 pour leur permettre d'envoyer des JSON au serveur MQTT du cégep
- ---
+## 📂 I2C et JSON pour ESP32  
+Ce dossier contient le code en C++ chargé dans les ESP32.  
+Il permet à ces derniers d’envoyer des messages JSON au serveur MQTT du Cégep.  
 
-## Mallette GUI 
-  Ce dossier contient le code Python nécessaire pour afficher à l'écran les donnés qu'il déchiffre des JSON qu'il reçoit. L'affichage se produit grâce à SimpleGUI
-  ---
+---
 
-## Projet Final MQTT 
-  Ce dossier contient les base de donnés SQLite utilisés dans notre projet, ainsi que les codes Python pour la gestion d'envoie et de réception des données 
-  ---
+## 📂 Interface Graphique (Mallette GUI)  
+Ce dossier contient le code Python nécessaire pour afficher les données reçues sous forme de JSON.  
+L’affichage à l’écran est réalisé à l’aide de la bibliothèque **SimpleGUI**.  
+
+---
+
+## 📂 Projet Final MQTT  
+Ce dossier contient :  
+- Les bases de données SQLite utilisées dans le projet.  
+- Les codes Python responsables de la gestion de l’envoi et de la réception des données via MQTT.  
+
+---
+
+### 🛠️ Notes
+Chaque dossier est structuré pour permettre une utilisation autonome des fonctionnalités qu’il contient. Consultez les fichiers README individuels dans chaque dossier pour plus de détails.
 
 Correction
 
