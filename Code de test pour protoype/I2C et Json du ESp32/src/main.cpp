@@ -70,7 +70,7 @@ void requestData() {
                                       + sw2Name + "\":\"" + sw2State + "\",\"" 
                                       + btn1Name + "\":\"" + btn1State +"\"}";
 
-  stringOfAllData = "{\"NomEsp32\":\"" + myName 
+  stringOfAllData = "{\"NomESP32\":\"" + myName 
                    + "\",\"JsonData\":" + stringOfInteractable + "}";
 
   // Envoyer les données du tableau `dataToSend` au maître 

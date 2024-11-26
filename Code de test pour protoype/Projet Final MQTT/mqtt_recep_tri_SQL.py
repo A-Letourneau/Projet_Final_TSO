@@ -1,9 +1,15 @@
 import paho.mqtt.client as paho
 import json
 import sqlite3
+import time
 
 """
-Exemple de Json
+Exemple de Json recu
+{
+  "NomEsp32": "enigmeTest1",
+  "JsonData": '{ "sw1": "0", "sw2": "0", "btn1": "0" }'
+}
+Exemple de Json complet
 {
   "Id": 1,
   "NomRaspPI": "RASP_PI_MASTER",
@@ -15,11 +21,11 @@ Exemple de Json
   "TempsDepuisLaDerniereEtape": "0m30",
   "EtapeReussi": 1,
   "MalletteReussi": 1,
-  "JsonRecu" : '{"BTN_1" : 1, "POT_2" : 12.34}'
+  "JsonData" : '{"BTN_1" : 1, "POT_2" : 12.34}'
 }
 """
 sqliteFile = 'DB_Mallette.sqlite'
-
+nameOfPI = "PI_MASTER"
 curID = 0
 
 ##########################################################################
@@ -44,19 +50,20 @@ def on_message(client, userdata, msg):
             TempsDepuisLeDebut         TEXT,
             EtapeReussi                INTEGER,
             MalletteReussi             INTEGER,
-            JsonRecu                   TEXT
+            JsonData                   TEXT
         );'''
                 )
 
     reception = str(msg.payload.decode('utf-8')) 
 
     print(reception)
-
+    
     try:        #DEbug des erreur du Json
         dictReceived = json.loads(reception) #Transforme le message recu en json
         #print(listDictPlain)
     except json.JSONDecodeError as e:
         print("Erreur au niveau du la convertion du json")
+    
 
    #Trouve le ID le plus grand des table 
     currentIdNb = 'Select MAX(Id) FROM DataMallette'
@@ -66,12 +73,69 @@ def on_message(client, userdata, msg):
         curID = currentIdNb[0] + 1
     else :
         curID = 1
+    """
+    Exemple de Json recu
+    {
+    "NomEsp32": "enigmeTest1",
+    "JsonData": '{ "sw1": "0", "sw2": "0", "btn1": "0" }'
+    }
+    Exemple de Json complet
+    {
+    "Id": 1, *
+    "NomRaspPI": "RASP_PI_MASTER", *
+    "NomESP32": "ESP_BOUTON", (Deja inclu)
+    "Timestamp": 123456789, *
+    "NumeroDeEssai": 2, (Ne peut pas encore être déterminé)
+    "TempsDepuisLeDebut": "1m30",
+    "EtapeDeEnigme": 4, (Ne peut pas encore être déterminé)
+    "TempsDepuisLaDerniereEtape": "0m30",
+    "EtapeReussi": 1, (Ne peut pas encore être déterminé)
+    "MalletteReussi": 1, (Ne peut pas encore être déterminé)
+    "JsonData" : '{"BTN_1" : 1, "POT_2" : 12.34}'
+    }
+    """
 
     dictReceived['Id'] = curID
+    dictReceived['NomRaspPI'] = nameOfPI
+    dictReceived["Timestamp"] = int(time.time())
+    dictReceived["NumeroDeEssai"] = 0
+    dictReceived["EtapeDeEnigme"] = 0
+
+    findStartTimeQuery = 'Select MIN(timestamp) FROM DataMallette WHERE NumeroDeEssai = {nbEssai}'.format(nbEssai=dictReceived["NumeroDeEssai"])
+    cur.execute(findStartTimeQuery)
+    findStartTimeQuery = cur.fetchone()
+    findStartTimeQuery[0] = int(findStartTimeQuery[0])
+    if isinstance(findStartTimeQuery[0], int): # Si c'est la premiere donne
+        dictReceived["TempsDepuisLeDebut"] = time.time() - findStartTimeQuery[0]
+    else :
+        print("Premiere donnee Debut")
+        dictReceived["TempsDepuisLeDebut"] = 0
+
+
+    dictReceived["TempsDepuisLeDebut"] = str(dictReceived["TempsDepuisLeDebut"])
+
+    findStartTimeQuery = 'Select MIN(timestamp) FROM DataMallette WHERE EtapeDeEnigme = {nbEssai}'.format(nbEssai=dictReceived["EtapeDeEnigme"])
+    cur.execute(findStartTimeQuery)
+    findStartTimeQuery = cur.fetchone()
+    findStartTimeQuery[0] = int(findStartTimeQuery[0])
+    if isinstance(findStartTimeQuery[0], int): 
+        dictReceived["TempsDepuisLaDerniereEtape"] = time.time() - findStartTimeQuery[0]
+    else :  #Si c'est la premiere donnee
+        print("Premiere donnee Etape")
+        dictReceived["TempsDepuisLaDerniereEtape"] = 0
+
+    dictReceived["TempsDepuisLaDerniereEtape"] = str(dictReceived["TempsDepuisLaDerniereEtape"])
+
+    dictReceived["EtapeReussi"] = 0
+    dictReceived["MalletteReussi"] = 0
+    dictReceived["JsonData"] = str(dictReceived["JsonData"])
+
+    print(dictReceived["JsonData"])
+    print(type(dictReceived["JsonData"]))
 
     cur.execute('''
-    INSERT INTO DataMallette (Id, Timestamp, NomRaspPI, NomESP32,  NumeroDeEssai, EtapeDeEnigme, TempsDepuisLaDerniereEtape, TempsDepuisLeDebut, EtapeReussi, MalletteReussi, JsonRecu)
-    VALUES (:Id, :Timestamp, :NomRaspPI, :NomESP32, :NumeroDeEssai, :EtapeDeEnigme, :TempsDepuisLaDerniereEtape, :TempsDepuisLeDebut, :EtapeReussi, :MalletteReussi, :JsonRecu)
+    INSERT INTO DataMallette (Id, Timestamp, NomRaspPI, NomESP32,  NumeroDeEssai, EtapeDeEnigme, TempsDepuisLaDerniereEtape, TempsDepuisLeDebut, EtapeReussi, MalletteReussi, JsonData)
+    VALUES (:Id, :Timestamp, :NomRaspPI, :NomESP32, :NumeroDeEssai, :EtapeDeEnigme, :TempsDepuisLaDerniereEtape, :TempsDepuisLeDebut, :EtapeReussi, :MalletteReussi, :JsonData)
     ''', dictReceived)
 
     conn.commit()

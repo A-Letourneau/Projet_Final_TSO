@@ -1,1 +1,0 @@
-Documentation qui n'est pas du code mais qui rapporte au projet.
