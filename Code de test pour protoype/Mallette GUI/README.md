@@ -16,6 +16,7 @@ Ce dossier contient plusieurs codes de test permettant de vérifier les fonction
 4. **Test d’affichage de LED virtuel selon la position réelle des interrupteurs :**  
    Affiche l’état des LEDs en fonction des positions physiques des interrupteurs connectés au circuit.  
 
+5. **Code finale de l'interface graphique en pysimplegui et de la communication I2C et mqtt dans le pi**
 ---
 
 ### Remarque  

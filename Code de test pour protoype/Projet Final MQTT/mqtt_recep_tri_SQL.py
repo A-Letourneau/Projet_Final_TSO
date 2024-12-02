@@ -37,7 +37,7 @@ def on_message(client, userdata, msg):
     # Création d'un curseur pour exécuter des commandes SQL
     conn = sqlite3.connect(sqliteFile)
     cur = conn.cursor()
-    #Crée 3 tables pour enregistrer les data
+    #Crée tables pour enregistrer les data
     cur.execute(
         '''CREATE TABLE IF NOT EXISTS DataMallette (
             Id                         INTEGER PRIMARY KEY,
@@ -65,7 +65,7 @@ def on_message(client, userdata, msg):
         print("Erreur au niveau du la convertion du json")
     
 
-   #Trouve le ID le plus grand des table 
+    #Trouve le ID le plus grand des table 
     currentIdNb = 'Select MAX(Id) FROM DataMallette'
     cur.execute(currentIdNb)
     currentIdNb = cur.fetchone()
@@ -73,40 +73,18 @@ def on_message(client, userdata, msg):
         curID = currentIdNb[0] + 1
     else :
         curID = 1
-    """
-    Exemple de Json recu
-    {
-    "NomEsp32": "enigmeTest1",
-    "JsonData": '{ "sw1": "0", "sw2": "0", "btn1": "0" }'
-    }
-    Exemple de Json complet
-    {
-    "Id": 1, *
-    "NomRaspPI": "RASP_PI_MASTER", *
-    "NomESP32": "ESP_BOUTON", (Deja inclu)
-    "Timestamp": 123456789, *
-    "NumeroDeEssai": 2, (Ne peut pas encore être déterminé)
-    "TempsDepuisLeDebut": "1m30",
-    "EtapeDeEnigme": 4, (Ne peut pas encore être déterminé)
-    "TempsDepuisLaDerniereEtape": "0m30",
-    "EtapeReussi": 1, (Ne peut pas encore être déterminé)
-    "MalletteReussi": 1, (Ne peut pas encore être déterminé)
-    "JsonData" : '{"BTN_1" : 1, "POT_2" : 12.34}'
-    }
-    """
 
     dictReceived['Id'] = curID
     dictReceived['NomRaspPI'] = nameOfPI
     dictReceived["Timestamp"] = int(time.time())
-    dictReceived["NumeroDeEssai"] = 0
+    dictReceived["NumeroDeEssai"] = 1
     dictReceived["EtapeDeEnigme"] = 0
 
     findStartTimeQuery = 'Select MIN(timestamp) FROM DataMallette WHERE NumeroDeEssai = {nbEssai}'.format(nbEssai=dictReceived["NumeroDeEssai"])
     cur.execute(findStartTimeQuery)
     findStartTimeQuery = cur.fetchone()
-    findStartTimeQuery[0] = int(findStartTimeQuery[0])
     if isinstance(findStartTimeQuery[0], int): # Si c'est la premiere donne
-        dictReceived["TempsDepuisLeDebut"] = time.time() - findStartTimeQuery[0]
+        dictReceived["TempsDepuisLeDebut"] = int(time.time()) - findStartTimeQuery[0]
     else :
         print("Premiere donnee Debut")
         dictReceived["TempsDepuisLeDebut"] = 0
@@ -117,9 +95,8 @@ def on_message(client, userdata, msg):
     findStartTimeQuery = 'Select MIN(timestamp) FROM DataMallette WHERE EtapeDeEnigme = {nbEssai}'.format(nbEssai=dictReceived["EtapeDeEnigme"])
     cur.execute(findStartTimeQuery)
     findStartTimeQuery = cur.fetchone()
-    findStartTimeQuery[0] = int(findStartTimeQuery[0])
     if isinstance(findStartTimeQuery[0], int): 
-        dictReceived["TempsDepuisLaDerniereEtape"] = time.time() - findStartTimeQuery[0]
+        dictReceived["TempsDepuisLaDerniereEtape"] = int(time.time()) - findStartTimeQuery[0]
     else :  #Si c'est la premiere donnee
         print("Premiere donnee Etape")
         dictReceived["TempsDepuisLaDerniereEtape"] = 0
@@ -129,7 +106,7 @@ def on_message(client, userdata, msg):
     dictReceived["EtapeReussi"] = 0
     dictReceived["MalletteReussi"] = 0
     dictReceived["JsonData"] = str(dictReceived["JsonData"])
-
+    dictReceived["JsonData"] = dictReceived["JsonData"].replace("\'", "\"")
     print(dictReceived["JsonData"])
     print(type(dictReceived["JsonData"]))
 
