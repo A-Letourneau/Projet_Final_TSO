@@ -40,7 +40,7 @@ window_BTN = sg.Window('Game Interface_BTN', layout_BTN, default_element_size=(1
 layout_POT_SW = [
                     [sg.Text('My LED Status Indicators', size=(20,1))],
                     [sg.Text('SW1'),  sg.Text('SW2'),  sg.Text('POT1'), sg.Text('POT2'), sg.Text('POT3'),],
-                    [sg.Image(source=toggle_btn_off, key="SW1_PIC"), sg.Image(source=toggle_btn_off, key="SW2_PIC"), sg.ProgressBar(65200, key='POT1'), sg.ProgressBar(65200, key='POT2'), sg.ProgressBar(65200, key='POT3')]
+                    [sg.Image(source=toggle_btn_off, key="SW1_PIC"), sg.Image(source=toggle_btn_off, key="SW2_PIC"), sg.ProgressBar(65200, key='POT1', size=(10,10)), sg.ProgressBar(65200, key='POT2',size=(10,10)), sg.ProgressBar(65200, key='POT3',size=(10,10))]
                 ]
 
 
