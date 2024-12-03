@@ -53,7 +53,7 @@ void setup() {
   Wire.onRequest(requestData); 
 
   Serial.println("Slave prêt, en attente de requêtes du maître..."); 
-
+  //Initialise les patte en entrée
   pinMode(Btn1Pin, INPUT);
   pinMode(Btn2Pin, INPUT);
   pinMode(Btn3Pin, INPUT);
@@ -67,25 +67,26 @@ void loop()
 
  
 // Fonction appelée lorsque le maître demande des données 
-
 void requestData() { 
-  
+  //Lit l'état des objets
   Btn1State = digitalRead(Btn1Pin);
   Btn2State = digitalRead(Btn2Pin);
   Btn3State = digitalRead(Btn3Pin);
   Btn4State = digitalRead(Btn4Pin);
 
+  //Crée une string json pour contenir les boutons
   String stringOfInteractable = "{\"" + Btn1Name + "\":\"" + Btn1State + "\",\"" 
                                       + Btn2Name + "\":\"" + Btn2State + "\",\""
                                       + Btn3Name + "\":\"" + Btn3State + "\",\"" 
                                       + Btn4Name + "\":\"" + Btn4State +"\"}";
 
+  //Crée une string json pour contenir le nom du esp32 et les objets
   stringOfAllData = "{\"NomEsp32\":\"" + myName 
                    + "\",\"JsonData\":" + stringOfInteractable + "}";
 
   // Envoyer les données du tableau `dataToSend` au maître 
   for (int i = 0; i < stringOfAllData.length(); i++)
-    Wire.write(stringOfAllData[i]);  // Envoyer chaque caractère 
+    Wire.write(stringOfAllData[i]);  // Envoyer chaque caractère en byte
   
-  Wire.write(0x00);  // Le Master repete le dernier byte recu, donc le dernier byte est NULL
+  Wire.write(0x00);  // Le Master repete le dernier byte recu, donc le dernier byte est NULL pour signaler la fin de la string
 } 

@@ -2,7 +2,7 @@
 Auteurs : Alexis Létourneau et Louis Boisvert
 Date : 2024-11-25
 Brief : Un programme pré-configurer pour l'envoit un json personnalisé en I2C à un Master sur un 
-    Raspberry PI 4. sa configuration présente est pour une suite de 2 switch et 3 potentiomètres.
+    Raspberry PI 4. sa configuration présente est pour une suite de 2 interrupteurs et 3 potentiomètres.
     
     il  vous suffit de remplacer le code dans le main par celui-ci pour configurer l'un des esp32.
 */
@@ -56,6 +56,7 @@ void setup() {
 
   Serial.println("Slave prêt, en attente de requêtes du maître..."); 
 
+  //Initialise les patte en entrée
   pinMode(Sw1Pin, INPUT);
   pinMode(Sw2Pin, INPUT);
   pinMode(Pot1Pin, INPUT);
@@ -69,27 +70,29 @@ void loop()
 
  
 // Fonction appelée lorsque le maître demande des données 
-
 void requestData() { 
 
+  //Lit l'état des objets
   Sw1State = digitalRead(Sw1Pin);
   Sw2State = digitalRead(Sw2Pin);
   Pot1State = analogRead(Pot1Pin);
   Pot2State = analogRead(Pot2Pin);
   Pot3State = analogRead(Pot3Pin);
 
+  //Crée une string json pour contenir les interrupteurs et potentiomètres
   String stringOfInteractable = "{\"" + Sw1Name + "\":\"" + Sw1State + "\",\"" 
                                       + Sw2Name + "\":\"" + Sw2State + "\",\""
                                       + Pot1Name + "\":\"" + Pot1State + "\",\""
                                       + Pot2Name + "\":\"" + Pot2State + "\",\"" 
                                       + Pot3Name + "\":\"" + Pot3State +"\"}";
 
+  //Crée une string json pour contenir le nom du esp32 et les objets
   stringOfAllData = "{\"NomEsp32\":\"" + myName 
                    + "\",\"JsonData\":" + stringOfInteractable + "}";
 
   // Envoyer les données du tableau `dataToSend` au maître 
   for (int i = 0; i < stringOfAllData.length(); i++)
-    Wire.write(stringOfAllData[i]);  // Envoyer chaque caractère 
+    Wire.write(stringOfAllData[i]);  // Envoyer chaque caractère en byte
   
-  Wire.write(0x00);  // Le Master repete le dernier byte recu, donc le dernier byte est NULL
+  Wire.write(0x00);  // Le Master repete le dernier byte recu, donc le dernier byte est NULL pour signaler la fin de la string
 } 
