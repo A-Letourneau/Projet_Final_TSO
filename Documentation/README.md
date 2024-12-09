@@ -13,6 +13,10 @@ Ce dossier contient :
 - Des images illustrant les débuts du projet.  
 - Certaines idées initiales qui n’ont pas été retenues dans les versions ultérieures du prototype.  
 
+## 📂 Devis Technique Prototype 
+Ce dossier contient :  
+- Le devis technique du prototype
+
 ---
 
 ### 🛠️ Notes  
