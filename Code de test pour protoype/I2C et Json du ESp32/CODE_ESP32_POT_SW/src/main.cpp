@@ -29,7 +29,7 @@ String const Pot1Name = "Pot1";
 String const Pot2Name = "Pot2";
 String const Pot3Name = "Pot3";
 
-String const myName = "I2C_Switch_Pot_COM11"; //L'ID du ESP 32
+String const myName = "I2C_Pot_Sw"; //L'ID du ESP 32
 
 void requestData(); //Prototype de fonction
 

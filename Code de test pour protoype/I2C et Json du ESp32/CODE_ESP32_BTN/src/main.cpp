@@ -28,7 +28,7 @@ String const Btn2Name = "Btn2";
 String const Btn3Name = "Btn3";
 String const Btn4Name = "Btn4";
 
-String const myName = "I2C_Btn_COM4"; //L'ID du ESP 32
+String const myName = "I2C_Btn"; //L'ID du ESP 32
 
 void requestData(); //Prototype de fonction
 

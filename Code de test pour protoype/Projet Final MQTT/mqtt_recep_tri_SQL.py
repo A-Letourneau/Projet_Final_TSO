@@ -13,8 +13,8 @@ Exemple de Json complet
 {
   "Id": 1,
   "NomRaspPI": "RASP_PI_MASTER",
-  "NomESP32": "ESP_BOUTON",
-  "Timestamp": 123456789,
+  "NomEsp32": "ESP_BOUTON",
+  "timestamp": 123456789,
   "NumeroDeEssai": 2,
   "TempsDepuisLeDebut": "1m30",
   "EtapeDeEnigme": 4,
@@ -38,21 +38,18 @@ def on_message(client, userdata, msg):
     conn = sqlite3.connect(sqliteFile)
     cur = conn.cursor()
     #Crée tables pour enregistrer les data
-    cur.execute(
-        '''CREATE TABLE IF NOT EXISTS DataMallette (
+    cur.execute( '''CREATE TABLE IF NOT EXISTS DataMallette (
             Id                         INTEGER PRIMARY KEY,
-            Timestamp                  INTEGER,
+            timestamp                  INTEGER,
             NomRaspPI                  TEXT,
-            NomESP32                   TEXT,
+            NomEsp32                   TEXT,
             NumeroDeEssai              INTEGER,
             EtapeDeEnigme              INTEGER,
             TempsDepuisLaDerniereEtape TEXT,
             TempsDepuisLeDebut         TEXT,
             EtapeReussi                INTEGER,
             MalletteReussi             INTEGER,
-            JsonData                   TEXT
-        );'''
-                )
+            JsonData                   TEXT)''')
 
     reception = str(msg.payload.decode('utf-8')) 
 
@@ -76,29 +73,35 @@ def on_message(client, userdata, msg):
 
     dictReceived['Id'] = curID
     dictReceived['NomRaspPI'] = nameOfPI
-    dictReceived["Timestamp"] = int(time.time())
-    dictReceived["NumeroDeEssai"] = 1
-    dictReceived["EtapeDeEnigme"] = 0
+    dictReceived["timestamp"] = int(time.time())
+    dictReceived["NumeroDeEssai"] = 2
+    dictReceived["EtapeDeEnigme"] = 1
 
-    findStartTimeQuery = 'Select MIN(timestamp) FROM DataMallette WHERE NumeroDeEssai = {nbEssai}'.format(nbEssai=dictReceived["NumeroDeEssai"])
-    cur.execute(findStartTimeQuery)
-    findStartTimeQuery = cur.fetchone()
-    if isinstance(findStartTimeQuery[0], int): # Si c'est la premiere donne
-        dictReceived["TempsDepuisLeDebut"] = int(time.time()) - findStartTimeQuery[0]
-    else :
-        print("Premiere donnee Debut")
+    try:
+        findStartTimeQuery = 'Select MIN(timestamp) FROM DataMallette WHERE NumeroDeEssai = {nbEssai}'.format(nbEssai=dictReceived["NumeroDeEssai"])
+        cur.execute(findStartTimeQuery)
+        findStartTimeQuery = cur.fetchone()
+        if isinstance(findStartTimeQuery[0], int): # Si c'est la premiere donne
+            dictReceived["TempsDepuisLeDebut"] = int(time.time()) - findStartTimeQuery[0]
+        else :
+            print("Premiere donnee Debut")
+            dictReceived["TempsDepuisLeDebut"] = 0
+    except:
         dictReceived["TempsDepuisLeDebut"] = 0
 
 
     dictReceived["TempsDepuisLeDebut"] = str(dictReceived["TempsDepuisLeDebut"])
 
-    findStartTimeQuery = 'Select MIN(timestamp) FROM DataMallette WHERE EtapeDeEnigme = {nbEssai}'.format(nbEssai=dictReceived["EtapeDeEnigme"])
-    cur.execute(findStartTimeQuery)
-    findStartTimeQuery = cur.fetchone()
-    if isinstance(findStartTimeQuery[0], int): 
-        dictReceived["TempsDepuisLaDerniereEtape"] = int(time.time()) - findStartTimeQuery[0]
-    else :  #Si c'est la premiere donnee
-        print("Premiere donnee Etape")
+    try:
+        findStartTimeQuery = 'Select MIN(timestamp) FROM DataMallette WHERE EtapeDeEnigme = {nbEssai}'.format(nbEssai=dictReceived["EtapeDeEnigme"])
+        cur.execute(findStartTimeQuery)
+        findStartTimeQuery = cur.fetchone()
+        if isinstance(findStartTimeQuery[0], int): 
+            dictReceived["TempsDepuisLaDerniereEtape"] = int(time.time()) - findStartTimeQuery[0]
+        else :  #Si c'est la premiere donnee
+            print("Premiere donnee Etape")
+            dictReceived["TempsDepuisLaDerniereEtape"] = 0
+    except:
         dictReceived["TempsDepuisLaDerniereEtape"] = 0
 
     dictReceived["TempsDepuisLaDerniereEtape"] = str(dictReceived["TempsDepuisLaDerniereEtape"])
@@ -111,8 +114,8 @@ def on_message(client, userdata, msg):
     print(type(dictReceived["JsonData"]))
 
     cur.execute('''
-    INSERT INTO DataMallette (Id, Timestamp, NomRaspPI, NomESP32,  NumeroDeEssai, EtapeDeEnigme, TempsDepuisLaDerniereEtape, TempsDepuisLeDebut, EtapeReussi, MalletteReussi, JsonData)
-    VALUES (:Id, :Timestamp, :NomRaspPI, :NomESP32, :NumeroDeEssai, :EtapeDeEnigme, :TempsDepuisLaDerniereEtape, :TempsDepuisLeDebut, :EtapeReussi, :MalletteReussi, :JsonData)
+    INSERT INTO DataMallette (Id, timestamp, NomRaspPI, NomEsp32,  NumeroDeEssai, EtapeDeEnigme, TempsDepuisLaDerniereEtape, TempsDepuisLeDebut, EtapeReussi, MalletteReussi, JsonData)
+    VALUES (:Id, :timestamp, :NomRaspPI, :NomEsp32, :NumeroDeEssai, :EtapeDeEnigme, :TempsDepuisLaDerniereEtape, :TempsDepuisLeDebut, :EtapeReussi, :MalletteReussi, :JsonData)
     ''', dictReceived)
 
     conn.commit()
