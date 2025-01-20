@@ -53,7 +53,7 @@ def on_message(client, userdata, msg):
 
     reception = str(msg.payload.decode('utf-8')) 
 
-    print(reception)
+    #print(reception)
     
     try:        #DEbug des erreur du Json
         dictReceived = json.loads(reception) #Transforme le message recu en json
@@ -74,15 +74,17 @@ def on_message(client, userdata, msg):
     dictReceived['Id'] = curID
     dictReceived['NomRaspPI'] = nameOfPI
     dictReceived["timestamp"] = int(time.time())
-    dictReceived["NumeroDeEssai"] = 2
-    dictReceived["EtapeDeEnigme"] = 1
+    dictReceived["NumeroDeEssai"] = 3
+    dictReceived["EtapeDeEnigme"] = 2
 
     try:
         findStartTimeQuery = 'Select MIN(timestamp) FROM DataMallette WHERE NumeroDeEssai = {nbEssai}'.format(nbEssai=dictReceived["NumeroDeEssai"])
         cur.execute(findStartTimeQuery)
         findStartTimeQuery = cur.fetchone()
         if isinstance(findStartTimeQuery[0], int): # Si c'est la premiere donne
+            print(findStartTimeQuery[0])
             dictReceived["TempsDepuisLeDebut"] = int(time.time()) - findStartTimeQuery[0]
+            print(dictReceived["TempsDepuisLeDebut"])
         else :
             print("Premiere donnee Debut")
             dictReceived["TempsDepuisLeDebut"] = 0
@@ -110,8 +112,8 @@ def on_message(client, userdata, msg):
     dictReceived["MalletteReussi"] = 0
     dictReceived["JsonData"] = str(dictReceived["JsonData"])
     dictReceived["JsonData"] = dictReceived["JsonData"].replace("\'", "\"")
-    print(dictReceived["JsonData"])
-    print(type(dictReceived["JsonData"]))
+    print(dictReceived)
+    #print(type(dictReceived["JsonData"]))
 
     cur.execute('''
     INSERT INTO DataMallette (Id, timestamp, NomRaspPI, NomEsp32,  NumeroDeEssai, EtapeDeEnigme, TempsDepuisLaDerniereEtape, TempsDepuisLeDebut, EtapeReussi, MalletteReussi, JsonData)
