@@ -1,3 +1,10 @@
+/* Corrrection : 7/10
+    Il manque la partie "nom de fichier" et "Environnement" au brief.
+    Commentaires pour les #include
+    Variables globales avec un g_
+    Entêtes de fonction faibles ou absentes
+*/
+
 /*
 Auteurs : Alexis Létourneau et Louis Boisvert
 Date : 2024-11-25

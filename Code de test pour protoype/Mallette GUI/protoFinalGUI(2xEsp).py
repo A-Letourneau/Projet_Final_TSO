@@ -1,3 +1,10 @@
+""" Correction 8/10
+    Manque sections Fichier et Environnement à l'entête de fichier
+    Commentaires aux import
+    Variables globales avec g_
+    Prendrais un peu plus de commentaires à certains endroits
+"""
+
 """
 Auteur : Alexis Létourneau
 Date : 2024-12-03
