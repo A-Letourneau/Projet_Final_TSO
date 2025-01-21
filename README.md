@@ -1,4 +1,4 @@
-# Escape Game Project 🎲🔐
+# Projet de Mallette D'évasion 🎲🔐
 
 Bienvenue dans notre projet de **jeu d'évasion** Pour le cours de *Planification de projet* de la *technique de système ordiné*! Ce jeu mettra à l'épreuve vos capacités de réflexion, de résolution d'énigmes,
 et les matières vues en classe. Explorez une mallette remplit de mystère et découvrez des secrets pour vous échapper avant la fin du temps imparti !
