@@ -123,7 +123,7 @@ while True:  # Event Loop
             strReceived_POT_SW += chr(value)
     
     print(strReceived_POT_SW)
-    msg_POT_SW = json.loads(strReceived_POT_SW) #Transforme la string JSON en dict pour l'utiliser plus facilement
+    msg_POT_SW = json.loads(strReceived_POT_SW) #Transforme la string JSON en dict pour l'utiliser en dictionnaire
     
     #----ENLEVER LES COMMENTAIRE POUR ACTIVER MQTT----#
     """

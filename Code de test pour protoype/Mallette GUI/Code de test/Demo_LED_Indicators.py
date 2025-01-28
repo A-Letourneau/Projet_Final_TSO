@@ -29,16 +29,12 @@ def LEDIndicator(key=None, radius=30):
 def SetLED(window, key, color):
     graph = window[key]
     graph.erase()
-    graph.draw_circle((10, 10), 35, fill_color=color, line_color=color)
+    graph.draw_circle((0, 0), 25, fill_color=color, line_color=color)
 
-
-layout = [[sg.Text('My LED Status Indicators', size=(20,1))],
-
-          [sg.Text('SW1'), sg.Image(source=toggle_btn_off, key="SW1_PIC"), sg.Text('SW2'), sg.Image(source=toggle_btn_off, key="SW2_PIC"), sg.Text('BTN1'), LEDIndicator('BTN1', radius=50)],          [sg.Button('Exit')]]
-
-layout = [[sg.Text('My LED Status Indicators', size=(20,1))],
-          [sg.Text('SW1'),  sg.Text('SW2'),  sg.Text('BTN1')],
-          [sg.Image(source=toggle_btn_off, key="SW1_PIC"), sg.Image(source=toggle_btn_off, key="SW2_PIC"), LEDIndicator('BTN1')],
+layout = [[sg.Text('My croco indicator', size=(20,1))],
+          [sg.Text('Croco 1'),  sg.Text('Croco 2'),  sg.Text('Croco 3'), sg.Text('Croco 4')],
+          [LEDIndicator('BTN1') ],
+          [sg.Text('Croco 5'),  sg.Text('Croco 6'),  sg.Text('Croco 7'), sg.Text('Croco 8')],
           [sg.Button('Exit')]]
 
 window = sg.Window('My new window', layout, default_element_size=(12, 1), auto_size_text=False, finalize=True)

@@ -7,6 +7,9 @@ Ce dossier regroupe les documents nécessaires pour soumettre notre participatio
 Il contient principalement des fichiers texte décrivant les raisons pour lesquelles nous avons choisi de réaliser ce projet.  
 
 ---
+## 📂 Journal de bord Alexis  
+Ce dossier contient :  
+- Un fichier word archivant le travail accompli par Alexis Létourneau
 
 ## 📂 Prototype  
 Ce dossier contient :  
