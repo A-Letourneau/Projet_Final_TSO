@@ -1,18 +1,11 @@
-/* Corrrection : 7/10
-    Il manque la partie "nom de fichier" et "Environnement" au brief.
-    Commentaires pour les #include
-    Variables globales avec un g_
-    Entêtes de fonction faible ou absente
-*/
 /*
 Auteurs : Alexis Létourneau et Louis Boisvert
 Date : 2024-11-25
 Nom du fichier : main.cpp
-Brief : Un programme pré-configurer pour l'envoit un json personnalisé en I2C à un Master sur un 
-    Raspberry PI 4. La configuration initial de ce code est pour une lecture digitales de 4 bouttons.
-    et l'envoit par json.
-
-    il  vous suffit de remplacer le code dans le main par celui-ci pour configurer l'un des esp32.
+Environnement : ESP32-C3-WROOM-02 Devkit, Platformio, C++ arduino, raspberry pi 4
+Brief : Un programme pour l'envoit un json d'information en I2C à un Master sur un Raspberry PI 4. 
+Ce code prend l'état de 4 boutons et le met dans un dictionnaire.
+Finalement, on envoit ce dictionnaire au Raspberry PI 4 en forme de Json.
 */
 
 #include <Wire.h> //Communication I2C entre les esp32 et le PI
@@ -77,7 +70,10 @@ void loop()
 { } 
 
  
-// Fonction appelée lorsque le maître demande des données 
+/*
+Brief : Fonction appelée lorsque le maître fait la demande des données. 
+Renvoit un JSON contenant les état des boutons connectés au esp32 sur la ligne i2c.
+*/
 void requestData() { 
   //Lit l'état des objets
   g_Btn1State = digitalRead(Btn1Pin);
@@ -112,6 +108,5 @@ void receiveData(int nbByte) {
       digitalWrite(DelPin, HIGH);
     else
       digitalWrite(DelPin, LOW);
-    Serial.println(c);         // print the character
   }
 }

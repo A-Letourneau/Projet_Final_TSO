@@ -1,4 +1,19 @@
-#!/usr/bin/env python
+"""
+Auteur : Alexis Létourneau
+Date : 2024-12-03
+Environnement : Python, Thorny, raspberry pi 4, ESP32-C3-WROOM-02 Devkit, 
+Brief : Programme qui affiche les données reçu par la communication i2c de un esp32 externe en mode Sub et qui affiche le résultat dans une interface PySimpleGUI.
+Ce programme communique en i2c en mode Main avec l'esp32 en mode Sub. 
+Le ESP32 est configuré pour envoyé une liste qui dit si une de ses pattes est connectées à une autre de ses pattes.
+
+
+Le ESP32 a une interface, qui contient des "widget" qui représentent l'états des connections entre les pattes.
+Si le ESP32 détecte une connection, alors on affiche les deux pattes avec la même couleur, sinon, on affiche du noir pour signifier aucune connection.
+
+Le programme peut aussi transmettre le JSON des esp32 en MQTT à toutes les secondes pour faire la collecte de données.
+Pour ce faire, enlever les # des entêtes MQTT.
+
+"""
 import PySimpleGUI as sg #Pour l'affichage utilisateur
 import json #Pour la manipulation des JSON
 from smbus2 import SMBus, i2c_msg #Pour la communication i2c pi

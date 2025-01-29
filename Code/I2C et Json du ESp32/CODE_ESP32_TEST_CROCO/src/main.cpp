@@ -3,9 +3,12 @@ Auteurs : Alexis Létourneau et Louis Boisvert
 Date : 2024-11-25
 Nom du fichier : main.cpp
 Environnement : ESP32-C3-WROOM-02 Devkit, Platformio, C++ arduino, raspberry pi 4
-Brief : Un programme pré-configurer pour l'envoit un json personnalisé en I2C à un Master sur un 
-    Raspberry PI 4. La configuration initial de ce code est pour une lecture digitales de 8 sortie pour savoir si elles sont relie entre elles.
-    et on l'envoit par json a un raspberry pi 4.
+Brief : Un programme pour l'envoit un json d'information en I2C à un Master sur un Raspberry PI 4. 
+Ce code prend 8 patte et détecte si cette patte est connectée avec une autre patte.
+Le code prend cette l'information et on met cette pair dans une liste, l'index est la sortie et le numéro à l'index est l'entrée. 
+Cette liste contient donc deux fois la même connections, mais inversée. Exemple {1,0,3,2}, 1 et 0 sont connecté et 2 et 3 sont connecté.
+Finalement, on envoit cette liste au Raspberry PI 4 en forme de Json.
+
 */
 
 #include <Wire.h> //Communication I2C entre les esp32 et le PI
@@ -17,6 +20,7 @@ Brief : Un programme pré-configurer pour l'envoit un json personnalisé en I2C 
 #define SDA_Pin 6
 #define SCL_Pin 7
 
+
 #define pinCroco0 0
 #define pinCroco1 1
 #define pinCroco2 2
@@ -26,22 +30,22 @@ Brief : Un programme pré-configurer pour l'envoit un json personnalisé en I2C 
 #define pinCroco6 18
 #define pinCroco7 19
 
-#define nbDeCroco 8
+#define nbDeCroco 8 
 
 #define noConnectionFound nbDeCroco //Si on ne trouve pas de connection, on met un nombre qui est plus que le nombre de Croco
 
 String const myName = "I2C_Croco"; //L'ID du ESP 32
 
-void requestData(); //Prototype de fonction
+void requestData(); //Prototype de fonction de réception du i2c 
 
 int g_listDeCrocoPin[nbDeCroco] = {pinCroco0, pinCroco1, pinCroco2, pinCroco3, pinCroco4, pinCroco5, pinCroco6, pinCroco7};
 int g_pairDeCroco[nbDeCroco] = {};
 
-String stringOfAllData = "";
+String g_stringOfAllData = "";
 
 void setup() { 
 
-  for(int curCroco = 0; curCroco < nbDeCroco; curCroco++)   
+  for(int curCroco = 0; curCroco < nbDeCroco; curCroco++)   //Mettre toutes les pattes "Croco" en entrée avec une pull-down
       pinMode(g_listDeCrocoPin[curCroco], INPUT_PULLDOWN);
 
   // Initialisation du port série pour le debug 
@@ -55,15 +59,14 @@ void setup() {
   Wire.onRequest(requestData); 
 
   Serial.println("Slave prêt, en attente de requêtes du maître..."); 
-  //Initialise les patte en entrée
 } 
  
 void loop() 
 { } 
 
 /*
-Brief : Fonction appelée lorsque le maître demande des données. 
-Renvoit un JSON contenant les informations du esp32.
+Brief : Fonction appelée lorsque le maître fait la demande des données. 
+Renvoit un JSON contenant les paires de connection sur les pattes "Croco" connectées au esp32 sur la ligne i2c.
 */
 void requestData() { 
 
@@ -72,8 +75,8 @@ void requestData() {
   //Chaques pattes "Croco" va être mit en sortie pour sondées les autres pattes en entrée
   for(int curOut = 0; curOut < nbDeCroco; curOut++) 
   { 
-    pinMode(g_listDeCrocoPin[curOut], OUTPUT); //Patte "Croco" pour envoyer un signal
-    digitalWrite(g_listDeCrocoPin[curOut], HIGH); //Le signal
+    pinMode(g_listDeCrocoPin[curOut], OUTPUT); //Patte "Croco" en sortie pour envoyer un signal
+    digitalWrite(g_listDeCrocoPin[curOut], HIGH); //Le signal haut à détecter
 
     //Tout les autre pattes "Croco" en entrée vont être lu pour savoir s'ils ont reçu un signal
     for(int curIn = 0; curIn < nbDeCroco; curIn++)
@@ -81,26 +84,19 @@ void requestData() {
       if(curIn != curOut)  //Si c'est pas la patte "Croco" en sortie
       {
         pinMode(g_listDeCrocoPin[curIn], INPUT_PULLDOWN); //On met la patte "Croco" en mode entrée
-        if (digitalRead(g_listDeCrocoPin[curIn])) //Si on trouve une connection
+        if (digitalRead(g_listDeCrocoPin[curIn])) //Si on détecte le signal haut du "Croco" en OUTPUT
         {
-          g_pairDeCroco[curOut] = curIn; //On enregistre la pair dans une liste, l'index est la sortie et le numéro à l'index est l'entrée
+          g_pairDeCroco[curOut] = curIn; //On enregistre la pair dans une liste, l'index est la sortie et le numéro à l'index est l'entrée. 
           foundConnection = true; 
         }
       }      
     }
-    if (!foundConnection) //Si on trouve pas de connection, on met 99 dans la liste pour l'indiquer 
+    if (!foundConnection) //Si on trouve pas de connection, on met un nombre qui est plus grand que le nombre de "Croco" dans la liste pour indiquer aucune connection
       g_pairDeCroco[curOut] = noConnectionFound;
       
     digitalWrite(g_listDeCrocoPin[curOut], LOW); //On remet la patte "Croco" sortie en mode entrée
     foundConnection = false;
   }
-
-  for(int cur = 0; cur < nbDeCroco; cur++) 
-  {
-    Serial.print(g_pairDeCroco[cur]);
-    Serial.print(" ");
-  }
-  Serial.println();
 
   //Crée une string json pour contenir les paires de patte croco
   String stringOfInteractable = "[\"" + String(g_pairDeCroco[0]) + "\",\"" + String(g_pairDeCroco[1]) + "\",\"" 
@@ -109,12 +105,12 @@ void requestData() {
                                       + String(g_pairDeCroco[6]) + "\",\"" + String(g_pairDeCroco[7]) +"\"]";
 
   //Crée une string json pour contenir le nom du esp32 et les objets
-  stringOfAllData = "{\"NomEsp32\":\"" + myName 
+  g_stringOfAllData = "{\"NomEsp32\":\"" + myName 
                    + "\",\"JsonData\":" + stringOfInteractable + "}";
 
   // Envoyer les données du tableau `dataToSend` au maître 
-  for (int i = 0; i < stringOfAllData.length(); i++)
-    Wire.write(stringOfAllData[i]);  // Envoyer chaque caractère en byte
+  for (int i = 0; i < g_stringOfAllData.length(); i++)
+    Wire.write(g_stringOfAllData[i]);  // Envoyer chaque caractère en byte
   
   Wire.write(0x00);  // Le Master repete le dernier byte recu, donc le dernier byte est NULL pour signaler la fin de la string
 
