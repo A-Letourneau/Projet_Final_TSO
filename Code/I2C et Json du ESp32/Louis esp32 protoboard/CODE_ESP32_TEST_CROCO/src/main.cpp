@@ -113,10 +113,17 @@ void requestData() {
   
   //Crée une string json pour contenir les paires de patte croco
   String stringOfInteractable = "{";
-  for (int i = 0; i < NUM_Croco ; i++)
+  for (int i = 0; i < NUM_Croco ; i++)  //cette boucle devrait ajouter toutes les interrupteurs et leurs états à une string
   {
-    stringOfInteractable += "\"" + String(g_pairDeCroco[i]) + "\":\"" + String(g_pairDeCroco[i]) + "\",";  //cette boucle devrait ajouter toutes les interrupteurs et leurs états à une string
-  }
+    if(i == NUM_Croco-1)
+    {
+      stringOfInteractable += "\"" + String(g_pairDeCroco[i]) + "\":\"" + String(g_pairDeCroco[i]) + "\""; // permet de ne pas avvoir de virgule
+    }
+    else
+    {
+      stringOfInteractable += "\"" + String(g_pairDeCroco[i]) + "\":\"" + String(g_pairDeCroco[i]) + "\",";
+    }
+    //stringOfInteractable += "\"" + String(g_pairDeCroco[i]) + "\":\"" + String(g_pairDeCroco[i]) + "\",";    }
 
   //Crée une string json pour contenir le nom du esp32 et les objets
   g_stringOfAllData = "{\"NomEsp32\":\"" + myName 

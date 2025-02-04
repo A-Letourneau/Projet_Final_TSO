@@ -94,11 +94,19 @@ void requestData() {
                                       + Pot2Name + "\":\"" + g_Pot2State + "\",\"" 
                                       + Pot3Name + "\":\"" + g_Pot3State +"\"}";*/
                                       
-  //Crée une string json pour contenir les interrupteurs et potentiomètres
+  //cette boucle crée une string json pour contenir les interrupteurs et potentiomètres
   String stringOfInteractable = "{";
-  for (int i = 0; i < NUM_POT; i++)
+  for (int i = 0; i < NUM_POT; i++) 
   {
-    stringOfInteractable += "{\"Potentiometre\":\"" + PotNames[i] + "\",\"Etat\":\"" + Potstates[i] +"\",";
+    if( i == NUM_POT-1) //permet de ne pas avoir de virgule à la fin du json
+    {
+      stringOfInteractable += "{\"Potentiometre\":\"" + PotNames[i] + "\",\"Etat\":\"" + Potstates[i] +"\"}";
+    }
+    else
+    {
+      stringOfInteractable += "{\"Potentiometre\":\"" + PotNames[i] + "\",\"Etat\":\"" + Potstates[i] +"\",";
+    }
+    //stringOfInteractable += "{\"Potentiometre\":\"" + PotNames[i] + "\",\"Etat\":\"" + Potstates[i] +"\",";
   }
 
   //Crée une string json pour contenir le nom du esp32 et les objets

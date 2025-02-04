@@ -98,9 +98,17 @@ void requestData() {
                                       + Sw3Name + "\":\"" + g_Sw3State + "\",\"" 
                                       + Sw4Name + "\":\"" + g_Sw4State +"\"}";*/
   String stringOfInteractable = "{";
-  for (int i = 0; i < NUM_SWITCHES; i++)
+  for (int i = 0; i < NUM_SWITCHES; i++)  //cette boucle devrait ajouter toutes les interrupteurs et leurs états à une string
   {
-    stringOfInteractable += "\"" + switchNames[i] + "\":\"" + switchstates[i] + "\",";  //cette boucle devrait ajouter toutes les interrupteurs et leurs états à une string
+    if{i == NUM_SWITCHES-1}
+    {
+      stringOfInteractable += "\"" + switchNames[i] + "\":\"" + switchstates[i] + "\""; //enlève la virgule à la fin
+    }
+    else
+    {
+      stringOfInteractable += "\"" + switchNames[i] + "\":\"" + switchstates[i] + "\",";
+    }
+    //stringOfInteractable += "\"" + switchNames[i] + "\":\"" + switchstates[i] + "\",";  
   }
 
   //Crée une string json pour contenir le nom du esp32 et les objets
