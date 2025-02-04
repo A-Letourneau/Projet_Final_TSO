@@ -25,7 +25,7 @@ Finalement, on envoit ce dictionnaire au Raspberry PI 4 en forme de Json.
 #define NUM_SWITCHES 8  // Number of switches
 
 // l'ordre des interrupteurs est de gauche à droites de haunt en bas 
-const int switchPins[NUM_SWITCHES] = {4, 5, 0, 8, 19, 3, 18, 2}; // Pins des interrupteurs
+const int switchPins[NUM_SWITCHES] = {4, 5, 1, 0, 19, 18, 3, 2}; // Pins des interrupteurs
 const String switchNames[NUM_SWITCHES] = {"Sw1", "Sw2", "Sw3", "Sw4", "Sw5", "Sw6", "Sw7", "Sw8"}; // Noms des interrupteurs
 
 #define DelPin 18
@@ -68,7 +68,11 @@ void setup() {
   pinMode(Sw3Pin, INPUT);
   pinMode(Sw4Pin, INPUT);*/
 
-  pinMode(DelPin, OUTPUT);
+  for(int i = 0; i < NUM_SWITCHES; i++) {
+    pinMode(switchPins[i], INPUT); // Initialise les pins des interrupteurs en entrée
+  }
+
+  //pinMode(DelPin, INPUT);
   
 } 
  
@@ -100,7 +104,7 @@ void requestData() {
   String stringOfInteractable = "{";
   for (int i = 0; i < NUM_SWITCHES; i++)  //cette boucle devrait ajouter toutes les interrupteurs et leurs états à une string
   {
-    if{i == NUM_SWITCHES-1}
+    if(i == NUM_SWITCHES-1)
     {
       stringOfInteractable += "\"" + switchNames[i] + "\":\"" + switchstates[i] + "\""; //enlève la virgule à la fin
     }

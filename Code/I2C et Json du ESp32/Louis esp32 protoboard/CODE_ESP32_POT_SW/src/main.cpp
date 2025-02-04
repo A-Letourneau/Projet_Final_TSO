@@ -29,15 +29,15 @@ String const Pot3Name = "Pot3";
 #define NUM_POT 2  // Number of switches
 
 // l'ordre des interrupteurs est de gauche à droites de haunt en bas 
-const int PotPins[NUM_POT] = {4, 5/*, 0, 8, 19, 3, 18, 2*/}; // Pins des interrupteurs
+const int PotPins[NUM_POT] = {4, 0/*, 0, 8, 19, 3, 18, 2*/}; // Pins des interrupteurs
 const String PotNames[NUM_POT] = {"Pot1", "Pot2"/*, "Pot3", "Pot4", "Pot5", "Pot6", "Pot7", "Pot8"*/}; // Noms des interrupteurs
 
-String const myName = "I2C_Pot_Sw"; //L'ID du ESP 32
+String const myName = "I2C_Pot"; //L'ID du ESP 32
 
 void requestData(); //Prototype de fonction
 
 
-bool Potstates[NUM_POT] = {0};  //met toutes les valeurs à 0
+int Potstates[NUM_POT] = {0};  //met toutes les valeurs à 0
 /*int g_Pot1State = 0;
 int g_Pot2State = 0;
 int g_Pot3State = 0;*/
@@ -84,7 +84,7 @@ void requestData() {
   //Lit l'état des objets
   for (int i = 0; i < NUM_POT; i++)
   {
-  Potstates[i] = digitalRead(PotPins[i]);
+    Potstates[i] = analogRead(PotPins[i]);
   }
 
   //Crée une string json pour contenir les interrupteurs et potentiomètres
@@ -100,11 +100,11 @@ void requestData() {
   {
     if( i == NUM_POT-1) //permet de ne pas avoir de virgule à la fin du json
     {
-      stringOfInteractable += "{\"Potentiometre\":\"" + PotNames[i] + "\",\"Etat\":\"" + Potstates[i] +"\"}";
+      stringOfInteractable += "\"" + PotNames[i] + "\":\"" + Potstates[i] +"\"";
     }
     else
     {
-      stringOfInteractable += "{\"Potentiometre\":\"" + PotNames[i] + "\",\"Etat\":\"" + Potstates[i] +"\",";
+      stringOfInteractable += "\"" + PotNames[i] + "\":\"" + Potstates[i] +"\",";
     }
     //stringOfInteractable += "{\"Potentiometre\":\"" + PotNames[i] + "\",\"Etat\":\"" + Potstates[i] +"\",";
   }
