@@ -28,64 +28,69 @@ def SetLED(window, key, color):
 
 
 
+def make_winBTN():
+    layout_BTN =    [
+                        [sg.Text('My LED Status Indicators', size=(20,1))],
+                        [sg.Text('BTN1'),  sg.Text('BTN2'),  sg.Text('BTN3'),  sg.Text('BTN4')],
+                        [ LEDIndicator('BTN1'),LEDIndicator('BTN2'),LEDIndicator('BTN3'),LEDIndicator('BTN4'),],
+                        [sg.Button('Exit'), sg.Button('Reopen') ]
+                    ]
+    return sg.Window('Game Interface_BTN', layout_BTN, default_element_size=(12, 1), auto_size_text=False, finalize=True)
 
-layout_BTN = [[sg.Text('My LED Status Indicators', size=(20,1))],
-          [sg.Text('BTN1'),  sg.Text('BTN2'),  sg.Text('BTN3'),  sg.Text('BTN4')],
-          [ LEDIndicator('BTN1'),LEDIndicator('BTN2'),LEDIndicator('BTN3'),LEDIndicator('BTN4'),],
-          [sg.Button('Exit')]]
-
-
-window_BTN = sg.Window('Game Interface_BTN', layout_BTN, default_element_size=(12, 1), auto_size_text=False, finalize=True)
-
-layout_POT_SW = [
-                    [sg.Text('My LED Status Indicators', size=(20,1))],
-                    [sg.Text('SW1'),  sg.Text('SW2'),  sg.Text('POT1'), sg.Text('POT2'), sg.Text('POT3'),],
-                    [sg.Image(source=toggle_btn_off, key="SW1_PIC"), sg.Image(source=toggle_btn_off, key="SW2_PIC"), sg.ProgressBar(65200, key='POT1', size=(10,10)), sg.ProgressBar(65200, key='POT2',size=(10,10)), sg.ProgressBar(65200, key='POT3',size=(10,10))]
-                ]
-
-
-window_POT_SW = sg.Window('Game Interface_POT_SW', layout_POT_SW, default_element_size=(12, 1), auto_size_text=False, finalize=True)
-
-listOfByte = []
-strReceived = ''
+def make_winPOT_SW():
+    layout_POT_SW = [
+                        [sg.Text('My LED Status Indicators', size=(20,1))],
+                        [sg.Text('SW1'),  sg.Text('SW2'),  sg.Text('POT1'), sg.Text('POT2'), sg.Text('POT3'),],
+                        [sg.Image(source=toggle_btn_off, key="SW1_PIC"), sg.Image(source=toggle_btn_off, key="SW2_PIC"), sg.ProgressBar(65200, key='POT1', size=(10,10)), sg.ProgressBar(65200, key='POT2',size=(10,10)), sg.ProgressBar(65200, key='POT3',size=(10,10))],
+                        [sg.Button('Exit'), sg.Button('Reopen') ]
+                    ]
+    return sg.Window('Game Interface_POT_SW', layout_POT_SW, default_element_size=(12, 1), auto_size_text=False, finalize=True)
 
 
+window_BTN, window_POT_SW = make_winBTN(), make_winPOT_SW()
+
+window_BTN.move(window_POT_SW.current_location()[0] + 50, window_POT_SW.current_location()[1]+250)
 
 
 while True:  # Event Loop
 
-    event, value = window_BTN.read(timeout=25)
+    window, event, values = sg.read_all_windows(timeout=100)
+    if window == sg.WIN_CLOSED and event != sg.TIMEOUT_EVENT:
+        break
     if event == 'Exit' or event == sg.WIN_CLOSED:
-        break
-    if value is None:
-        break
-
-    event, value = window_POT_SW.read(timeout=25)
-    if event == 'Exit' or event == sg.WIN_CLOSED:
-        break
-    if value is None:
-        break
-
-
-    if randint(1,2) == 1:
-        window_POT_SW["SW1_PIC"].update(source=toggle_btn_on)
-    else:
-        window_POT_SW["SW1_PIC"].update(source=toggle_btn_off)
+        window.close()
+        if window == window_BTN:
+            window_BTN = None
+        elif window == window_POT_SW:
+            window_POT_SW = None
+    if event == 'Reopen' or event == sg.WIN_CLOSED:
+        if window == window_POT_SW and not window_BTN:
+            window_BTN = make_winBTN()
+            window_BTN.move(window_POT_SW.current_location()[0] + 75, window_POT_SW.current_location()[1]+250)
+        elif window == window_BTN and not window_POT_SW:
+            window_POT_SW = make_winPOT_SW()
+            window_POT_SW.move(window_BTN.current_location()[0] + 75, window_BTN.current_location()[1]-250)
 
 
-    if randint(1,2) == 1:
-        window_POT_SW["SW2_PIC"].update(source=toggle_btn_on)
-    else:
-        window_POT_SW["SW2_PIC"].update(source=toggle_btn_off)
+    if window_POT_SW:
+        if randint(1,2) == 1:
+            window_POT_SW["SW1_PIC"].update(source=toggle_btn_on)
+        else:
+            window_POT_SW["SW1_PIC"].update(source=toggle_btn_off)
 
-    window_POT_SW["POT1"].update(current_count = randint(0,65000))
-    window_POT_SW["POT2"].update(current_count = randint(0,65000))
-    window_POT_SW["POT3"].update(current_count = randint(0,65000))
 
-    SetLED(window_BTN, 'BTN1', 'green' if randint(1,2) == 1 else 'red')
-    SetLED(window_BTN, 'BTN2', 'green' if randint(1,2) == 1 else 'red')
-    SetLED(window_BTN, 'BTN3', 'green' if randint(1,2) == 1 else 'red')
-    SetLED(window_BTN, 'BTN4', 'green' if randint(1,2) == 1 else 'red')
-    
-window_BTN.close()
-window_POT_SW.close()
+        if randint(1,2) == 1:
+            window_POT_SW["SW2_PIC"].update(source=toggle_btn_on)
+        else:
+            window_POT_SW["SW2_PIC"].update(source=toggle_btn_off)
+
+        window_POT_SW["POT1"].update(current_count = randint(0,65000))
+        window_POT_SW["POT2"].update(current_count = randint(0,65000))
+        window_POT_SW["POT3"].update(current_count = randint(0,65000))
+
+    if window_BTN:
+        SetLED(window_BTN, 'BTN1', 'green' if randint(1,2) == 1 else 'red')
+        SetLED(window_BTN, 'BTN2', 'green' if randint(1,2) == 1 else 'red')
+        SetLED(window_BTN, 'BTN3', 'green' if randint(1,2) == 1 else 'red')
+        SetLED(window_BTN, 'BTN4', 'green' if randint(1,2) == 1 else 'red')
+        
