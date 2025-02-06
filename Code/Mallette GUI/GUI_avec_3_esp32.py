@@ -45,9 +45,10 @@ listColor = ["green","pink","yellow","cyan"]
 #Nombre de Switch
 NB_SW = 8
 
-#La valeur de refresh en ms (divisé par 3 car il est utilisé 3 fois)
-REFRESH_RATE = 50/3
+#La valeur de refresh en ms
+REFRESH_RATE = 50
 
+DEBUG = False
 #Crée un graph pour contenir un rond de couleur
 def LEDIndicator(key=None, radius=30):
     return sg.Graph(canvas_size=(radius, radius),
@@ -65,7 +66,7 @@ def SetLED(window, key, color):
 
 #Les layout et activation des fenêtres
 layout_SW = [
-                [sg.Text('My SW Status Indicators', size=(20,1))],
+                [sg.Text('My SW Status Indicators', size=(20,1), key = "titleSW")],
                 [sg.Text('Sw1'),  sg.Text('Sw2'),  sg.Text('Sw3'),  sg.Text('Sw4'),   sg.Text('Sw5'),   sg.Text('Sw6'),   sg.Text('Sw7'),   sg.Text('Sw8'),],
                 [
                     sg.Image(source=TOGGLE_SW_OFF, key="Sw1"),sg.Image(source=TOGGLE_SW_OFF, key="Sw2"),sg.Image(source=TOGGLE_SW_OFF, key="Sw3"),sg.Image(source=TOGGLE_SW_OFF, key="Sw4"),
@@ -76,9 +77,10 @@ layout_SW = [
 
 
 window_SW = sg.Window('SW window', layout_SW, default_element_size=(12, 1), auto_size_text=False, finalize=True)
+window_SW.BackgroundColor = "red"
 
 layout_POT =    [
-                    [sg.Text('My Pot Indicators', size=(20,1))],
+                    [sg.Text('My Pot Indicators', size=(20,1), key = "titlePOT")],
                     [sg.Text('Pot1'), sg.Text('Pot2')],
                     [sg.ProgressBar(MAX_POT_VAL, key='Pot1'), sg.ProgressBar(MAX_POT_VAL, key='Pot2')],
                     [sg.Button('Exit')]
@@ -88,7 +90,7 @@ layout_POT =    [
 window_POT = sg.Window('POT window', layout_POT, default_element_size=(12, 1), auto_size_text=False, finalize=True)
 
 layout_Croco =[
-                [sg.Text('My croco indicator', size=(20,1))],
+                [sg.Text('My croco indicator', size=(20,1), key = "titleCroco")],
                 [sg.Text('Croco 1'),  sg.Text('Croco 2'),  sg.Text('Croco 3'), sg.Text('Croco 4')],
                 [LEDIndicator('0'), LEDIndicator('1'), LEDIndicator('2'), LEDIndicator('3')],
                 [LEDIndicator('4'), LEDIndicator('5'), LEDIndicator('6'), LEDIndicator('7')],          
@@ -112,63 +114,82 @@ def sendRequest(SlaveAddresse):
             break
         else:
             strReceived += chr(value) #Accumule les caractères pour faire un string Json complet
-    
-    print(strReceived)
+    if DEBUG:
+        print(strReceived)
     return json.loads(strReceived) #Transforme la string JSON en dict pour l'utiliser en dictionnaire
 
 #Boucle principale
 while True: 
 
-    msg_SW = sendRequest(SLAVE_ADDRESS_SW)
-    msg_POT = sendRequest(SLAVE_ADDRESS_POT)
-    msg_Croco = sendRequest(SLAVE_ADDRESS_Croco)
+#Essaye de lire les json des esp32 et met un message d'erreur s'il n'y parvient pas
+    try:
+        msg_SW = sendRequest(SLAVE_ADDRESS_SW)
+        SWerror = False
+        window_SW["titleSW"].update(text_color = "white")
+    except:
+        window_SW["titleSW"].update(text_color = "red")
+        SWerror = True
+        if DEBUG:
+            print("SW i2c ERROR")
+              
+    try:
+        msg_POT = sendRequest(SLAVE_ADDRESS_POT)
+        POTerror = False
+        window_POT["titlePOT"].update(text_color = "white")
+    except:
+        window_POT["titlePOT"].update(text_color = "red")
+        POTerror = True
+        if DEBUG:
+            print("POT i2c ERROR")
+        
+    try:
+        msg_Croco = sendRequest(SLAVE_ADDRESS_Croco)
+        Crocoerror = False
+        window_Croco["titleCroco"].update(text_color = "white")
+    except:
+        window_Croco["titleCroco"].update(text_color = "red")
+        Crocoerror = True
+        if DEBUG:
+            print("Croco i2c ERROR")    
     
-    event, value = window_SW.read(timeout=REFRESH_RATE)    #Attend 25ms pour voir si on appuis sur le bouton "exit". Si oui, on quitte la boucle
-    if event == 'Exit' or event == sg.WIN_CLOSED:
-        break
-    if value is None:
-        break
-
-    event, value = window_POT.read(timeout=REFRESH_RATE) #Attend 25ms pour voir si on appuis sur le bouton "exit". Si oui, on quitte la boucle
-    if event == 'Exit' or event == sg.WIN_CLOSED:
-        break
-    if value is None:
+    #-------------Lcture des boutons des fenetres--------------#
+    window, event, value = sg.read_all_windows(timeout = REFRESH_RATE)
+    
+    if event == 'Exit' or event == sg.WIN_CLOSED: #Si on ferme une fenetre on ferme toutes les fenetres
         break
     
-    event, value = window_Croco.read(timeout=REFRESH_RATE) #Attend 25ms pour voir si on appuis sur le bouton "exit". Si oui, on quitte la boucle
-    if event == 'Exit' or event == sg.WIN_CLOSED:
-        break
-    if value is None:
-        break
-
     #-----------Fenêtre Interface Croco-----------#
-    cpt = 0 #La paire de Croco actuel
-    colorCpt = 0 #la couleur de paire actuel
-    dictOfPairsColor = {} #Pour mettre la couleur en memoire pour la deuxieme fois qu'on voit la paire
-    #Pour chaque connection du Json, on met un rond de couleur pour l'associer avec sa paire
-    for pairs in msg_Croco['JsonData']:
-        if int(pairs) == NB_CROCO: #Le 8 signifit qu'il n'y pas de connection
-            SetLED(window_Croco, str(cpt), 'black')
-        elif cpt < int(pairs): #Si c'est la premiere fois qu'on voit cette paire
-            SetLED(window_Croco, str(cpt), listColor[colorCpt]) #On met le rond de couleur a la position cpt en une des 4 couleurs possible en ordre
-            dictOfPairsColor[str(cpt)] = listColor[colorCpt]	#On met la couleur en memoire pour la deuxieme fois qu'on voit la paire
-            colorCpt = colorCpt + 1 #On passe a la prochaine couleur
-        else:  #Si c'est la deuxieme fois qu'on voit cette paire
-            SetLED(window_Croco, str(cpt), dictOfPairsColor[pairs])
+    if not Crocoerror:
+        cpt = 0 #La paire de Croco actuel
+        colorCpt = 0 #la couleur de paire actuel
+        dictOfPairsColor = {} #Pour mettre la couleur en memoire pour la deuxieme fois qu'on voit la paire
+        #Pour chaque connection du Json, on met un rond de couleur pour l'associer avec sa paire
+        for pairs in msg_Croco['JsonData']:
+            if int(pairs) == NB_CROCO: #Le 8 signifit qu'il n'y pas de connection
+                SetLED(window_Croco, str(cpt), 'black')
+            elif cpt < int(pairs): #Si c'est la premiere fois qu'on voit cette paire
+                SetLED(window_Croco, str(cpt), listColor[colorCpt]) #On met le rond de couleur a la position cpt en une des 4 couleurs possible en ordre
+                dictOfPairsColor[str(cpt)] = listColor[colorCpt]	#On met la couleur en memoire pour la deuxieme fois qu'on voit la paire
+                colorCpt = colorCpt + 1 #On passe a la prochaine couleur
+            else:  #Si c'est la deuxieme fois qu'on voit cette paire
+                SetLED(window_Croco, str(cpt), dictOfPairsColor[pairs])
 
-        cpt = cpt + 1
+            cpt = cpt + 1
 
     #-----------Fenêtre Interface_POT-----------#
-    #Met à jour le progrèe du "ProgressBar" selon l'état des potentiomètes
-    window_POT["Pot1"].update(current_count = int(msg_POT['JsonData']['Pot1']))
-    window_POT["Pot2"].update(current_count = int(msg_POT['JsonData']['Pot2']))
+    if not POTerror:
+        #Met à jour le progrèe du "ProgressBar" selon l'état des potentiomètes
+        window_POT["Pot1"].update(current_count = int(msg_POT['JsonData']['Pot1']))
+        window_POT["Pot2"].update(current_count = int(msg_POT['JsonData']['Pot2']))
 
-    #-----------Fenêtre Interface_SW-----------#
-    for curSw in range(NB_SW): #Pour chaque switch, on change l'image de la switch selon son état
-        if msg_SW['JsonData'][f'Sw{curSw + 1}'] == '1':
-            window_SW[f'Sw{curSw + 1}'].update(source=TOGGLE_SW_ON)
-        else:
-            window_SW[f'Sw{curSw + 1}'].update(source=TOGGLE_SW_OFF)
+
+        #-----------Fenêtre Interface_SW-----------#
+    if not SWerror:
+        for curSw in range(NB_SW): #Pour chaque switch, on change l'image de la switch selon son état
+            if msg_SW['JsonData'][f'Sw{curSw + 1}'] == '1':
+                window_SW[f'Sw{curSw + 1}'].update(source=TOGGLE_SW_ON)
+            else:
+                window_SW[f'Sw{curSw + 1}'].update(source=TOGGLE_SW_OFF)
 
     
 #À la fin du programme, on ferme les fenêtres
