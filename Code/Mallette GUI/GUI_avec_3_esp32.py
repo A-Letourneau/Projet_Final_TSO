@@ -55,6 +55,7 @@ NB_GOOD_ANSWER_REQ = 3
 #Pour les print
 DEBUG = False
 
+DEBUG = False
 #Crée un graph pour contenir un rond de couleur
 def LEDIndicator(key=None, radius=100):
     return sg.Graph(canvas_size=(radius, radius),
