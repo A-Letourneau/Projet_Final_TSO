@@ -31,6 +31,7 @@ def main():
 
     window_background['-C-'].expand(True, False, False)  # expand the titlebar's rightmost column so that it resizes correctly
 
+    
     layout = [
         [sg.Button(image_source='Minesweeperlogo.png', image_subsample=5, pad=10, key="Minesweeper")],
         [sg.Button(image_source='Folder.png', image_subsample=5, pad=10)],

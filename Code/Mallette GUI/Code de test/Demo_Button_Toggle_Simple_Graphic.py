@@ -15,7 +15,7 @@ import PySimpleGUI as sg
 
 
 def main():
-    layout = [[sg.Text('A toggle button example')],
+    layout = [[sg.Text('A toggle button example', key="1", text_color="blue")],
               [sg.Text('Off'),
                sg.Button(image_data=toggle_btn_off, key='-TOGGLE-GRAPHIC-', button_color=(sg.theme_background_color(), sg.theme_background_color()), border_width=0, metadata=False),
                sg.Text('On')]]
@@ -28,7 +28,9 @@ def main():
             break
         elif event == '-TOGGLE-GRAPHIC-':  # if the graphical button that changes images
             window['-TOGGLE-GRAPHIC-'].metadata = not window['-TOGGLE-GRAPHIC-'].metadata
+            window["1"].update(text_color = "red")
             window['-TOGGLE-GRAPHIC-'].update(image_data=toggle_btn_on if window['-TOGGLE-GRAPHIC-'].metadata else toggle_btn_off)
+
 
     window.close()
 
