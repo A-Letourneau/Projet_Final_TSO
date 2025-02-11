@@ -20,6 +20,11 @@ Quand on ferme une des fenêtres, les deux se ferme.
 
 """
 
+
+"""
+Trouver une maniere de cree un premier chiffre (flag dans if goodAnswer)
+
+"""
 from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
 import PySimpleGUI as sg            #Pour l'interface graphique
 import json                         #Pour la manipulation des json
@@ -49,13 +54,13 @@ NB_SW = 8
 #La valeur de refresh en ms
 REFRESH_RATE = 50
 
-#Le nombre de question pour les equation
-NB_GOOD_ANSWER_REQ = 3
+#Liste les operations des question en ordre
+#LIST_OPERATIVE = ["+","+","-","x","/"]
+LIST_OPERATIVE = ["x","x"]
 
 #Pour les print
 DEBUG = False
 
-DEBUG = False
 #Crée un graph pour contenir un rond de couleur
 def LEDIndicator(key=None, radius=100):
     return sg.Graph(canvas_size=(radius, radius),
@@ -85,7 +90,7 @@ layout_SW = [
 
 
 window_SW = sg.Window('SW window', layout_SW, default_element_size=(12, 1), auto_size_text=False, finalize=True)
-window_SW.BackgroundColor = "red"
+window_SW.location = (100,100)
 
 layout_POT =    [
                     [sg.Text('My Pot Indicators', size=(20,1), key = "titlePOT")],
@@ -99,9 +104,9 @@ window_POT = sg.Window('POT window', layout_POT, default_element_size=(12, 1), a
 
 layout_Croco =[
                 [sg.Text('My croco indicator', size=(20,1), key = "titleCroco")],
-                [sg.Graph(canvas_size=(400, 100),
+                [sg.Graph(canvas_size=(500, 100),
                     graph_bottom_left=(0, 0),
-                    graph_top_right=(400, 100),
+                    graph_top_right=(500, 100),
                     pad=(0, 0), key="equationGraph")],
                 [sg.Text('Croco 1'),  sg.Text('Croco 2'),  sg.Text('Croco 3'), sg.Text('Croco 4')],
                 [LEDIndicator('0'), LEDIndicator('1'), LEDIndicator('2'), LEDIndicator('3')],
@@ -129,6 +134,18 @@ def sendRequest(SlaveAddresse):
     if DEBUG:
         print(strReceived)
     return json.loads(strReceived) #Transforme la string JSON en dict pour l'utiliser en dictionnaire
+
+
+def isPrime(num):
+    # Iterate from 2 to n // 2
+    for i in range(2, (num//2)+1):
+        # If num is divisible by any number between
+        # 2 and n / 2, it is not prime
+        if (num % i) == 0:
+            return False
+            break
+        else:
+            return True
 
 
 randomAnswer = randint(3,15)
@@ -179,6 +196,7 @@ while True:
     colorCpt = 0 #la couleur de paire actuel
     dictOfPairsColor = {} #Pour mettre la couleur en memoire pour la deuxieme fois qu'on voit la paire
     answer = 0
+    
     #Pour chaque connection du Json, on met un rond de couleur pour l'associer avec sa paire
     for pairs in msg_Croco['JsonData']:
         if int(pairs) == NB_CROCO: #Le 8 signifit qu'il n'y pas de connection
@@ -187,22 +205,62 @@ while True:
             SetLED(window_Croco, str(cpt), listColor[colorCpt]) #On met le rond de couleur a la position cpt en une des 4 couleurs possible en ordre
             dictOfPairsColor[str(cpt)] = listColor[colorCpt]#On met la couleur en memoire pour la deuxieme fois qu'on voit la paire
             colorCpt = colorCpt + 1 #On passe a la prochaine couleur
-            answer += (cpt + 1) + (int(pairs) + 1)
+            if LIST_OPERATIVE[goodAnswer] == "+":
+                answer += (cpt + 1) + (int(pairs) + 1)
+            elif LIST_OPERATIVE[goodAnswer] == "-":
+                answer += (int(pairs) + 1) - (cpt + 1)
+            elif LIST_OPERATIVE[goodAnswer] == "x":
+                answer += (cpt + 1) * (int(pairs) + 1)
+            elif LIST_OPERATIVE[goodAnswer] == "/":
+                answer += (int(pairs) + 1) / (cpt + 1)
+            
         else:  #Si c'est la deuxieme fois qu'on voit cette paire
-            SetLED(window_Croco, str(cpt), dictOfPairsColor[pairs])
+            try:
+                SetLED(window_Croco, str(cpt), dictOfPairsColor[pairs])
+            except:
+                SetLED(window_Croco, str(cpt), "red")
         cpt = cpt + 1
 
     window_Croco["equationGraph"].erase()
-    window_Croco["equationGraph"].draw_text(f"{randomAnswer}={answer}", (150,50), font=("Comic", 50))
-    
-    
+    window_Croco["equationGraph"].draw_text(f"{randomAnswer}={answer} ({LIST_OPERATIVE[goodAnswer]})", (200,50), font=("Comic", 50))
+
     if answer == randomAnswer:
-        sg.popup('CORRECT')
-        randomAnswer = randint(3,15)
+        sg.popup_no_titlebar('CORRECT', auto_close_duration = 1, auto_close = True)
         goodAnswer += 1
-        if goodAnswer >= NB_GOOD_ANSWER_REQ:
-            sg.popup('REUSSI')
+        
+        if goodAnswer == len(LIST_OPERATIVE):
+            sg.popup_no_titlebar('REUSSI', auto_close_duration = 1, auto_close = True)
             goodAnswer = 0
+            
+        elif LIST_OPERATIVE[goodAnswer] == "+":
+            while True:
+                NewRandomAnswer = randint(3,15)
+                if NewRandomAnswer != randomAnswer:
+                    randomAnswer = NewRandomAnswer
+                    break
+                
+        elif LIST_OPERATIVE[goodAnswer] == "-":
+            while True:
+                NewRandomAnswer = randint(1,7)
+                if NewRandomAnswer != randomAnswer:
+                    randomAnswer = NewRandomAnswer
+                    break
+                
+        elif LIST_OPERATIVE[goodAnswer] == "x":
+            while True:
+                NewRandomAnswer = randint(1,8)
+                NewRandomAnswer2 = randint(1,8)
+                if randomAnswer != NewRandomAnswer * NewRandomAnswer2 and NewRandomAnswer != NewRandomAnswer2:
+                    randomAnswer = NewRandomAnswer * NewRandomAnswer2
+                    break
+                
+        elif LIST_OPERATIVE[goodAnswer] == "/":
+            while True:
+                NewRandomAnswer = randint(1,4)
+                if NewRandomAnswer != randomAnswer:
+                    randomAnswer = NewRandomAnswer
+                    break
+            
 
     #-----------Fenêtre Interface_POT-----------#
     if not POTerror:
