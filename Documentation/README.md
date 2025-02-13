@@ -11,6 +11,10 @@ Il contient principalement des fichiers texte décrivant les raisons pour lesque
 Ce dossier contient :  
 - Un fichier word archivant le travail accompli par Alexis Létourneau
 
+## 📂 Fiche technique 
+Ce dossier contient :  
+- Les diverses fiche technique utilisé pouvant être pertinente si un ajout est effectuer
+
 ## 📂 Prototype  
 Ce dossier contient :  
 - Des images illustrant les débuts du projet.  
