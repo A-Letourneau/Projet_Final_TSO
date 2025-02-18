@@ -75,7 +75,7 @@ GenerateClassCluster=0
 DocumentUniqueId=
 
 [Document2]
-DocumentPath=TEMPLATE_Title.SchDoc
+DocumentPath=Title_Page.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -92,7 +92,24 @@ GenerateClassCluster=0
 DocumentUniqueId=SXLJWRSD
 
 [Document3]
-DocumentPath=TEMPLATE_Connectors.SchDoc
+DocumentPath=SchemaBloc_Image.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=ERJQVQTD
+
+[Document4]
+DocumentPath=Alimentation_USB_Header.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -108,7 +125,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=FAPMBNMV
 
-[Document4]
+[Document5]
 DocumentPath=Énigme1_Switch.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -125,7 +142,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=IJWHLXDW
 
-[Document5]
+[Document6]
 DocumentPath=Énigme2_Crocodile.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -142,7 +159,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=RTYEHROU
 
-[Document6]
+[Document7]
 DocumentPath=Énigme3_Potentiomètres.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -159,7 +176,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=TPXILOFH
 
-[Document7]
+[Document8]
 DocumentPath=Raspberry_Pi_4_ModelB.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -176,7 +193,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=DQAGYFQL
 
-[Document8]
+[Document9]
 DocumentPath=TEMPLATE_PCB_2L.PcbDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -193,7 +210,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=GNYTCPOA
 
-[Document9]
+[Document10]
 DocumentPath=TEMPLATE_PCB_4L.PcbDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -210,7 +227,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=LIENCYWW
 
-[Document10]
+[Document11]
 DocumentPath=XCVR_ESP32-C3-DEVKITC-02.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -227,7 +244,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=WPIMTKSJ
 
-[Document11]
+[Document12]
 DocumentPath=TGE_outputjob_4L_PANEL.OutJob
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -244,7 +261,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document12]
+[Document13]
 DocumentPath=ESP32-C3-DEVKITC-02.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -261,7 +278,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=MVRQIXWH
 
-[Document13]
+[Document14]
 DocumentPath=Raspberry_Pi4B_3D.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -278,7 +295,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=NJBKYYAC
 
-[Document14]
+[Document15]
 DocumentPath=Schlib1.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -295,7 +312,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=WMUZPLMO
 
-[Document15]
+[Document16]
 DocumentPath=Res_Templates.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -312,7 +329,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=YYGEDFCC
 
-[Document16]
+[Document17]
 DocumentPath=RASPBERRY_PI_4B_4GB.IntLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -329,7 +346,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document17]
+[Document18]
 DocumentPath=Schema_MaletteDevasion.Annotation
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -346,7 +363,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document18]
+[Document19]
 DocumentPath=C:\Users\louwo\Downloads\SOT95P275X110-5N.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -363,7 +380,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=HPTHGDVN
 
-[Document19]
+[Document20]
 DocumentPath=74HC1G125-Q100.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
