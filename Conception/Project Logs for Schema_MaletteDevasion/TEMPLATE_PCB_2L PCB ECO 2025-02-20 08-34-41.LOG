@@ -1,0 +1,6 @@
+Change Component Designator: OldDesignator=J? NewDesignator=J29
+Change Component Designator: OldDesignator=R? NewDesignator=R31
+Change Component Designator: OldDesignator=R? NewDesignator=R32
+Change Net Name : Old Net Name=NetJ?_A5 New Net Name=NetJ29_A5
+Change Net Name : Old Net Name=NetJ?_B5 New Net Name=NetJ29_B5
+Added Member To Class: ClassName=Alimentation_USB_Header Member=Component R32 5.1 Kohm

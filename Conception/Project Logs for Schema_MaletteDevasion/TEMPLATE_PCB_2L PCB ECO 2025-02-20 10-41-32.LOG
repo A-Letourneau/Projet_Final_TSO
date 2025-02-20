@@ -1,0 +1,11 @@
+Removed Pin From Net: NetName=GND Pin=J29-4
+Removed Pin From Net: NetName=GND Pin=J29-5
+Removed Pin From Net: NetName=GND Pin=J29-A1/B12
+Removed Pin From Net: NetName=VUSB Pin=J29-A4/B9
+Removed Pin From Net: NetName=GND Pin=J29-A12/B1
+Removed Pin From Net: NetName=VUSB Pin=J29-B4/A9
+Removed Pin From Net: NetName=GND Pin=R31-1
+Removed Pin From Net: NetName=GND Pin=R32-1
+Removed Member From Class: ClassName=Alimentation_USB_Header Member=J29
+Removed Member From Class: ClassName=Alimentation_USB_Header Member=R31
+Removed Member From Class: ClassName=Alimentation_USB_Header Member=R32
