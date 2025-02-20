@@ -8,8 +8,8 @@
         {
             "name": "PlatformIO",
             "includePath": [
-                "c:/Users/mario/OneDrive/Documents/GitHub/Projet Final TSO/Projet_Final_TSO/Code de test pour protoype/I2C et Json du ESp32/CODE_ESP32_POT_SW/include",
-                "c:/Users/mario/OneDrive/Documents/GitHub/Projet Final TSO/Projet_Final_TSO/Code de test pour protoype/I2C et Json du ESp32/CODE_ESP32_POT_SW/src",
+                "c:/Users/mario/OneDrive/Documents/GitHub/Projet Final TSO/Projet_Final_TSO/Code/I2C et Json du ESp32/CODE_ESP32_POT/include",
+                "c:/Users/mario/OneDrive/Documents/GitHub/Projet Final TSO/Projet_Final_TSO/Code/I2C et Json du ESp32/CODE_ESP32_POT/src",
                 "C:/Users/mario/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                 "C:/Users/mario/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32c3/include/newlib/platform_include",
                 "C:/Users/mario/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32c3/include/freertos/include",
@@ -241,8 +241,8 @@
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
-                    "c:/Users/mario/OneDrive/Documents/GitHub/Projet Final TSO/Projet_Final_TSO/Code de test pour protoype/I2C et Json du ESp32/CODE_ESP32_POT_SW/include",
-                    "c:/Users/mario/OneDrive/Documents/GitHub/Projet Final TSO/Projet_Final_TSO/Code de test pour protoype/I2C et Json du ESp32/CODE_ESP32_POT_SW/src",
+                    "c:/Users/mario/OneDrive/Documents/GitHub/Projet Final TSO/Projet_Final_TSO/Code/I2C et Json du ESp32/CODE_ESP32_POT/include",
+                    "c:/Users/mario/OneDrive/Documents/GitHub/Projet Final TSO/Projet_Final_TSO/Code/I2C et Json du ESp32/CODE_ESP32_POT/src",
                     "C:/Users/mario/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                     "C:/Users/mario/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32c3/include/newlib/platform_include",
                     "C:/Users/mario/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32c3/include/freertos/include",
@@ -473,7 +473,7 @@
                 ]
             },
             "defines": [
-                "PLATFORMIO=60116",
+                "PLATFORMIO=60117",
                 "ARDUINO_ESP32C3_DEV",
                 "HAVE_CONFIG_H",
                 "MBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\"",

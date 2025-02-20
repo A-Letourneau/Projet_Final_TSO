@@ -28,8 +28,7 @@ Trouver une maniere de cree un premier chiffre (flag dans if goodAnswer)
 from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
 import PySimpleGUI as sg            #Pour l'interface graphique
 import json                         #Pour la manipulation des json
-from time import sleep
-from random import randint
+from random import randint          #Pour la generation de nombre aleatoire pour les equations
 
 #Les deux images d'interrupteurs en base 64
 TOGGLE_SW_OFF = b'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'
@@ -55,8 +54,8 @@ NB_SW = 8
 REFRESH_RATE = 50
 
 #Liste les operations des question en ordre
-#LIST_OPERATIVE = ["+","+","-","x","/"]
-LIST_OPERATIVE = ["x","x"]
+#LIST_OPERATIVE = ["+","-","x","/"] exemple de quatre questions possibles
+LIST_OPERATIVE = ["/","/"]
 
 #Pour les print
 DEBUG = False
@@ -103,7 +102,7 @@ layout_POT =    [
 window_POT = sg.Window('POT window', layout_POT, default_element_size=(12, 1), auto_size_text=False, finalize=True)
 
 layout_Croco =[
-                [sg.Text('My croco indicator', size=(20,1), key = "titleCroco")],
+                [sg.Text(f"Nombre d'équation restante 0/{len(LIST_OPERATIVE)}", size=(40,1), key = 'titleCroco')],
                 [sg.Graph(canvas_size=(500, 100),
                     graph_bottom_left=(0, 0),
                     graph_top_right=(500, 100),
@@ -135,21 +134,10 @@ def sendRequest(SlaveAddresse):
         print(strReceived)
     return json.loads(strReceived) #Transforme la string JSON en dict pour l'utiliser en dictionnaire
 
-
-def isPrime(num):
-    # Iterate from 2 to n // 2
-    for i in range(2, (num//2)+1):
-        # If num is divisible by any number between
-        # 2 and n / 2, it is not prime
-        if (num % i) == 0:
-            return False
-            break
-        else:
-            return True
-
-
-randomAnswer = randint(3,15)
-goodAnswer = 0
+#Initiation du jeu d'equation
+firstEquation = True #Pour savoir qu'il faut trouver une premiere reponse aleatoire
+randomAnswer = 0 #La reponse aleatoire
+goodAnswer = 0 #Nombre de bonnes reponses
 
 #Boucle principale
 while True: 
@@ -192,46 +180,59 @@ while True:
         break
     
    #-----------Fenêtre Interface Croco-----------#
-    cpt = 0 #La paire de Croco actuel
+    curCroco = 0 #La paire de Croco actuel
     colorCpt = 0 #la couleur de paire actuel
     dictOfPairsColor = {} #Pour mettre la couleur en memoire pour la deuxieme fois qu'on voit la paire
-    answer = 0
+    answer = 0 #Reponse de l'usager
     
     #Pour chaque connection du Json, on met un rond de couleur pour l'associer avec sa paire
     for pairs in msg_Croco['JsonData']:
         if int(pairs) == NB_CROCO: #Le 8 signifit qu'il n'y pas de connection
-            SetLED(window_Croco, str(cpt), 'white')
-        elif cpt < int(pairs): #Si c'est la premiere fois qu'on voit cette paire
-            SetLED(window_Croco, str(cpt), listColor[colorCpt]) #On met le rond de couleur a la position cpt en une des 4 couleurs possible en ordre
-            dictOfPairsColor[str(cpt)] = listColor[colorCpt]#On met la couleur en memoire pour la deuxieme fois qu'on voit la paire
+            SetLED(window_Croco, str(curCroco), 'white')
+        elif curCroco < int(pairs): #Si c'est la premiere fois qu'on voit cette paire
+            SetLED(window_Croco, str(curCroco), listColor[colorCpt]) #On met le rond de couleur a la position curCroco en une des 4 couleurs possible en ordre
+            dictOfPairsColor[str(curCroco)] = listColor[colorCpt]#On met la couleur en memoire pour la deuxieme fois qu'on voit la paire
             colorCpt = colorCpt + 1 #On passe a la prochaine couleur
-            if LIST_OPERATIVE[goodAnswer] == "+":
-                answer += (cpt + 1) + (int(pairs) + 1)
+            
+            if LIST_OPERATIVE[goodAnswer] == "+": #Fait la bonne operation selon l'operation, mais additionne toujours les paires
+                answer += (curCroco + 1) + (int(pairs) + 1)
             elif LIST_OPERATIVE[goodAnswer] == "-":
-                answer += (int(pairs) + 1) - (cpt + 1)
+                answer += (int(pairs) + 1) - (curCroco + 1)
             elif LIST_OPERATIVE[goodAnswer] == "x":
-                answer += (cpt + 1) * (int(pairs) + 1)
+                answer += (curCroco + 1) * (int(pairs) + 1)
             elif LIST_OPERATIVE[goodAnswer] == "/":
-                answer += (int(pairs) + 1) / (cpt + 1)
+                answer += (int(pairs) + 1) / (curCroco + 1)
             
         else:  #Si c'est la deuxieme fois qu'on voit cette paire
-            try:
-                SetLED(window_Croco, str(cpt), dictOfPairsColor[pairs])
+            try: #
+                SetLED(window_Croco, str(curCroco), dictOfPairsColor[pairs])
             except:
-                SetLED(window_Croco, str(cpt), "red")
-        cpt = cpt + 1
+                if DEBUG:
+                    SetLED(window_Croco, str(curCroco), "red")
+                    
+        curCroco = curCroco + 1
 
     window_Croco["equationGraph"].erase()
-    window_Croco["equationGraph"].draw_text(f"{randomAnswer}={answer} ({LIST_OPERATIVE[goodAnswer]})", (200,50), font=("Comic", 50))
+    if LIST_OPERATIVE[goodAnswer] != "/": #Pour afficher la reponse voulu, la reponse de l'utilisateur et l'operation actuelle
+        window_Croco["equationGraph"].draw_text(f"{randomAnswer}={answer} ({LIST_OPERATIVE[goodAnswer]})", (200,50), font=("Comic", 50))
+    else: #Pour afficher un bon nombre de decimal des float
+        window_Croco["equationGraph"].draw_text(f"{randomAnswer:5.3f}={answer:5.3f} ({LIST_OPERATIVE[goodAnswer]})", (200,50), font=("Comic", 30))        
+            
+    if firstEquation or answer == randomAnswer: 
+        if not firstEquation:
+            goodAnswer += 1
+            sg.popup_no_titlebar('CORRECT', auto_close_duration = 1, auto_close = True)
+            window_Croco["titleCroco"].update(f"Nombre d'équation restante {goodAnswer}/{len(LIST_OPERATIVE)}")
+        else:
+            firstEquation = False
 
-    if answer == randomAnswer:
-        sg.popup_no_titlebar('CORRECT', auto_close_duration = 1, auto_close = True)
-        goodAnswer += 1
-        
-        if goodAnswer == len(LIST_OPERATIVE):
+        if goodAnswer == len(LIST_OPERATIVE): #Lorsque l'user a finit les questions
             sg.popup_no_titlebar('REUSSI', auto_close_duration = 1, auto_close = True)
             goodAnswer = 0
+            firstEquation = True
+            window_Croco["titleCroco"].update(f"Nombre d'équation restante {goodAnswer}/{len(LIST_OPERATIVE)}")
             
+        #Tout les reponses aleatoires doivent etre different de l'ancien pour ne pas resoudre immediatement
         elif LIST_OPERATIVE[goodAnswer] == "+":
             while True:
                 NewRandomAnswer = randint(3,15)
@@ -250,17 +251,19 @@ while True:
             while True:
                 NewRandomAnswer = randint(1,8)
                 NewRandomAnswer2 = randint(1,8)
-                if randomAnswer != NewRandomAnswer * NewRandomAnswer2 and NewRandomAnswer != NewRandomAnswer2:
+                if randomAnswer != NewRandomAnswer * NewRandomAnswer2 and NewRandomAnswer != NewRandomAnswer2: #Un nombre qui n'est pas carre
                     randomAnswer = NewRandomAnswer * NewRandomAnswer2
                     break
                 
         elif LIST_OPERATIVE[goodAnswer] == "/":
             while True:
-                NewRandomAnswer = randint(1,4)
-                if NewRandomAnswer != randomAnswer:
-                    randomAnswer = NewRandomAnswer
+                NewRandomAnswer = randint(2,8)
+                NewRandomAnswer2 = randint(2,8)
+                if NewRandomAnswer2 < NewRandomAnswer and randomAnswer != NewRandomAnswer * NewRandomAnswer2 and NewRandomAnswer != NewRandomAnswer2: #Un nombre qui n'est pas 1 et pas plus petit que zero
+                    randomAnswer = NewRandomAnswer / NewRandomAnswer2
                     break
-            
+    
+    
 
     #-----------Fenêtre Interface_POT-----------#
     if not POTerror:
@@ -269,7 +272,7 @@ while True:
         window_POT["Pot2"].update(current_count = int(msg_POT['JsonData']['Pot2']))
 
 
-        #-----------Fenêtre Interface_SW-----------#
+    #-----------Fenêtre Interface_SW-----------#
     if not SWerror:
         for curSw in range(NB_SW): #Pour chaque switch, on change l'image de la switch selon son état
             if msg_SW['JsonData'][f'Sw{curSw + 1}'] == '1':
