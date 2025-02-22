@@ -363,6 +363,10 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=HFYVFHZR
 
+[GeneratedDocument1]
+DocumentPath=Project Outputs for Schema_MaletteDevasion\Design Rule Check - TEMPLATE_PCB_2L.html
+DItemRevisionGUID=
+
 [Parameter1]
 Name=Projet_Concepteur1
 Value=Louis Boisvert

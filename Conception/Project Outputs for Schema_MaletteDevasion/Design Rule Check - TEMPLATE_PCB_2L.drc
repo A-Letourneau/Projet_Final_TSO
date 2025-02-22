@@ -1,0 +1,70 @@
+Protel Design System Design Rule Check
+PCB File : F:\cours\planif projet\Projet_Final_TSO\Conception\TEMPLATE_PCB_2L.PcbDoc
+Date     : 2025-02-22
+Time     : 14:02:43
+
+Processing Rule : Clearance Constraint (Gap=0.152mm) (All),(All)
+Rule Violations :0
+
+Processing Rule : Short-Circuit Constraint (Allowed=No) (All),(All)
+   Violation between Short-Circuit Constraint: Between Pad J23-(216.583mm,21.301mm) on Multi-Layer And Polygon Region (477 hole(s)) Bottom Location : [X = 0mm][Y = 0mm]
+   Violation between Short-Circuit Constraint: Between Pad J23-(216.583mm,21.301mm) on Multi-Layer And Polygon Region (78 hole(s)) Top Location : [X = 0mm][Y = 0mm]
+   Violation between Short-Circuit Constraint: Between Pad J23-(222.583mm,21.301mm) on Multi-Layer And Polygon Region (477 hole(s)) Bottom Location : [X = 0mm][Y = 0mm]
+   Violation between Short-Circuit Constraint: Between Pad J23-(222.583mm,21.301mm) on Multi-Layer And Polygon Region (78 hole(s)) Top Location : [X = 0mm][Y = 0mm]
+Rule Violations :4
+
+Processing Rule : Un-Routed Net Constraint ( (All) )
+   Violation between Un-Routed Net Constraint: Net 3V3 Between Pad R19-2(298.704mm,158.877mm) on Multi-Layer And Pad J15-1(322.354mm,97.674mm) on Multi-Layer 
+   Violation between Un-Routed Net Constraint: Net VUSB Between Pad M3-5(32.41mm,131.789mm) on Top And Track (69.088mm,134.211mm)(69.088mm,134.211mm) on Top 
+Rule Violations :2
+
+Processing Rule : Modified Polygon (Allow modified: No), (Allow shelved: No)
+Rule Violations :0
+
+Processing Rule : Width Constraint (Min=0.127mm) (Max=25.4mm) (Preferred=0.152mm) (All)
+Rule Violations :0
+
+Processing Rule : Power Plane Connect Rule(Relief Connect )(Expansion=0.508mm) (Conductor Width=0.254mm) (Air Gap=0.254mm) (Entries=4) (All)
+Rule Violations :0
+
+Processing Rule : Minimum Annular Ring (Minimum=0.1mm) (All)
+Rule Violations :0
+
+Processing Rule : Hole Size Constraint (Min=0.3mm) (Max=6.3mm) (All)
+Rule Violations :0
+
+Processing Rule : Hole To Hole Clearance (Gap=0.5mm) (All),(All)
+Rule Violations :0
+
+Processing Rule : Minimum Solder Mask Sliver (Gap=0.1mm) (All),(All)
+Rule Violations :0
+
+Processing Rule : Silk To Solder Mask (Clearance=0.024mm) (IsPad),(All)
+Rule Violations :0
+
+Processing Rule : Silk to Silk (Clearance=0.102mm) (All),(All)
+   Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Text "PCB REV #" (261.239mm,212.823mm) on Top Overlay And Track (256.239mm,211.698mm)(256.239mm,215.773mm) on Top Overlay Silk Text to Silk Clearance [0mm]
+   Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Text "PCB REV #" (261.239mm,212.823mm) on Top Overlay And Track (256.239mm,211.698mm)(261.239mm,211.698mm) on Top Overlay Silk Text to Silk Clearance [0mm]
+   Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Text "PCB REV #" (261.239mm,212.823mm) on Top Overlay And Track (261.239mm,211.698mm)(261.239mm,215.773mm) on Top Overlay Silk Text to Silk Clearance [0mm]
+Rule Violations :3
+
+Processing Rule : Net Antennae (Tolerance=0mm) (All)
+   Violation between Net Antennae: Track (403.352mm,97.028mm)(405.257mm,95.123mm) on Top 
+Rule Violations :1
+
+Processing Rule : Board Clearance Constraint (Gap=0mm) (All)
+Rule Violations :0
+
+Processing Rule : Height Constraint (Min=0mm) (Max=25.4mm) (Prefered=12.7mm) (All)
+Rule Violations :0
+
+Waived Violations Of Rule : Silk to Silk (Clearance=0.102mm) (All),(All)
+   Waived Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Arc (324.104mm,114.944mm) on Top Overlay And Text "+" (323.404mm,113.694mm) on Top Overlay Silk Text to Silk Clearance [0mm]Waived by Louis Boisvert at 2025-02-22 14:00:50sa fait partie de la pièce
+   Waived Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Arc (330.851mm,114.935mm) on Top Overlay And Text "+" (330.151mm,113.685mm) on Top Overlay Silk Text to Silk Clearance [0mm]Waived by Louis Boisvert at 2025-02-22 14:01:08sa fait partie de la pièce
+   Waived Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Arc (337.685mm,114.808mm) on Top Overlay And Text "+" (336.985mm,113.558mm) on Top Overlay Silk Text to Silk Clearance [0mm]Waived by Louis Boisvert at 2025-02-22 14:01:13sa fait partie de la pièce
+Waived Violations :3
+
+
+Violations Detected : 10
+Waived Violations : 3
+Time Elapsed        : 00:00:01
