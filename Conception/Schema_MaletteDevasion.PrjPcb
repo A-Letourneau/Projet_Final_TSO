@@ -194,23 +194,6 @@ GenerateClassCluster=0
 DocumentUniqueId=GNYTCPOA
 
 [Document9]
-DocumentPath=TEMPLATE_PCB_4L.PcbDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=LIENCYWW
-
-[Document10]
 DocumentPath=XCVR_ESP32-C3-DEVKITC-02.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -227,7 +210,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=WPIMTKSJ
 
-[Document11]
+[Document10]
 DocumentPath=TGE_outputjob_4L_PANEL.OutJob
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -244,7 +227,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document12]
+[Document11]
 DocumentPath=ESP32-C3-DEVKITC-02.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -261,7 +244,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=MVRQIXWH
 
-[Document13]
+[Document12]
 DocumentPath=Raspberry_Pi4B_3D.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -278,7 +261,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=NJBKYYAC
 
-[Document14]
+[Document13]
 DocumentPath=Schlib1.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -295,7 +278,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=WMUZPLMO
 
-[Document15]
+[Document14]
 DocumentPath=Res_Templates.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -312,7 +295,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=YYGEDFCC
 
-[Document16]
+[Document15]
 DocumentPath=RASPBERRY_PI_4B_4GB.IntLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -329,7 +312,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document17]
+[Document16]
 DocumentPath=Schema_MaletteDevasion.Annotation
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -346,7 +329,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document18]
+[Document17]
 DocumentPath=74HC1G125-Q100.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -365,6 +348,10 @@ DocumentUniqueId=HFYVFHZR
 
 [GeneratedDocument1]
 DocumentPath=Project Outputs for Schema_MaletteDevasion\Design Rule Check - TEMPLATE_PCB_2L.html
+DItemRevisionGUID=
+
+[GeneratedDocument2]
+DocumentPath=Project Outputs for Schema_MaletteDevasion\Schema_MaletteDevasion.xlsx
 DItemRevisionGUID=
 
 [Parameter1]
@@ -487,7 +474,7 @@ GlobalBookmarks=-1
 ExportBOM=0
 TemplateFilename=Board Stack Report.XLT
 TemplateStoreRelative=-1
-PCB_PrintColor=1
+PCB_PrintColor=0
 SCH_PrintColor=0
 PrintQuality=-3
 SCH_ShowNoErc=-1
@@ -837,6 +824,18 @@ OutputDocumentPath1=
 OutputVariantName1=[No Variations]
 OutputDefault1=0
 PageOptions1=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-3|MediaType=1|DitherType=10|PrintScaleMode=1|PaperKind=A4|PaperIndex=9
+Configuration1_Name1=ColumnNameFormat
+Configuration1_Item1=CaptionAsName
+Configuration1_Name2=ForceUpdateSettings
+Configuration1_Item2=False
+Configuration1_Name3=General
+Configuration1_Item3=OpenExported=False|AddToProject=True|ReportBOMViolationsInMessages=False|ForceFit=False|NotFitted=False|Database=False|DatabasePriority=False|IncludePcbData=False|IncludeVaultData=False|IncludeCloudData=False|IncludeDocumentData=True|IncludeAlternatives=False|ShowExportOptions=True|TemplateFilename=|TemplateVaultGuid=8051A890-20B5-4808-9216-C54EAAAEFA7E|TemplateItemGuid=7E1A842A-4A97-4043-B097-070FAC4775BA|TemplateRevisionGuid=C7AB2AEC-436F-4B56-8505-F11C653A53F3|BatchMode=5|FormWidth=1200|FormHeight=710|SupplierProdQty=1|SupplierAutoQty=False|SupplierUseCachedPricing=False|SupplierCurrency=CAD|SolutionsPerItem=1|SuppliersPerSolution=1|ViewType=1|UseDirectApi=False|BomSetName=
+Configuration1_Name4=GroupOrder
+Configuration1_Item4=Comment=True|Footprint=True
+Configuration1_Name5=SortOrder
+Configuration1_Item5=Designator=Up|Comment=Up|Footprint=Up
+Configuration1_Name6=VisibleOrder
+Configuration1_Item6=Comment=120|Description=120|Designator=120|Footprint=120|LibRef=120|Quantity=120
 OutputType2=ComponentCrossReference
 OutputName2=Component Cross Reference Report
 OutputDocumentPath2=
@@ -1954,13 +1953,13 @@ ComparisonOptions5=Kind=Structure Class|MinPercent=75|MinMatch=3|ShowMatch=-1|Us
 [SmartPDF]
 PageOptions=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-3|MediaType=1|DitherType=10|PrintScaleMode=1|PaperKind=A4|PaperIndex=9
 Configuration_Name1=OutputConfigurationParameter1
-Configuration_Item1=DesignatorDisplayMode=Physical|PrintArea=DesignExtent|PrintAreaLowerLeftCornerX=0|PrintAreaLowerLeftCornerY=0|PrintAreaUpperRightCornerX=0|PrintAreaUpperRightCornerY=0|Record=PcbPrintView|DocumentPath=F:\cours\gestion de projet\PCB_Project\TEMPLATE_PCB_2L.PcbDoc
+Configuration_Item1=DesignatorDisplayMode=Physical|PrintArea=DesignExtent|PrintAreaLowerLeftCornerX=0|PrintAreaLowerLeftCornerY=0|PrintAreaUpperRightCornerX=0|PrintAreaUpperRightCornerY=0|Record=PcbPrintView|DocumentPath=F:\cours\planif projet\Projet_Final_TSO\Conception\TEMPLATE_PCB_2L.PcbDoc
 Configuration_Name2=OutputConfigurationParameter2
-Configuration_Item2=IncludeBoardCutouts=False|IncludeBottomLayerComponents=True|IncludeMultiLayerComponents=True|IncludeTopLayerComponents=True|IncludeViewports=False|Index=0|Mirror=False|Name=Multilayer Composite Print|PadNumberFontSize=14|Record=PcbPrintOut|ShowHoles=False|ShowPadNets=False|ShowPadNumbers=False|SubstituteFonts=False|DocumentPath=F:\cours\gestion de projet\PCB_Project\TEMPLATE_PCB_2L.PcbDoc
+Configuration_Item2=IncludeBoardCutouts=False|IncludeBottomLayerComponents=True|IncludeMultiLayerComponents=True|IncludeTopLayerComponents=True|IncludeViewports=False|Index=0|Mirror=False|Name=Multilayer Composite Print|PadNumberFontSize=14|Record=PcbPrintOut|ShowHoles=False|ShowPadNets=False|ShowPadNumbers=False|SubstituteFonts=False|DocumentPath=F:\cours\planif projet\Projet_Final_TSO\Conception\TEMPLATE_PCB_2L.PcbDoc
 Configuration_Name3=OutputConfigurationParameter3
-Configuration_Item3=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|DrillType=Regular|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=TopOverlay|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer|DocumentPath=F:\cours\gestion de projet\PCB_Project\TEMPLATE_PCB_2L.PcbDoc
+Configuration_Item3=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|DrillType=Regular|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=TopOverlay|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer|DocumentPath=F:\cours\planif projet\Projet_Final_TSO\Conception\TEMPLATE_PCB_2L.PcbDoc
 Configuration_Name4=OutputConfigurationParameter4
-Configuration_Item4=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|DrillType=Regular|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=MultiLayer|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer|DocumentPath=F:\cours\gestion de projet\PCB_Project\TEMPLATE_PCB_2L.PcbDoc
+Configuration_Item4=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|DrillType=Regular|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=MultiLayer|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer|DocumentPath=F:\cours\planif projet\Projet_Final_TSO\Conception\TEMPLATE_PCB_2L.PcbDoc
 Configuration_Name5=OutputConfigurationParameter5
-Configuration_Item5=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|DrillType=Regular|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=Mechanical5|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer|DocumentPath=F:\cours\gestion de projet\PCB_Project\TEMPLATE_PCB_2L.PcbDoc
+Configuration_Item5=CArc=Full|CFill=Full|Comment=Full|Coordinate=Full|CPad=Full|CRegion=Full|CText=Full|CTrack=Full|CVia=Full|Designator=Full|Dimension=Full|DLayer1=TopLayer|DLayer2=BottomLayer|DrillType=Regular|FArc=Full|FFill=Full|FPad=Full|FRegion=Full|FText=Full|FTrack=Full|FVia=Full|Layer=Mechanical5|Polygon=Full|PrintOutIndex=0|Record=PcbPrintLayer|DocumentPath=F:\cours\planif projet\Projet_Final_TSO\Conception\TEMPLATE_PCB_2L.PcbDoc
 
