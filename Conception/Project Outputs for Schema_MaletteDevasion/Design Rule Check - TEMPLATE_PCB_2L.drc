@@ -1,7 +1,7 @@
 Protel Design System Design Rule Check
 PCB File : F:\cours\planif projet\Projet_Final_TSO\Conception\TEMPLATE_PCB_2L.PcbDoc
-Date     : 2025-02-22
-Time     : 14:02:43
+Date     : 2025-02-24
+Time     : 08:43:55
 
 Processing Rule : Clearance Constraint (Gap=0.152mm) (All),(All)
 Rule Violations :0
@@ -43,10 +43,7 @@ Processing Rule : Silk To Solder Mask (Clearance=0.024mm) (IsPad),(All)
 Rule Violations :0
 
 Processing Rule : Silk to Silk (Clearance=0.102mm) (All),(All)
-   Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Text "PCB REV #" (261.239mm,212.823mm) on Top Overlay And Track (256.239mm,211.698mm)(256.239mm,215.773mm) on Top Overlay Silk Text to Silk Clearance [0mm]
-   Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Text "PCB REV #" (261.239mm,212.823mm) on Top Overlay And Track (256.239mm,211.698mm)(261.239mm,211.698mm) on Top Overlay Silk Text to Silk Clearance [0mm]
-   Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Text "PCB REV #" (261.239mm,212.823mm) on Top Overlay And Track (261.239mm,211.698mm)(261.239mm,215.773mm) on Top Overlay Silk Text to Silk Clearance [0mm]
-Rule Violations :3
+Rule Violations :0
 
 Processing Rule : Net Antennae (Tolerance=0mm) (All)
    Violation between Net Antennae: Track (403.352mm,97.028mm)(405.257mm,95.123mm) on Top 
@@ -62,9 +59,12 @@ Waived Violations Of Rule : Silk to Silk (Clearance=0.102mm) (All),(All)
    Waived Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Arc (324.104mm,114.944mm) on Top Overlay And Text "+" (323.404mm,113.694mm) on Top Overlay Silk Text to Silk Clearance [0mm]Waived by Louis Boisvert at 2025-02-22 14:00:50sa fait partie de la pièce
    Waived Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Arc (330.851mm,114.935mm) on Top Overlay And Text "+" (330.151mm,113.685mm) on Top Overlay Silk Text to Silk Clearance [0mm]Waived by Louis Boisvert at 2025-02-22 14:01:08sa fait partie de la pièce
    Waived Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Arc (337.685mm,114.808mm) on Top Overlay And Text "+" (336.985mm,113.558mm) on Top Overlay Silk Text to Silk Clearance [0mm]Waived by Louis Boisvert at 2025-02-22 14:01:13sa fait partie de la pièce
-Waived Violations :3
+   Waived Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Text "PCB REV #" (261.239mm,212.823mm) on Top Overlay And Track (256.239mm,211.698mm)(256.239mm,215.773mm) on Top Overlay Silk Text to Silk Clearance [0mm]Waived by Louis Boisvert at 2025-02-22 14:03:08sa fait partie de du silk screen
+   Waived Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Text "PCB REV #" (261.239mm,212.823mm) on Top Overlay And Track (256.239mm,211.698mm)(261.239mm,211.698mm) on Top Overlay Silk Text to Silk Clearance [0mm]Waived by Louis Boisvert at 2025-02-22 14:03:23sa fait partie de du silk screen
+   Waived Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Text "PCB REV #" (261.239mm,212.823mm) on Top Overlay And Track (261.239mm,211.698mm)(261.239mm,215.773mm) on Top Overlay Silk Text to Silk Clearance [0mm]Waived by Louis Boisvert at 2025-02-22 14:03:27sa fait partie de du silk screen
+Waived Violations :6
 
 
-Violations Detected : 10
-Waived Violations : 3
-Time Elapsed        : 00:00:01
+Violations Detected : 7
+Waived Violations : 6
+Time Elapsed        : 00:00:02

@@ -1,0 +1,8 @@
+Removed Pin From Net: NetName=PIN_PI_27 Pin=U4-13
+Removed Pin From Net: NetName=PIN_PI_22 Pin=U4-15
+Removed Pin From Net: NetName=PIN_PI_24 Pin=U4-24
+Removed Pin From Net: NetName=PIN_PI_23 Pin=U4-26
+Added Pin To Net: NetName=PIN_PI_23 Pin=U4-16
+Added Pin To Net: NetName=PIN_PI_24 Pin=U4-18
+Added Pin To Net: NetName=PIN_PI_27 Pin=U4-24
+Added Pin To Net: NetName=PIN_PI_22 Pin=U4-26

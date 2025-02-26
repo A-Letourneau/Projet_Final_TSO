@@ -1,0 +1,20 @@
+Removed Member From Class: ClassName=Alimentation_USB_Header Member=J?
+Change Component Footprint: Designator=J? Old Footprint=FP-USB4120-03-C-MFG New Footprint=FP-USB4120-03-C-MFG
+Change Component Designator: OldDesignator=J? NewDesignator=J23
+Change Component Designator: OldDesignator=J? NewDesignator=J24
+Change Component Designator: OldDesignator=J? NewDesignator=J25
+Change Component Designator: OldDesignator=J? NewDesignator=J26
+Change Component Designator: OldDesignator=J? NewDesignator=J27
+Change Component Designator: OldDesignator=J? NewDesignator=J28
+Change Component Designator: OldDesignator=R? NewDesignator=R29
+Change Component Designator: OldDesignator=R? NewDesignator=R30
+Add Pin To Net: Unknown Pin: Pin U4-5
+Add Pin To Net: Unknown Pin: Pin U4-S3
+Change Net Name : Old Net Name=NetJ?_A5 New Net Name=NetJ23_A5
+Change Net Name : Old Net Name=NetJ?_B5 New Net Name=NetJ23_B5
+Added Member To Class: ClassName=Alimentation_USB_Header Member=Component J23 USB4120-03-C
+Added Member To Class: ClassName=Raspberry_Pi_4_ModelB Member=Component J24 B4B-XH-A(LF)(SN)
+Added Member To Class: ClassName=Raspberry_Pi_4_ModelB Member=Component J26 B4B-XH-A(LF)(SN)
+Added Member To Class: ClassName=Raspberry_Pi_4_ModelB Member=Component J27 B4B-XH-A(LF)(SN)
+Added Member To Class: ClassName=Raspberry_Pi_4_ModelB Member=Component J28 B4B-XH-A(LF)(SN)
+Added Member To Class: ClassName=Alimentation_USB_Header Member=Component R30 5.1 Kohm

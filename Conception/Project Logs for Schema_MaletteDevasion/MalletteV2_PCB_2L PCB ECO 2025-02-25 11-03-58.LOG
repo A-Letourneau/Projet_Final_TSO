@@ -1,0 +1,4 @@
+Removed Pin From Net: NetName=Reset_Switch Pin=U4-36
+Removed Pin From Net: NetName=Reset_Croco Pin=U4-38
+Added Pin To Net: NetName=Reset_Croco Pin=U4-36
+Added Pin To Net: NetName=Reset_Switch Pin=U4-38
