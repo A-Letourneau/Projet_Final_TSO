@@ -1,0 +1,12 @@
+Removed Pin From Net: NetName=PIN_PI_18 Pin=Q2-2
+Removed Pin From Net: NetName=PIN_PI_12 Pin=Q3-2
+Removed Pin From Net: NetName=PIN_PI_18 Pin=R20-2
+Removed Pin From Net: NetName=PIN_PI_12 Pin=R21-2
+Add Component: Footprint Not Found REV_REVISION_CARTRIDGE_MINI
+Add Component: Footprint Not Found SER_SERIAL_CARTRIDGE_MICRO
+Added Pin To Net: NetName=PIN_PI_12 Pin=Q2-2
+Added Pin To Net: NetName=PIN_PI_18 Pin=Q3-2
+Added Pin To Net: NetName=PIN_PI_12 Pin=R20-2
+Added Pin To Net: NetName=PIN_PI_18 Pin=R21-2
+Add Class Member: Failed to add class member : Component REV1 Revision Cartridge Mini
+Add Class Member: Failed to add class member : Component SER1 Serial Cartridge MICRO
