@@ -1,16 +1,16 @@
 Protel Design System Design Rule Check
 PCB File : C:\Users\mario\OneDrive\Documents\GitHub\Projet Final TSO\Projet_Final_TSO\Matériel\MalletteV2_PCB_2L.PcbDoc
 Date     : 2025-03-05
-Time     : 10:49:34
+Time     : 11:07:18
 
 Processing Rule : Clearance Constraint (Gap=0.152mm) (All),(All)
 Rule Violations :0
 
 Processing Rule : Short-Circuit Constraint (Allowed=No) (All),(All)
-   Violation between Short-Circuit Constraint: Between Pad J23-(159.95mm,159.385mm) on Multi-Layer And Polygon Region (316 hole(s)) Top Location : [X = 0mm][Y = 0mm]
-   Violation between Short-Circuit Constraint: Between Pad J23-(159.95mm,159.385mm) on Multi-Layer And Polygon Region (496 hole(s)) Bottom Location : [X = 0mm][Y = 0mm]
-   Violation between Short-Circuit Constraint: Between Pad J23-(159.95mm,166.885mm) on Multi-Layer And Polygon Region (316 hole(s)) Top Location : [X = 0mm][Y = 0mm]
-   Violation between Short-Circuit Constraint: Between Pad J23-(159.95mm,166.885mm) on Multi-Layer And Polygon Region (496 hole(s)) Bottom Location : [X = 0mm][Y = 0mm]
+   Violation between Short-Circuit Constraint: Between Pad J23-(159.95mm,159.385mm) on Multi-Layer And Polygon Region (318 hole(s)) Top Location : [X = 0mm][Y = 0mm]
+   Violation between Short-Circuit Constraint: Between Pad J23-(159.95mm,159.385mm) on Multi-Layer And Polygon Region (499 hole(s)) Bottom Location : [X = 0mm][Y = 0mm]
+   Violation between Short-Circuit Constraint: Between Pad J23-(159.95mm,166.885mm) on Multi-Layer And Polygon Region (318 hole(s)) Top Location : [X = 0mm][Y = 0mm]
+   Violation between Short-Circuit Constraint: Between Pad J23-(159.95mm,166.885mm) on Multi-Layer And Polygon Region (499 hole(s)) Bottom Location : [X = 0mm][Y = 0mm]
 Rule Violations :4
 
 Processing Rule : Un-Routed Net Constraint ( (All) )
@@ -65,4 +65,4 @@ Rule Violations :0
 
 Violations Detected : 14
 Waived Violations : 0
-Time Elapsed        : 00:00:02
+Time Elapsed        : 00:00:01
