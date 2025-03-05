@@ -1,16 +1,16 @@
 Protel Design System Design Rule Check
-PCB File : F:\cours\planif projet\Projet_Final_TSO\Conception\MalletteV2_PCB_2L.PcbDoc
-Date     : 2025-02-26
-Time     : 10:18:45
+PCB File : C:\Users\mario\OneDrive\Documents\GitHub\Projet Final TSO\Projet_Final_TSO\Matériel\MalletteV2_PCB_2L.PcbDoc
+Date     : 2025-03-05
+Time     : 10:49:34
 
 Processing Rule : Clearance Constraint (Gap=0.152mm) (All),(All)
 Rule Violations :0
 
 Processing Rule : Short-Circuit Constraint (Allowed=No) (All),(All)
-   Violation between Short-Circuit Constraint: Between Pad J23-(159mm,178.067mm) on Multi-Layer And Polygon Region (238 hole(s)) Top Location : [X = 0mm][Y = 0mm]
-   Violation between Short-Circuit Constraint: Between Pad J23-(159mm,178.067mm) on Multi-Layer And Polygon Region (516 hole(s)) Bottom Location : [X = 0mm][Y = 0mm]
-   Violation between Short-Circuit Constraint: Between Pad J23-(159mm,185.567mm) on Multi-Layer And Polygon Region (238 hole(s)) Top Location : [X = 0mm][Y = 0mm]
-   Violation between Short-Circuit Constraint: Between Pad J23-(159mm,185.567mm) on Multi-Layer And Polygon Region (516 hole(s)) Bottom Location : [X = 0mm][Y = 0mm]
+   Violation between Short-Circuit Constraint: Between Pad J23-(159.95mm,159.385mm) on Multi-Layer And Polygon Region (316 hole(s)) Top Location : [X = 0mm][Y = 0mm]
+   Violation between Short-Circuit Constraint: Between Pad J23-(159.95mm,159.385mm) on Multi-Layer And Polygon Region (496 hole(s)) Bottom Location : [X = 0mm][Y = 0mm]
+   Violation between Short-Circuit Constraint: Between Pad J23-(159.95mm,166.885mm) on Multi-Layer And Polygon Region (316 hole(s)) Top Location : [X = 0mm][Y = 0mm]
+   Violation between Short-Circuit Constraint: Between Pad J23-(159.95mm,166.885mm) on Multi-Layer And Polygon Region (496 hole(s)) Bottom Location : [X = 0mm][Y = 0mm]
 Rule Violations :4
 
 Processing Rule : Un-Routed Net Constraint ( (All) )
@@ -38,17 +38,20 @@ Processing Rule : Minimum Solder Mask Sliver (Gap=0.1mm) (All),(All)
 Rule Violations :0
 
 Processing Rule : Silk To Solder Mask (Clearance=0.024mm) (IsPad),(All)
-   Violation between Silk To Solder Mask Clearance Constraint: (Collision < 0.024mm) Between Pad U4-S2(207.557mm,147.193mm) on Multi-Layer And Track (204.343mm,143.764mm)(204.343mm,158.369mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]
-Rule Violations :1
+Rule Violations :0
 
 Processing Rule : Silk to Silk (Clearance=0.102mm) (All),(All)
-   Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Arc (376.571mm,243.967mm) on Top Overlay And Text "+" (377.271mm,245.217mm) on Top Overlay Silk Text to Silk Clearance [0mm]
-   Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Arc (386.08mm,243.967mm) on Top Overlay And Text "+" (386.78mm,245.217mm) on Top Overlay Silk Text to Silk Clearance [0mm]
-   Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Arc (395.589mm,243.967mm) on Top Overlay And Text "+" (396.289mm,245.217mm) on Top Overlay Silk Text to Silk Clearance [0mm]
-   Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Text "PCB REV #" (137.89mm,48.79mm) on Top Overlay And Track (137.89mm,45.84mm)(137.89mm,49.915mm) on Top Overlay Silk Text to Silk Clearance [0mm]
-   Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Text "PCB REV #" (137.89mm,48.79mm) on Top Overlay And Track (137.89mm,49.915mm)(142.89mm,49.915mm) on Top Overlay Silk Text to Silk Clearance [0mm]
-   Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Text "PCB REV #" (137.89mm,48.79mm) on Top Overlay And Track (142.89mm,45.84mm)(142.89mm,49.915mm) on Top Overlay Silk Text to Silk Clearance [0mm]
-Rule Violations :6
+   Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Arc (337.664mm,217.058mm) on Top Overlay And Text "+" (338.364mm,218.308mm) on Top Overlay Silk Text to Silk Clearance [0mm]
+   Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Arc (345.17mm,217.33mm) on Top Overlay And Text "+" (345.87mm,218.58mm) on Top Overlay Silk Text to Silk Clearance [0mm]
+   Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Arc (352.282mm,217.33mm) on Top Overlay And Text "+" (352.982mm,218.58mm) on Top Overlay Silk Text to Silk Clearance [0mm]
+   Violation between Silk To Silk Clearance Constraint: (0.049mm < 0.102mm) Between Arc (355.471mm,228.725mm) on Top Overlay And Text "POT 1 / POT 2 / POT 3" (352.038mm,229.024mm) on Top Overlay Silk Text to Silk Clearance [0.049mm]
+   Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Text "Chemin du fils USB" (162.047mm,172.085mm) on Top Overlay And Track (148.336mm,248.158mm)(179.451mm,248.158mm) on Top Overlay Silk Text to Silk Clearance [0mm]
+   Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Text "Chemin du fils USB" (162.047mm,172.085mm) on Top Overlay And Track (157.162mm,248.158mm)(162.433mm,248.158mm) on Top Overlay Silk Text to Silk Clearance [0mm]
+   Violation between Silk To Silk Clearance Constraint: (0.079mm < 0.102mm) Between Text "J13" (286.28mm,236.928mm) on Top Overlay And Track (288.46mm,234.251mm)(288.46mm,240.001mm) on Top Overlay Silk Text to Silk Clearance [0.079mm]
+   Violation between Silk To Silk Clearance Constraint: (0.083mm < 0.102mm) Between Text "PCB REV #" (220.345mm,10.925mm) on Top Overlay And Track (220.091mm,12.128mm)(227.838mm,12.128mm) on Top Overlay Silk Text to Silk Clearance [0.083mm]
+   Violation between Silk To Silk Clearance Constraint: (0.083mm < 0.102mm) Between Text "SERIAL #" (212.598mm,10.925mm) on Top Overlay And Track (211.709mm,12.128mm)(219.456mm,12.128mm) on Top Overlay Silk Text to Silk Clearance [0.083mm]
+   Violation between Silk To Silk Clearance Constraint: (0.096mm < 0.102mm) Between Text "U3" (335.123mm,209.316mm) on Top Overlay And Track (336.66mm,185.073mm)(336.66mm,210.473mm) on Top Overlay Silk Text to Silk Clearance [0.096mm]
+Rule Violations :10
 
 Processing Rule : Net Antennae (Tolerance=0mm) (All)
 Rule Violations :0
@@ -60,6 +63,6 @@ Processing Rule : Height Constraint (Min=0mm) (Max=25.4mm) (Prefered=12.7mm) (Al
 Rule Violations :0
 
 
-Violations Detected : 11
+Violations Detected : 14
 Waived Violations : 0
 Time Elapsed        : 00:00:02
