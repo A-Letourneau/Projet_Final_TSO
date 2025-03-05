@@ -1,7 +1,7 @@
 Protel Design System Design Rule Check
 PCB File : C:\Users\mario\OneDrive\Documents\GitHub\Projet Final TSO\Projet_Final_TSO\Matériel\MalletteV2_PCB_2L.PcbDoc
 Date     : 2025-03-05
-Time     : 11:14:23
+Time     : 11:18:54
 
 Processing Rule : Clearance Constraint (Gap=0.152mm) (All),(All)
 Rule Violations :0
@@ -33,18 +33,6 @@ Rule Violations :0
 Processing Rule : Minimum Solder Mask Sliver (Gap=0.1mm) (All),(All)
 Rule Violations :0
 
-Processing Rule : Silk To Solder Mask (Clearance=0.024mm) (IsPad),(All)
-Rule Violations :0
-
-Processing Rule : Silk to Silk (Clearance=0.102mm) (All),(All)
-   Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Text "Chemin du fils USB" (162.047mm,172.085mm) on Top Overlay And Track (148.336mm,248.158mm)(179.451mm,248.158mm) on Top Overlay Silk Text to Silk Clearance [0mm]
-   Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Text "Chemin du fils USB" (162.047mm,172.085mm) on Top Overlay And Track (157.162mm,248.158mm)(162.433mm,248.158mm) on Top Overlay Silk Text to Silk Clearance [0mm]
-   Violation between Silk To Silk Clearance Constraint: (0.079mm < 0.102mm) Between Text "J13" (286.28mm,236.928mm) on Top Overlay And Track (288.46mm,234.251mm)(288.46mm,240.001mm) on Top Overlay Silk Text to Silk Clearance [0.079mm]
-   Violation between Silk To Silk Clearance Constraint: (0.083mm < 0.102mm) Between Text "PCB REV #" (220.345mm,10.925mm) on Top Overlay And Track (220.091mm,12.128mm)(227.838mm,12.128mm) on Top Overlay Silk Text to Silk Clearance [0.083mm]
-   Violation between Silk To Silk Clearance Constraint: (0.083mm < 0.102mm) Between Text "SERIAL #" (212.598mm,10.925mm) on Top Overlay And Track (211.709mm,12.128mm)(219.456mm,12.128mm) on Top Overlay Silk Text to Silk Clearance [0.083mm]
-   Violation between Silk To Silk Clearance Constraint: (0.096mm < 0.102mm) Between Text "U3" (335.123mm,209.316mm) on Top Overlay And Track (336.66mm,185.073mm)(336.66mm,210.473mm) on Top Overlay Silk Text to Silk Clearance [0.096mm]
-Rule Violations :6
-
 Processing Rule : Net Antennae (Tolerance=0mm) (All)
 Rule Violations :0
 
@@ -61,14 +49,7 @@ Waived Violations Of Rule : Short-Circuit Constraint (Allowed=No) (All),(All)
    Waived Violation between Short-Circuit Constraint: Between Pad J23-(159.95mm,166.885mm) on Multi-Layer And Polygon Region (499 hole(s)) Bottom Location : [X = 0mm][Y = 0mm]Waived by Alexis Létourneau at 2025-03-05 11:07:39Probleme de silkcreen
 Waived Violations :4
 
-Waived Violations Of Rule : Silk to Silk (Clearance=0.102mm) (All),(All)
-   Waived Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Arc (337.664mm,217.058mm) on Top Overlay And Text "+" (338.364mm,218.308mm) on Top Overlay Silk Text to Silk Clearance [0mm]Waived by Alexis Létourneau at 2025-03-05 11:07:39Probleme de silkcreen
-   Waived Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Arc (345.17mm,217.33mm) on Top Overlay And Text "+" (345.87mm,218.58mm) on Top Overlay Silk Text to Silk Clearance [0mm]Waived by Alexis Létourneau at 2025-03-05 11:07:39Probleme de silkcreen
-   Waived Violation between Silk To Silk Clearance Constraint: (Collision < 0.102mm) Between Arc (352.282mm,217.33mm) on Top Overlay And Text "+" (352.982mm,218.58mm) on Top Overlay Silk Text to Silk Clearance [0mm]Waived by Alexis Létourneau at 2025-03-05 11:07:39Probleme de silkcreen
-   Waived Violation between Silk To Silk Clearance Constraint: (0.049mm < 0.102mm) Between Arc (355.471mm,228.725mm) on Top Overlay And Text "POT 1 / POT 2 / POT 3" (352.038mm,229.024mm) on Top Overlay Silk Text to Silk Clearance [0.049mm]Waived by Alexis Létourneau at 2025-03-05 11:07:39Probleme de silkcreen
-Waived Violations :4
 
-
-Violations Detected : 6
-Waived Violations : 8
+Violations Detected : 0
+Waived Violations : 4
 Time Elapsed        : 00:00:01
