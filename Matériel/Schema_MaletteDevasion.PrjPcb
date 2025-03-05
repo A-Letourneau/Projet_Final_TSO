@@ -364,7 +364,7 @@ GenerateClassCluster=0
 DocumentUniqueId=
 
 [Document19]
-DocumentPath=..\..\..\..\..\..\..\Public\Documents\Altium\PCB_Project\TGE_outputjob_2L.OutJob
+DocumentPath=TGE_outputjob_2L.OutJob
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
