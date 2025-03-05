@@ -54,7 +54,7 @@ PrefsRevisionGUID=
 
 [Release]
 ReleaseTarget=1
-ReleaseFolderPath=[OutputPath]
+ReleaseFolderPath=C:\Users\mario\OneDrive\Bureau\outputPCBmallette
 ReleaseZipPath=[OutputPath][ProjectName].zip
 
 [Document1]
@@ -363,6 +363,23 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
+[Document19]
+DocumentPath=..\..\..\..\..\..\..\Public\Documents\Altium\PCB_Project\TGE_outputjob_2L.OutJob
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
+
 [GeneratedDocument1]
 DocumentPath=Project Outputs for Schema_MaletteDevasion\Design Rule Check - MalletteV2_PCB_2L.html
 DItemRevisionGUID=
@@ -376,48 +393,48 @@ DocumentPath=Project Outputs for Schema_MaletteDevasion\Schema_MaletteDevasion.x
 DItemRevisionGUID=
 
 [Parameter1]
-Name=Projet_Titre
-Value=Mallette d'évasion
+Name=Projet_Concepteur1
+Value=Louis Boisvert
 
 [Parameter2]
-Name=Projet_stencil_Top_epaisseur
-Value=0.1 MM
+Name=Projet_Concepteur2
+Value=Alexis Létourneau
 
 [Parameter3]
-Name=Projet_stencil_Bot_epaisseur
-Value=0.1 MM
+Name=Projet_Concepteur3
+Value=
 
 [Parameter4]
-Name=Projet_SCH_Rev
-Value=00
+Name=Projet_Concepteur4
+Value=
 
 [Parameter5]
-Name=Projet_PCB_Rev
-Value=1
+Name=Projet_Date
+Value=2025-03-04
 
 [Parameter6]
 Name=Projet_nom_du_cours
 Value=247-67P-SH PROJET DE FIN D'ÉTUDES
 
 [Parameter7]
-Name=Projet_Date
-Value=2025-03-04
+Name=Projet_PCB_Rev
+Value=1
 
 [Parameter8]
-Name=Projet_Concepteur4
-Value=
+Name=Projet_SCH_Rev
+Value=00
 
 [Parameter9]
-Name=Projet_Concepteur3
-Value=
+Name=Projet_stencil_Bot_epaisseur
+Value=0.1 MM
 
 [Parameter10]
-Name=Projet_Concepteur2
-Value=Alexis Létourneau
+Name=Projet_stencil_Top_epaisseur
+Value=0.1 MM
 
 [Parameter11]
-Name=Projet_Concepteur1
-Value=Louis Boisvert
+Name=Projet_Titre
+Value=Mallette d'évasion
 
 [Configuration1]
 Name=Sources
@@ -427,7 +444,7 @@ ReleaseItemId=
 Variant=[No Variations]
 OutputJobsCount=1
 DocumentReferenceClass1=DocumentReference
-OutputJobFileName1=PCB_Ruler.OutJob
+OutputJobFileName1=TGE_outputjob_2L.OutJob
 ContentTypeGUID=CB6F2064-E317-11DF-B822-12313F0024A2
 ConfigurationType=Source
 
@@ -439,23 +456,11 @@ ReleaseItemId=
 Variant=[No Variations]
 OutputJobsCount=1
 DocumentReferenceClass1=DocumentReference
-OutputJobFileName1=PCB_Ruler.OutJob
+OutputJobFileName1=TGE_outputjob_2L.OutJob
 ContentTypeGUID=0C520D2A-E60C-11DF-B822-12313F0024A2
 ConfigurationType=Fabrication
 
 [Configuration3]
-Name=Assembly Populated
-ParameterCount=0
-ConstraintFileCount=0
-ReleaseItemId=
-Variant=Populated
-OutputJobsCount=1
-DocumentReferenceClass1=DocumentReference
-OutputJobFileName1=PCB_Ruler.OutJob
-ContentTypeGUID=0D12F8DC-E60C-11DF-B822-12313F0024A2
-ConfigurationType=Assembly
-
-[Configuration4]
 Name=Assembly
 ParameterCount=0
 ConstraintFileCount=0
@@ -463,19 +468,7 @@ ReleaseItemId=
 Variant=[No Variations]
 OutputJobsCount=1
 DocumentReferenceClass1=DocumentReference
-OutputJobFileName1=PCB_Ruler.OutJob
-ContentTypeGUID=0D12F8DC-E60C-11DF-B822-12313F0024A2
-ConfigurationType=Assembly
-
-[Configuration5]
-Name=Assembly Populated_no_0201
-ParameterCount=0
-ConstraintFileCount=0
-ReleaseItemId=
-Variant=Populated_no_0201
-OutputJobsCount=1
-DocumentReferenceClass1=DocumentReference
-OutputJobFileName1=PCB_Ruler.OutJob
+OutputJobFileName1=TGE_outputjob_2L.OutJob
 ContentTypeGUID=0D12F8DC-E60C-11DF-B822-12313F0024A2
 ConfigurationType=Assembly
 
