@@ -198,3 +198,12 @@ while True:
 
     my_Croco.window_open()
 
+#À la fin du programme, on ferme les fenêtres s'il existe
+if window_SW:
+    window_SW.close()       
+if window_POT:    
+    window_POT.close()            
+if window_Croco: 
+    window_Croco.close()
+
+print("closing")

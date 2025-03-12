@@ -5,11 +5,11 @@ Environnement : Python, Thonny, raspberry pi 4, ESP32-C3-WROOM-02 Devkit,
 Brief : Cette Class représentes l'énigmes des fils bananes que l'on a renommé à Croco
 par simplicité.
 
-- la fonction "window_test" appel le fichier I2c_Comm ce qui permet de récupérer
+- la fonction "Croco_Json" appel le fichier I2c_Comm ce qui permet de récupérer
 les informations du esp32 servant à l'énigme Croco
-- la fonction "make_winCroco" crée l'interface utilisateur
-- la fonction "window_open" est la portion de code qui va gérer l'énigme grâce au
-information récupérer par "window_test".
+- la fonction "Make_WinCroco" crée l'interface utilisateur
+- la fonction "Start_WinCroco" est la portion de code qui va gérer l'énigme grâce au
+information récupérer par "Croco_Json".
 
 Commentaire : la vérification de la réussite des utilisateur pourrait être dans
 sa propre fonction
@@ -32,7 +32,7 @@ import I2c_Comm
 
 class Croco:
     
-    #------------------- les variables statiques utilisés par l'énigme Croco -------------------#
+    #------------------- les variables statiques utilisés par l'énigme des fils bananes -------------------#
     #Nombre d'entrées Croco
     NB_CROCO = 8
     #Couleur des paires de Croco
@@ -48,7 +48,7 @@ class Croco:
     
 
     #Crée un graph pour contenir un rond de couleur
-    def LEDIndicator(self, key=None, radius=100):
+    def DrawRGB(self, key=None, radius=100):
         return sg.Graph(canvas_size=(radius, radius),
                  graph_bottom_left=(-radius, -radius),
                  graph_top_right=(radius, radius),
@@ -56,7 +56,7 @@ class Croco:
 
 
     #Efface puis crée un rond de couleur pour représenter l'état des boutons
-    def SetLED(self, window, key, color):
+    def SetRGB(self, window, key, color):
         graph = window[key]
         graph.erase()
         graph.draw_circle((0, 0), 75, fill_color=color, line_color=color)
@@ -64,7 +64,7 @@ class Croco:
      
      
     #essaie la communication I2c et la reception des donnees (louis)
-    def window_test(self):
+    def Croco_Json(self):
         global Crocoerror
         self.msg_Croco = ""
         if self.window_Croco: 
@@ -81,7 +81,7 @@ class Croco:
    
    
     #crée l'interface utilisateur pour l'énigme Croco 
-    def make_winCroco(self):
+    def Make_WinCroco(self):
         layout_Croco =[
                         [sg.Text(f"Nombre d'équation restante 0/{len(self.LIST_OPERATIVE)}", size=(40,1), key = 'titleCroco')],
                         [sg.Graph(canvas_size=(500, 100),
@@ -89,8 +89,8 @@ class Croco:
                             graph_top_right=(500, 100),
                             pad=(0, 0), key="equationGraph")],
                         [sg.Text('Croco 1'),  sg.Text('Croco 2'),  sg.Text('Croco 3'), sg.Text('Croco 4')],
-                        [self.LEDIndicator('0'), self.LEDIndicator('1'), self.LEDIndicator('2'), self.LEDIndicator('3')],
-                        [self.LEDIndicator('4'), self.LEDIndicator('5'), self.LEDIndicator('6'), self.LEDIndicator('7')],          
+                        [self.DrawRGB('0'), self.DrawRGB('1'), self.DrawRGB('2'), self.DrawRGB('3')],
+                        [self.DrawRGB('4'), self.DrawRGB('5'), self.DrawRGB('6'), self.DrawRGB('7')],          
                         [sg.Text('Croco 5'),  sg.Text('Croco 6'),  sg.Text('Croco 7'), sg.Text('Croco 8')],
                         [sg.Button('Exit')]
                       ]
@@ -98,7 +98,7 @@ class Croco:
 
 
     #cette fonction est le coeur de l'énigme. c'est ici que l'utilisateur va pouvoir essayer de résoudre l'énigme.
-    def window_open(self):
+    def Start_WinCroco(self):
         global Crocoerror
        #-----------Fenêtre Interface Croco-----------#
         if self.window_Croco and not Crocoerror: #Detecte si la fenetre existe puis detecte si le i2c fonctionne. L'ordre est important car si la fenetre est None, le Crocoerror n'existe pas
@@ -115,9 +115,9 @@ class Croco:
             #Pour chaque connection du Json, on met un rond de couleur pour l'associer avec sa paire
             for pairs in self.msg_Croco['JsonData']:
                 if int(pairs) == self.NB_CROCO: #Le 8 signifit qu'il n'y pas de connection
-                    self.SetLED(self.window_Croco, str(curCroco), 'white')
+                    self.SetRGB(self.window_Croco, str(curCroco), 'white')
                 elif curCroco < int(pairs): #Si c'est la premiere fois qu'on voit cette paire
-                    self.SetLED(self.window_Croco, str(curCroco), self.listColor[colorCpt]) #On met le rond de couleur a la position curCroco en une des 4 couleurs possible en ordre
+                    self.SetRGB(self.window_Croco, str(curCroco), self.listColor[colorCpt]) #On met le rond de couleur a la position curCroco en une des 4 couleurs possible en ordre
                     dictOfPairsColor[str(curCroco)] = self.listColor[colorCpt]#On met la couleur en memoire pour la deuxieme fois qu'on voit la paire
                     colorCpt = colorCpt + 1 #On passe a la prochaine couleur
                     
@@ -132,10 +132,10 @@ class Croco:
                     
                 else:  #Si c'est la deuxieme fois qu'on voit cette paire
                     try: #
-                        self.SetLED(self.window_Croco, str(curCroco), dictOfPairsColor[pairs])
+                        self.SetRGB(self.window_Croco, str(curCroco), dictOfPairsColor[pairs])
                     except:
                         if self.DEBUG:
-                            self.SetLED(self.window_Croco, str(curCroco), "red")
+                            self.SetRGB(self.window_Croco, str(curCroco), "red")
                             
                 curCroco = curCroco + 1
 
