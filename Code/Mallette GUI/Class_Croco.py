@@ -17,17 +17,18 @@ sa propre fonction
 
 """
 
+#importation des library standard
 from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
 import PySimpleGUI as sg            #Pour l'interface graphique
 import json                         #Pour la manipulation des json
 from random import randint          #Pour la generation de nombre aleatoire pour les equations
-import math
-import board
-import neopixel
-from digitalio import DigitalInOut, Direction, Pull
+# library pour les strips de dels
+import time
+from rpi_ws281x import PixelStrip, Color
 
+#importation des library créer
 import I2c_Comm
-
+import moduleDEL
 
 
 class Croco:
@@ -38,13 +39,18 @@ class Croco:
     #Couleur des paires de Croco
     listColor = ["purple","pink","yellow","cyan"]
     
+    
     #------------------- les varibles qui dépendent du 'main.py' ou/et qui sont utilisés dans plus d'une fonction -------------------#
-    def __init__(self, LIST_OPERATIVE, SLAVE_ADDRESS_Croco, DEBUG):
-        self.LIST_OPERATIVE = LIST_OPERATIVE
+    def __init__(self, SLAVE_ADDRESS_Croco, DEBUG, strip):
+        #Liste les operations des question en ordre
+        #LIST_OPERATIVE = ["+","-","x","/"] exemple de quatre questions possibles
+        self.LIST_OPERATIVE = ["/","/"]
+        
         self.SLAVE_ADDRESS_Croco = SLAVE_ADDRESS_Croco
         self.DEBUG = DEBUG
         self.Crocoerror = False
         self.window_Croco = None
+        self.strip = strip
     
 
     #Crée un graph pour contenir un rond de couleur
@@ -154,6 +160,7 @@ class Croco:
                     firstEquation = False
 
                 if goodAnswer == len(self.LIST_OPERATIVE): #Lorsque l'user a finit les questions
+                    moduleDEL.colorWipe(self.strip, Color(0, 255, 0), 0)  # change la couleur des strips à vert
                     sg.popup_no_titlebar('REUSSI', auto_close_duration = 1, auto_close = True)
                     goodAnswer = 0
                     firstEquation = True

@@ -1,4 +1,5 @@
-# Auteur: Alexis Letourneau 
+# Auteur: Alexis Letourneau
+# Editeur: Louis Boisvert
 # Brief : NeoPixel librairie utilisant rpi_ws281x directement au lieu de NeoPixel
 # Permet d'init des strip de DEL et de faire quelques animations
 # DOIT ETRE LANCE EN SUDO AVEC LA COMMANDE "sudo thonny" DANS LE CMD
@@ -15,7 +16,7 @@ def colorWipe(strip, color, wait_ms=50):
         strip.show()
         time.sleep(wait_ms / 1000.0)
 
-
+# ne pas utilisés, parce qu'il bloque la fonction jusqu'à la fin de l'animation
 def theaterChase(strip, color, wait_ms=50, iterations=10):
     """Movie theater light style chaser animation."""
     for j in range(iterations):
@@ -39,7 +40,7 @@ def wheel(pos):
         pos -= 170
         return Color(0, pos * 3, 255 - pos * 3)
 
-
+# ne pas utilisés, parce qu'il bloque la fonction jusqu'à la fin de l'animation
 def rainbow(strip, wait_ms=20, iterations=1):
     """Draw rainbow that fades across all pixels at once."""
     for j in range(256 * iterations):
@@ -48,7 +49,7 @@ def rainbow(strip, wait_ms=20, iterations=1):
         strip.show()
         time.sleep(wait_ms / 1000.0)
 
-
+# ne pas utilisés, parce qu'il bloque la fonction jusqu'à la fin de l'animation
 def rainbowCycle(strip, wait_ms=20, iterations=5):
     """Draw rainbow that uniformly distributes itself across all pixels."""
     for j in range(256 * iterations):
@@ -58,7 +59,7 @@ def rainbowCycle(strip, wait_ms=20, iterations=5):
         strip.show()
         time.sleep(wait_ms / 1000.0)
 
-
+# ne pas utilisés, parce qu'il bloque la fonction jusqu'à la fin de l'animation    peut être utile en cas de victoires
 def theaterChaseRainbow(strip, wait_ms=50):
     """Rainbow movie theater light style chaser animation."""
     for j in range(256):

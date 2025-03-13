@@ -14,12 +14,17 @@ Elle est constituer de quelques fonctions simples.
 Cette class ne possède pas encore son énigmes. Elle sera un labyrinthe
 où les intérupteurs (switch) ouvrirons ou/et fermeront des passages. (Louis)
 """
-
+#importation des library standard
 from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
 import PySimpleGUI as sg            #Pour l'interface graphique
 import json                         #Pour la manipulation des json
+# library pour les strips de del		pas encore utilisé
+import time
+from rpi_ws281x import PixelStrip, Color
 
+#importation des library créer
 import I2c_Comm
+import moduleDEL
 
 
 class SW_MODULE:

@@ -12,16 +12,21 @@ de l'énigme des potentiomètre. Elle consiste à reproduire l'onde qui est affi
 
 """
 
+#importation des library standard
 from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
 import PySimpleGUI as sg            #Pour l'interface graphique
 import json                         #Pour la manipulation des json
-from random import randint          #Pour la generation de nombre aleatoire pour les equations
+# Pour la generation de nombre aleatoire pour les equations et les calcules mathématiques
+from random import randint          
 import math
-import board
-import neopixel
-from digitalio import DigitalInOut, Direction, Pull
+# library pour les strips de dels
+import time
+from rpi_ws281x import PixelStrip, Color
 
+#importation des library créer
 import I2c_Comm
+import moduleDEL
+
 
 class POT:
     
@@ -32,13 +37,17 @@ class POT:
     NUMBER_MARKER_FREQUENCY = 25
     MARGINS = 2
     
+    #Valeur max des potentiomètres		Variables pas utilisé, mais toujours pratique à savoir
+    MAX_POT_VAL = 4095
+    
     #------------------- les varibles qui dépendent du 'main.py' ou/et qui sont utilisés dans plus d'une fonction -------------------#
-    def __init__(self, SLAVE_ADDRESS_POT, DEBUG):
+    def __init__(self, SLAVE_ADDRESS_POT, DEBUG, strip):
         self.SLAVE_ADDRESS_POT = SLAVE_ADDRESS_POT
         self.DEBUG = DEBUG
         self.POTerror = False
         self.window_POT = None
         self.correctSin = True
+        self.strip = strip
         
     
     def scale(self, val, src, dst):
@@ -125,6 +134,8 @@ class POT:
                     if self.periodeGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot2']), (0, 4096), (10, 25)) <= self.periodeGoal+self.MARGINS:
                         if self.posYGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot3']), (0, 4096), (-10, 10)) <= self.posYGoal+self.MARGINS:
                             self.correctSin = True
+                            moduleDEL.colorWipe(self.strip, Color(0, 255, 0), 0)  # change la couleur des strips à vert
+                            
 
             prev_x_goal = prev_y_goal = None
             for x in range(int(-self.SIZE_X/2),int(self.SIZE_X/2)):

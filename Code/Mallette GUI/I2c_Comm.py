@@ -10,13 +10,7 @@ donc mieux vaut la rendre simple et accessible pour les prochains
 """
 
 from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
-import PySimpleGUI as sg            #Pour l'interface graphique
 import json                         #Pour la manipulation des json
-from random import randint          #Pour la generation de nombre aleatoire pour les equations
-import math
-import board
-import neopixel
-from digitalio import DigitalInOut, Direction, Pull
 
 #Brief : Une fonction qui envoit une demande de donnée à l'adresse d'un esp32 
 #Param : L'adresse i2c du esp32
