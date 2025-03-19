@@ -1,8 +1,0 @@
-Removed Pin From Net: NetName=PIN_CROCO_18 Pin=J12-3
-Removed Pin From Net: NetName=PIN_CROCO_19 Pin=J12-4
-Removed Pin From Net: NetName=PIN_CROCO_18 Pin=R15-2
-Removed Pin From Net: NetName=PIN_CROCO_19 Pin=R16-2
-Added Pin To Net: NetName=PIN_CROCO_19 Pin=J12-3
-Added Pin To Net: NetName=PIN_CROCO_18 Pin=J12-4
-Added Pin To Net: NetName=PIN_CROCO_19 Pin=R15-2
-Added Pin To Net: NetName=PIN_CROCO_18 Pin=R16-2

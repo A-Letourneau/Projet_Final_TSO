@@ -1,0 +1,43 @@
+Removed Pin From Net: NetName=GND Pin=J23-B12
+Change Component Designator: OldDesignator=M1 NewDesignator=Q2
+Change Component Designator: OldDesignator=M2 NewDesignator=Q3
+Change Component Designator: OldDesignator=M3 NewDesignator=Q4
+Change Component Designator: OldDesignator=M4 NewDesignator=Q5
+Added Component: Designator=C?(CAP TH ALPOLY D10.00mm S5.00mm H13.00mm)
+Add component (AddParameter): Name = "Applications"; Value = "General Purpose"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Capacitance"; Value = "470 µF"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "componentlink1description"; Value = "Datasheet"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "componentlink1url"; Value = "https://api.kemet.com/component-edge/download/specsheet/A759MS477M1EAAE020.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "componentlink2description"; Value = "DigiKey Link"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "componentlink2url"; Value = "https://www.digikey.com/en/products/detail/kemet/A759MS477M1EAAE020/13676499"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ESR (Equivalent Series Resistance)"; Value = "20mOhm"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Height - Seated (Max)"; Value = "0.512" (13.00mm)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "lastupdated"; Value = "2024-06-03 20:25:49"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Lead Spacing"; Value = "0.197" (5.00mm)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Lifecycle Status"; Value = "Active"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Lifetime @ Temp."; Value = "2000 Hrs @ 125°C"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "manufacturer"; Value = "KEMET"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Minimum Order"; Value = "1"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mounting Type"; Value = "Through Hole"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Operating Temperature"; Value = "-55°C ~ 125°C"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "packaging"; Value = "Bulk"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Part Number"; Value = "A759MS477M1EAAE020"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Part Status"; Value = "Active"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "partid"; Value = "4689"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "price"; Value = "0.24"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ripple Current @ High Frequency"; Value = "4.844 A @ 100 kHz"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ripple Current @ Low Frequency"; Value = "242.2 mA @ 120 Hz"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "series"; Value = "A759"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Size / Dimension"; Value = "0.394" Dia (10.00mm)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 1"; Value = "DigiKey"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 1"; Value = "399-A759MS477M1EAAE020-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Tolerance"; Value = "±20%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Type"; Value = "Polymer"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "470 µF"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Voltage - Rated"; Value = "25 V"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=VUSB Pin=C?-1
+Added Pin To Net: NetName=GND Pin=C?-2
+Added Pin To Net: NetName=VUSB Pin=J23-A9
+Added Pin To Net: NetName=VUSB Pin=J23-B4
+Added Pin To Net: NetName=VUSB Pin=J23-B9
+Added Member To Class: ClassName=Alimentation_USB_Header Member=Component C? 470 µF

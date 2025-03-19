@@ -1,0 +1,4 @@
+Removed Pin From Net: NetName=PIN_CROCO_4 Pin=J11-5
+Removed Pin From Net: NetName=PIN_CROCO_5 Pin=J11-6
+Added Pin To Net: NetName=PIN_CROCO_5 Pin=J11-5
+Added Pin To Net: NetName=PIN_CROCO_4 Pin=J11-6

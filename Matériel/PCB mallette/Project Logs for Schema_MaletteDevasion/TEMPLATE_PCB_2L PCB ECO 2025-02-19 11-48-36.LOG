@@ -1,4 +1,0 @@
-Added Pin To Net: NetName=VBUS Pin=J23-A4/B9
-Added Pin To Net: NetName=VBUS Pin=J23-B4/A9
-Added Pin To Net: NetName=GND Pin=U4-S1
-Change Net Name : Old Net Name=VBUS New Net Name=VUSB
