@@ -1,6 +1,6 @@
-# Collection des Codes pour le Prototype de la Mallette 🚀🌙
+# 📂 Code
 
-Ce dépôt regroupe trois ensembles de fichiers essentiels pour le fonctionnement du prototype. En plus, il inclut des fichiers individuels qui ont servi de base pour le développement.
+Ce dépôt regroupe 4 ensembles de fichiers essentiels pour le fonctionnement du prototype. 
 
 ## 📂 I2C et JSON pour ESP32  
 Ce dossier contient le code en C++ chargé dans les ESP32.  
@@ -9,9 +9,9 @@ Il permet à ces derniers d’envoyer des messages JSON en I2C contenant l'état
 ---
 
 ## 📂 Interface Graphique (Mallette GUI)  
-Ce dossier contient le code Python nécessaire pour afficher les données reçues sous forme de JSON dans un interface.  
-L’affichage à l’écran est réalisé à l’aide de la bibliothèque **SimpleGUI**. 
-
+Ce dossier contient :
+- Le code Python nécessaire pour afficher les données i2c reçues sous forme de JSON dans une interface.  
+- L’affichage à l’écran est réalisé à l’aide de la bibliothèque **PySimpleGUI**. 
 
 ---
 
@@ -19,6 +19,13 @@ L’affichage à l’écran est réalisé à l’aide de la bibliothèque **Simp
 Ce dossier contient :  
 - Les bases de données SQLite utilisées dans le projet.  
 - Les codes Python responsables de la gestion de la réception des données via MQTT provenant du raspberry PI.  
+Note : Même si le MQTT est disponible, nous avons décidé de ne pas l'utiliser.
+
+---
+
+## 📂 Clavier esp32
+Ce dossier contient :  
+- Le code main qui va dans un clavier esp32 qui utilise la librairie kmk_firmware .  
 
 ---
 

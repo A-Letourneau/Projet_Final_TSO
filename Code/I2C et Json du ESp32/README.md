@@ -1,7 +1,12 @@
 # Programme de Communication I2C avec JSON pour ESP32
 
-Ce programme permet d’envoyer un JSON personnalisé via communication I2C à un maître.  
+Ce fichier contient tous les codes fait en rapport avec les esp32 en c++
+
+Les programmes de CODE_ESP32_POT, CODE_ESP32_SW et CODE_ESP32_CROCO permet d’envoyer les états des objets interactifs (interrupteur, potentiomètre et fils banane/croco) dans un JSON via communication I2C à un maître.  
 Le maître utilisé dans notre projet est un **Raspberry Pi 4**.  
+Les sub (esclaves) utilisés dans notre projet est le **esp32 c3 devkit 02**
+
+'esp32 protoboard' est une archive de l'ancien planche d'essai avec les anciens objets interactifs.
 
 ## Configuration d’un Nouveau Module d’Énigme avec un ESP32  
 
@@ -13,9 +18,10 @@ Pour ajouter un nouveau module, suivez ces étapes :
 2. **Configurer les broches I2C (si nécessaire) :**  
    - Modifiez la ligne **`Wire.setPins()`** pour définir les broches I2C souhaitées.  
    - Si l’ESP32 utilise déjà des broches par défaut, cette ligne peut être supprimée.  
+   - Les pattes arbitraires pour le i2c que nous avons choisi est le 6 pour SDA et 7 pour SCL.
 
 3. **Personnaliser l’identifiant du module :**  
-   Changez la valeur de la variable **`myName`** pour identifier le module.  
+   Changez la valeur de la variable **`ESP32_NAME`** pour identifier le module.  
 
 4. **Adapter le fichier `platformio.ini` :**  
    - Vérifiez que le fichier **`platformio.ini`** correspond à la carte ESP32 utilisée.  
@@ -25,3 +31,4 @@ Pour ajouter un nouveau module, suivez ces étapes :
 
 ### Remarque  
 Assurez-vous que tous les modules sont correctement configurés pour éviter les conflits d’adresse sur le bus I2C.
+Utilisez i2cdetect -i 0 sur le cmd du pi pour détecter les connections i2c

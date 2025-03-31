@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=monautostart
+Exec =sudo /home/pi/path/to/venv/bin/python3 /home/pi/Desktop/programMallette/main.py
+Type=Application
+X-GNOME-Autostart-enabled=true
+
+
+
