@@ -26,12 +26,12 @@ import PySimpleGUI as sg            #Pour l'interface graphique
 import json                         #Pour la manipulation des json
 from random import randint          #Pour la generation de nombre aleatoire pour les DEL
 import math							#Pour la fonction sine des POT
-import board						#Pour l'assignement des pattes pour le bouton lumineux
+import board						#Pour l'assignement des pattes pour le bouton lumineux (librairie adafruit-blinka)
 from digitalio import DigitalInOut, Direction, Pull #Pour l'assignement des entre sortie pour le bouton lumineux
 from rpi_ws281x import PixelStrip, Color  #Pour les bande de DEL
 
 #importation des libraries custom pour la mallette
-import moduleDEL
+import moduleDEL #A mettre dans une classe
 from Class_Croco import Croco
 from Class_SW import SW_MODULE
 from Class_POT import POT
@@ -60,22 +60,23 @@ num_pixels = 12
 # luminosités des bandes de dels
 lumin = 50
 
-# Pin number
+# GPIO number
 pinStrip1 = 19
 pinStrip2 = 12
 pinStrip3 = 18
 pinStrip4 = 21
 
-
-# LED setup.
-led = DigitalInOut(board.D17)
+# LED Bouton lumineux setup.
+led = DigitalInOut(board.D17) #Changer le nom de LED pour btnLed
 led.direction = Direction.OUTPUT
 
-#BTN setup
-switch = DigitalInOut(board.D4)
+#Bouton lumineux setup
+switch = DigitalInOut(board.D4) #Changer le nom de switch pour btnSwitch
 switch.direction = Direction.INPUT
 
-
+"""
+Brief : Fenetre d'accueil pour la selection des enigmes
+"""
 def make_winSelect():
     layout_winSelect = [
             [sg.Text('My SW Status Indicators', size=(20,1), key = "titleSW")],
@@ -109,6 +110,7 @@ my_SW = SW_MODULE(SLAVE_ADDRESS_SW,DEBUG)
 my_POT = POT(SLAVE_ADDRESS_POT,DEBUG, strip3)
 
 if DEL_ACTIVE:
+    '''Met des couleurs aleatoires à des fin de debuggage'''
     moduleDEL.colorWipe(strip1, Color(randint(0,255), randint(0,255), randint(0,255)), 0)  # Red wipe
     moduleDEL.colorWipe(strip2, Color(randint(0,255), randint(0,255), randint(0,255)), 0)  # Red wipe
     moduleDEL.colorWipe(strip3, Color(randint(0,255), randint(0,255), randint(0,255)), 0)  # Red wipe
@@ -116,9 +118,9 @@ if DEL_ACTIVE:
 
 #Boucle principale
 while True: 
-    #Del.RandLED(DEL_ACTIVE, pixels, pixels2)
     #moduleDEL.rainbowCycle(strip1)
 
+    """Pour tester le gros bouton"""
     if switch.value:
         if DEBUG:
             print("off")
@@ -130,13 +132,16 @@ while True:
         
         
     #-------------Lecture des boutons des fenetres--------------#
+    #On bloque dans le read_all_windows pendant REFRESH_RATE (50ms) si on n'a rien appuyée
     window, event, value = sg.read_all_windows(timeout = REFRESH_RATE)
     
-    if window == sg.WIN_CLOSED and event != sg.TIMEOUT_EVENT:
+    if window == sg.WIN_CLOSED and event != sg.TIMEOUT_EVENT: #On ferme si le programme quand on ferme la fenetre select
         break
+
     if event == 'Exit' or event == sg.WIN_CLOSED: #Si on ferme une fenetre on ferme toutes les fenetres
         window.close()
          
+        #Si on ferme une fenetre, on garde en memoire qu'elle n'existe plus pour ne pas les dupliquer plus tard
         if window == my_SW.window_SW:
             my_SW.window_SW = None
             
@@ -146,33 +151,34 @@ while True:
         elif window == my_Croco.window_Croco:
             my_Croco.window_Croco = None
             
-        elif window == window_winSelect:
+        elif window == window_winSelect:# Si c'est la fenetre select, on quitte le programme
             break
         
     # crée les interfaces utilisateurs selon le choix de l'utilisateurs 
     if event == "SW":
-        if not my_SW.window_SW:
+        if not my_SW.window_SW: #On verifie qu'elle n'existe pas avant de la recréer
             my_SW.window_SW = my_SW.Make_WinSW()
             
     if event == "POT":
-        if not my_POT.window_POT:
+        if not my_POT.window_POT: #On verifie qu'elle n'existe pas avant de la recréer
             my_POT.window_POT = my_POT.Make_WinPOT()
     
     if event == "Croco":
-        if not my_Croco.window_Croco:
+        if not my_Croco.window_Croco: #On verifie qu'elle n'existe pas avant de la recréer
             my_Croco.window_Croco = my_Croco.Make_WinCroco()
     
 
-    #Essaye de lire les json des esp32 et met un message d'erreur s'il n'y parvient pas
+    #Essaye de lire les json via i2c des esp32 et met un message d'erreur s'il n'y parvient pas
     my_Croco.msg_Croco = my_Croco.Croco_Json()
     my_SW.msg_SW = my_SW.SW_Json()
     my_POT.msg_POT = my_POT.POT_Json()
     
     #débute les énigmes si leur fenêtre est présentement ouverte
     # et va changer les couleurs des strips de dels lorsque l'utilisateur va réussir
-    my_Croco.Start_WinCroco()
-    #my_SW.Start_WinCroco()		#il n'existe pas encore, puisque l'énigme n'est pas encore créer
-    my_POT.Start_WinPOT()
+    my_Croco.Start_WinCroco()   #Changer pour doWinCroco
+    #my_SW.Start_WinSW()		#il n'existe pas encore, puisque l'énigme n'est pas encore créer
+    my_POT.Start_WinPOT()       #Changer pour doWinPot
+
 
 #À la fin du programme, on ferme les fenêtres s'il existe
 if my_SW.window_SW:

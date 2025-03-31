@@ -1,8 +1,9 @@
 import PySimpleGUI as sg
 from time import sleep
 
+sg.theme('NeonGreen1')
 layout = [
-            [sg.Text('A toggle button example', key="1", text_color="blue")],
+            [sg.Text('A toggle button example', key="1", text_color="lightgreen")],
             [sg.Text("", size=(30,25), background_color='white', text_color='black', key="mazeTxtBox", font="Monaco"),],
             [sg.Text(key="input")],
             [sg.Button(button_text='gateA', key='gateA')]
@@ -11,6 +12,7 @@ layout = [
 window = sg.Window('Toggle Button Simple Graphic', layout, return_keyboard_events=True, use_default_focus=False)
 
 window.Location = (100,100)
+
 
 # Maze file constants:
 WALL = '#'
@@ -99,6 +101,7 @@ event, values = window.read(timeout=0)
 
 mazeCompleted = False
 displayMaze(maze)
+move = ''
 
 while not mazeCompleted:  # Main game loop.
     
@@ -115,9 +118,8 @@ while not mazeCompleted:  # Main game loop.
         if event != "__TIMEOUT__" and event.isalpha():
             window["input"].update(event)
             move = event.upper()
-
-        if move not in ['W', 'A', 'S', 'D']:
-            continue
+            if move not in ['W', 'A', 'S', 'D']:
+                continue
 
         # Check if the player can move in that direction:
         if move == 'W' and maze[(playerx, playery - 1)] == EMPTY:

@@ -19,6 +19,8 @@ Finalement, on envoit ce dictionnaire au Raspberry PI 4 en forme de Json.
 
 #define NUM_POT 3  // Number of pot
 
+#define DEBUG true
+
 // l'ordre des interrupteurs est de gauche à droites de haunt en bas 
 const int PotPins[NUM_POT] = {0, 1, 2}; // Pins des pot
 const String PotNames[NUM_POT] = {"Pot1", "Pot2", "Pot3"}; // Noms des interrupteurs
@@ -27,12 +29,9 @@ String const myName = "I2C_Pot"; //L'ID du ESP 32
   
 void requestData(); //Prototype de fonction
 
-
 int Potstates[NUM_POT] = {0};  //met toutes les valeurs à 0
 
-
 String stringOfAllData = "";
-
 
 void setup() { 
 
@@ -53,12 +52,13 @@ void setup() {
   {
     pinMode(PotPins[i], INPUT);
   }
+  pinMode(9, INPUT);
+  pinMode(8, INPUT);
+  pinMode(5, INPUT);
 } 
  
-
 void loop() 
 {} 
-
  
 /*
 Brief : Fonction appelée lorsque le maître fait la demande des données. 
@@ -90,6 +90,10 @@ void requestData() {
   stringOfAllData = "{\"NomEsp32\":\"" + myName 
                    + "\",\"JsonData\":" + stringOfInteractable + " } }";
 
+  if (DEBUG)
+  {
+    Serial.print(stringOfAllData);
+  }
   // Envoyer les données du tableau `dataToSend` au maître 
   for (int i = 0; i < stringOfAllData.length(); i++)
     Wire.write(stringOfAllData[i]);  // Envoyer chaque caractère en byte

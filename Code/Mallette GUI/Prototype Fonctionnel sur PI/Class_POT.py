@@ -52,7 +52,7 @@ class POT:
     
     def scale(self, val, src, dst):
         """
-        self.scale the given value from the self.scale of src to the self.scale of dst.
+        scale the given value from the scale of src to the scale of dst.
         """
         return ((val - src[0]) / (src[1]-src[0])) * (dst[1]-dst[0]) + dst[0]
 
