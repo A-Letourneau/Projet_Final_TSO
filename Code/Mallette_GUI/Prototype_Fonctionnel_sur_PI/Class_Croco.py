@@ -43,14 +43,18 @@ class Croco:
     #------------------- les varibles qui dépendent du 'main.py' ou/et qui sont utilisés dans plus d'une fonction -------------------#
     def __init__(self, SLAVE_ADDRESS_Croco, DEBUG, strip):
         #Liste les operations des question en ordre
-        #LIST_OPERATIVE = ["+","-","x","/"] exemple de quatre questions possibles
-        self.LIST_OPERATIVE = ["/","/"]
+        self.LIST_OPERATIVE = ["+","-","x","/"] #exemple de quatre questions possibles
+        #self.LIST_OPERATIVE = ["/","/"]
         
         self.SLAVE_ADDRESS_Croco = SLAVE_ADDRESS_Croco
         self.DEBUG = DEBUG
         self.Crocoerror = False
         self.window_Croco = None
         self.strip = strip
+        #Initiation du jeu d'equation
+        self.firstEquation = True
+        self.randomAnswer = 0 #La reponse aleatoire
+        self.goodAnswer = 0 #Nombre de bonnes reponses
     
 
     #Crée un graph pour contenir un rond de couleur
@@ -100,11 +104,11 @@ class Croco:
                         [sg.Text('Croco 5'),  sg.Text('Croco 6'),  sg.Text('Croco 7'), sg.Text('Croco 8')],
                         [sg.Button('Exit')]
                       ]
-        return sg.Window('Croco window', layout_Croco, default_element_size=(12, 1), auto_size_text=False, finalize=True)
+        return sg.Window('Croco window', layout_Croco, default_element_size=(12, 1), auto_size_text=False, finalize=True, keep_on_top=True)
 
 
     #cette fonction est le coeur de l'énigme. c'est ici que l'utilisateur va pouvoir essayer de résoudre l'énigme.
-    def Start_WinCroco(self):
+    def doWinCroco(self):
         global Crocoerror
        #-----------Fenêtre Interface Croco-----------#
         if self.window_Croco and not Crocoerror: #Detecte si la fenetre existe puis detecte si le i2c fonctionne. L'ordre est important car si la fenetre est None, le Crocoerror n'existe pas
@@ -112,11 +116,6 @@ class Croco:
             colorCpt = 0 #la couleur de paire actuel
             dictOfPairsColor = {} #Pour mettre la couleur en memoire pour la deuxieme fois qu'on voit la paire
             answer = 0 #Reponse de l'usager
-            
-            #Initiation du jeu d'equation
-            firstEquation = True #Pour savoir qu'il faut trouver une premiere reponse aleatoire
-            randomAnswer = 0 #La reponse aleatoire
-            goodAnswer = 0 #Nombre de bonnes reponses
             
             #Pour chaque connection du Json, on met un rond de couleur pour l'associer avec sa paire
             for pairs in self.msg_Croco['JsonData']:
@@ -127,13 +126,13 @@ class Croco:
                     dictOfPairsColor[str(curCroco)] = self.listColor[colorCpt]#On met la couleur en memoire pour la deuxieme fois qu'on voit la paire
                     colorCpt = colorCpt + 1 #On passe a la prochaine couleur
                     
-                    if self.LIST_OPERATIVE[goodAnswer] == "+": #Fait la bonne operation selon l'operation, mais additionne toujours les paires
+                    if self.LIST_OPERATIVE[self.goodAnswer] == "+": #Fait la bonne operation selon l'operation, mais additionne toujours les paires
                         answer += (curCroco + 1) + (int(pairs) + 1)
-                    elif self.LIST_OPERATIVE[goodAnswer] == "-":
+                    elif self.LIST_OPERATIVE[self.goodAnswer] == "-":
                         answer += (int(pairs) + 1) - (curCroco + 1)
-                    elif self.LIST_OPERATIVE[goodAnswer] == "x":
+                    elif self.LIST_OPERATIVE[self.goodAnswer] == "x":
                         answer += (curCroco + 1) * (int(pairs) + 1)
-                    elif self.LIST_OPERATIVE[goodAnswer] == "/":
+                    elif self.LIST_OPERATIVE[self.goodAnswer] == "/":
                         answer += (int(pairs) + 1) / (curCroco + 1)
                     
                 else:  #Si c'est la deuxieme fois qu'on voit cette paire
@@ -146,53 +145,53 @@ class Croco:
                 curCroco = curCroco + 1
 
             self.window_Croco["equationGraph"].erase()
-            if self.LIST_OPERATIVE[goodAnswer] != "/": #Pour afficher la reponse voulu, la reponse de l'utilisateur et l'operation actuelle
-                self.window_Croco["equationGraph"].draw_text(f"{randomAnswer}={answer} ({self.LIST_OPERATIVE[goodAnswer]})", (200,50), font=("Comic", 50))
+            if self.LIST_OPERATIVE[self.goodAnswer] != "/": #Pour afficher la reponse voulu, la reponse de l'utilisateur et l'operation actuelle
+                self.window_Croco["equationGraph"].draw_text(f"{self.randomAnswer}={answer} ({self.LIST_OPERATIVE[self.goodAnswer]})", (200,50), font=("Comic", 50))
             else: #Pour afficher un bon nombre de decimal des float
-                self.window_Croco["equationGraph"].draw_text(f"{randomAnswer:5.3f}={answer:5.3f} ({self.LIST_OPERATIVE[goodAnswer]})", (200,50), font=("Comic", 30))        
+                self.window_Croco["equationGraph"].draw_text(f"{self.randomAnswer:5.3f}={answer:5.3f} ({self.LIST_OPERATIVE[self.goodAnswer]})", (200,50), font=("Comic", 30))        
                     
-            if firstEquation or answer == randomAnswer: 
-                if not firstEquation:
-                    goodAnswer += 1
+            if self.firstEquation or answer == self.randomAnswer: 
+                if not self.firstEquation:
+                    self.goodAnswer += 1
                     sg.popup_no_titlebar('CORRECT', auto_close_duration = 1, auto_close = True)
-                    self.window_Croco["titleCroco"].update(f"Nombre d'équation restante {goodAnswer}/{len(self.LIST_OPERATIVE)}")
+                    self.window_Croco["titleCroco"].update(f"Nombre d'équation restante {self.goodAnswer}/{len(self.LIST_OPERATIVE)}")
                 else:
-                    firstEquation = False
+                    self.firstEquation = False
 
-                if goodAnswer == len(self.LIST_OPERATIVE): #Lorsque l'user a finit les questions
+                if self.goodAnswer == len(self.LIST_OPERATIVE): #Lorsque l'user a finit les questions
                     moduleDEL.colorWipe(self.strip, Color(0, 255, 0), 0)  # change la couleur des strips à vert
                     sg.popup_no_titlebar('REUSSI', auto_close_duration = 1, auto_close = True)
-                    goodAnswer = 0
-                    firstEquation = True
-                    self.window_Croco["titleCroco"].update(f"Nombre d'équation restante {goodAnswer}/{len(self.LIST_OPERATIVE)}")
+                    self.goodAnswer = 0
+                    self.firstEquation = True
+                    self.window_Croco["titleCroco"].update(f"Nombre d'équation restante {self.goodAnswer}/{len(self.LIST_OPERATIVE)}")
                     
                 #Tout les reponses aleatoires doivent etre different de l'ancien pour ne pas resoudre immediatement
-                elif self.LIST_OPERATIVE[goodAnswer] == "+":
+                elif self.LIST_OPERATIVE[self.goodAnswer] == "+":
                     while True:
-                        NewRandomAnswer = randint(3,15)
-                        if NewRandomAnswer != randomAnswer:
-                            randomAnswer = NewRandomAnswer
+                        newRandomAnswer = randint(3,15)
+                        if newRandomAnswer != self.randomAnswer:
+                            self.randomAnswer = newRandomAnswer
                             break
                         
-                elif self.LIST_OPERATIVE[goodAnswer] == "-":
+                elif self.LIST_OPERATIVE[self.goodAnswer] == "-":
                     while True:
-                        NewRandomAnswer = randint(1,7)
-                        if NewRandomAnswer != randomAnswer:
-                            randomAnswer = NewRandomAnswer
+                        newRandomAnswer = randint(1,7)
+                        if newRandomAnswer != self.randomAnswer:
+                            self.randomAnswer = newRandomAnswer
                             break
                         
-                elif self.LIST_OPERATIVE[goodAnswer] == "x":
+                elif self.LIST_OPERATIVE[self.goodAnswer] == "x":
                     while True:
-                        NewRandomAnswer = randint(1,8)
-                        NewRandomAnswer2 = randint(1,8)
-                        if randomAnswer != NewRandomAnswer * NewRandomAnswer2 and NewRandomAnswer != NewRandomAnswer2: #Un nombre qui n'est pas carre
-                            randomAnswer = NewRandomAnswer * NewRandomAnswer2
+                        newRandomAnswer = randint(1,8)
+                        newRandomAnswer2 = randint(1,8)
+                        if self.randomAnswer != newRandomAnswer * newRandomAnswer2 and newRandomAnswer != newRandomAnswer2: #Un nombre qui n'est pas carre
+                            self.randomAnswer = newRandomAnswer * newRandomAnswer2
                             break
                         
-                elif self.LIST_OPERATIVE[goodAnswer] == "/":
+                elif self.LIST_OPERATIVE[self.goodAnswer] == "/":
                     while True:
-                        NewRandomAnswer = randint(2,8)
-                        NewRandomAnswer2 = randint(2,8)
-                        if NewRandomAnswer2 < NewRandomAnswer and randomAnswer != NewRandomAnswer * NewRandomAnswer2 and NewRandomAnswer != NewRandomAnswer2: #Un nombre qui n'est pas 1 et pas plus petit que zero
-                            randomAnswer = NewRandomAnswer / NewRandomAnswer2
+                        newRandomAnswer = randint(2,8)
+                        newRandomAnswer2 = randint(2,8)
+                        if newRandomAnswer2 < newRandomAnswer and self.randomAnswer != newRandomAnswer * newRandomAnswer2 and newRandomAnswer != newRandomAnswer2: #Un nombre qui n'est pas 1 et pas plus petit que zero
+                            self.randomAnswer = newRandomAnswer / newRandomAnswer2
                             break

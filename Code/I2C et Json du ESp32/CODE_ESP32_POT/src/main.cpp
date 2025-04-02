@@ -14,6 +14,7 @@ Il faut rerouter les pin 9, 8 et 5 à 0, 1 et 2, donc il faut désactiver les pa
 #include <Wire.h> //Communication I2C entre les esp32 et le PI
 #include <Arduino.h> //Pour la programmation arduino
 #include <string.h> //Pour la manipulation des string
+#include <Adafruit_NeoPixel.h> 
 
 #define SLAVE_ADDR 0x09 
 
@@ -21,6 +22,8 @@ Il faut rerouter les pin 9, 8 et 5 à 0, 1 et 2, donc il faut désactiver les pa
 #define SCL_PIN 7
 
 #define NUM_POT 3  
+
+#define BRIGHTNESS 50 
 
 #define DEBUG true
 
@@ -35,6 +38,8 @@ int Potstates[NUM_POT] = {0};  //Init toutes les valeurs à 0
 
 String stringOfAllData = "";
 
+Adafruit_NeoPixel uniDEL(1, 8, NEO_GRBW + NEO_KHZ800);
+
 void setup() { 
 
   // Initialisation du port série pour le debug 
@@ -48,7 +53,15 @@ void setup() {
   Wire.onRequest(requestData); 
 
   Serial.println("Slave prêt, en attente de requêtes du maître..."); 
-
+  for (int i = 0; i < 3; i++)
+  {
+    uniDEL.setPixelColor(0, 0, 0, 255);
+    uniDEL.show();
+    delay(100);
+    uniDEL.setPixelColor(0, 0, 0, 0);
+    uniDEL.show();
+    delay(100);
+  }
   //Initialise les pattes en entrée
   for (int i = 0; i <NUM_POT; i++)
   {
@@ -68,7 +81,8 @@ Brief : Fonction appelée lorsque le maître fait la demande des données.
 Renvoit un JSON contenant les état des interrupteurs et des potentiomètres connectés au esp32 sur la ligne i2c.
 */
 void requestData() { 
-
+  uniDEL.setPixelColor(0, 255, 0, 0);
+  uniDEL.show();
   for (int i = 0; i < NUM_POT; i++)
     Potstates[i] = analogRead(POT_PINS[i]);
 
@@ -98,4 +112,6 @@ void requestData() {
     Wire.write(stringOfAllData[i]);  // Envoyer chaque caractère en byte
   
   Wire.write(0x00);  // Le Master repete le dernier byte recu, donc le dernier byte est NULL pour signaler la fin de la string
+  uniDEL.setPixelColor(0, 0, 0, 0);
+  uniDEL.show();
 } 

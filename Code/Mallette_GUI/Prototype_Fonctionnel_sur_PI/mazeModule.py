@@ -1,150 +1,303 @@
-"""
-Auteur : Louis Boisvert & Alexis Létourneau
-Date : 2025-03-12
-Environnement : Python, Thonny, raspberry pi 4, ESP32-C3-WROOM-02 Devkit, 
-Brief : Cette classe représente les parties de code servant au fonctionnement
-de l'énigme des potentiomètre. Elle consiste à reproduire l'onde qui est afficher
-à l'écran pour la réussite de cette énigme.
-
-- Make_WinPOT:   permet de créer l'affichage
-- POT_Json :     permet de demander l'envoie d'un Json au Esp32 lié.
-- Start_WinPOT : sert à la fonctionnalité de l'énigme et au calcule.
-
-"""
-
-#importation des library standard
+import PySimpleGUI as sg
+from time import sleep
 from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
-import PySimpleGUI as sg            #Pour l'interface graphique
 import json                         #Pour la manipulation des json
-# Pour la generation de nombre aleatoire pour les equations et les calcules mathématiques
-from random import randint          
-import math
-# library pour les strips de dels
-import time
-from rpi_ws281x import PixelStrip, Color
-
-#importation des library créer
-import I2c_Comm
-import moduleDEL
 
 
-class POT:
-    
-    #------------------- les variables statiques utilisés par l'énigme des potentiomètres -------------------#
-    #Pour le graph
-    SIZE_X = 200
-    SIZE_Y = 100
-    NUMBER_MARKER_FREQUENCY = 25
-    MARGINS = 2
-    
-    #Valeur max des potentiomètres		Variables pas utilisé, mais toujours pratique à savoir
-    MAX_POT_VAL = 4095
-    
-    #------------------- les varibles qui dépendent du 'main.py' ou/et qui sont utilisés dans plus d'une fonction -------------------#
-    def __init__(self, SLAVE_ADDRESS_POT, DEBUG, strip):
-        self.SLAVE_ADDRESS_POT = SLAVE_ADDRESS_POT
+class mazeClass:
+    def __init__(self, mazeFile, nbGate, SLAVE_ADDRESS_MAZE, DEBUG, strip = None):
+        self.mazeFile = mazeFile
+        self.nbGate = nbGate
+        self.SLAVE_ADDRESS_MAZE = SLAVE_ADDRESS_MAZE
         self.DEBUG = DEBUG
-        self.MazeError = False
+        self.mazeError = False
         self.windowMaze = None
-        self.correctSin = True
         self.strip = strip
-        
-    
-    def scale(self, val, src, dst):
-        """
-        self.scale the given value from the self.scale of src to the self.scale of dst.
-        """
-        return ((val - src[0]) / (src[1]-src[0])) * (dst[1]-dst[0]) + dst[0]
+        self.HEIGHT = 0
+        self.WIDTH = 0
+        self.maze = {}
+        self.lines = self.mazeFile.readlines()
+        self.playerx = 0
+        self.playery = 0
+        self.exitx = 0
+        self.exity = 0
+       
+        # Maze file constants:
+        self.WALL = '#'
+        self.EMPTY = ' '
+        self.START = '!'
+        self.EXIT = '?'
+        self.CLOSED_GATE = '█'
+        self.OPEN_GATE = '║'
+        self.PLAYER = '@'  
+        self.BLOCK = chr(9617)  # Character 9617 is '░'
 
-    
-    def draw_axis(self):
-        self.window_POT['graph'].draw_line((-self.SIZE_X,0), (self.SIZE_X, 0))                # axis lines
-        self.window_POT['graph'].draw_line((0,-self.SIZE_Y), (0,self.SIZE_Y))
 
-        for x in range(-self.SIZE_X, self.SIZE_X+1, self.NUMBER_MARKER_FREQUENCY):
-            self.window_POT['graph'].draw_line((x,-3), (x,3))                       # tick marks
-            if x != 0:
-                self.window_POT['graph'].draw_text( str(x), (x,-10), color='green', font='Algerian 10')      # numeric labels
+        self.listGateState = {'a' : 1, 'A' : 0,'b' : 1, 'B' : 0,'c' : 1, 'C' : 0,'d' : 1, 'D' : 0}
+        self.listGatePos = {}
 
-        for y in range(-self.SIZE_Y, self.SIZE_Y+1, self.NUMBER_MARKER_FREQUENCY):
-            self.window_POT['graph'].draw_line((-3,y), (3,y))
-            if y != 0:
-                self.window_POT['graph'].draw_text( str(y), (-10,y), color='blue')
+
+        self.window_maze = None
+
+
+    """
+    Brief : Cree une fenetre qui contient le labyrinthe
+    Para : self.
+    Return : les information pour cree une fenetre labyrinthe dans une variable
     
-    
-    def Make_WinPOT(self):
-        layout_POT =[
-                    [sg.Text("Forme la fonction sine correspondantes", size=(40,1), key = 'titlePOT')],
-                    [sg.Graph(canvas_size=(400, 400),
-                      graph_bottom_left=(-(self.SIZE_X+5), -(self.SIZE_Y+5)),
-                      graph_top_right=(self.SIZE_X+5, self.SIZE_Y+5),
-                      background_color='white',
-                      key='graph')],
-                    [sg.Text('f(x)=a*sin(p*x)+pY', font='Algerian 18')],
-                    [sg.Text('a')],
-                    [sg.Text('p')],
-                    [sg.Text('pY')],
+    """
+    def make_winMaze(self):
+        layout = [
+                    [sg.Text('A maze', text_color="white", key="title_Maze")],
+                    [sg.Text("", size=(30,25), background_color='white', text_color='black', key="mazeTxtBox", font="FreeMono"),],
+                    [sg.Text(key="input")],
+                    [sg.Button(button_text='gateA', key='gateA')]
                 ]
-        return sg.Window('POT window', layout_POT, default_element_size=(12, 1), auto_size_text=False, finalize=True)
-    
-    
-    def maze_Json(self):
-        self.msg_Maze = ""
-        global MazeError
-        
-        if self.window_POT:    
-            try:
-                self.msg_POT = I2c_Comm.sendRequest(self.SLAVE_ADDRESS_POT, self.DEBUG)
-                self.POTerror = False
-                self.window_POT["titlePOT"].update(text_color = "white")
-            except:
-                self.window_POT["titlePOT"].update(text_color = "red")
-                self.POTerror = True
-                if self.DEBUG:
-                    print("POT i2c ERROR")
-        return self.msg_POT
-    
-    
-    def Start_WinPOT(self):
-        
-        #-----------Fenêtre Interface_POT-----------#
-        if self.window_POT and not self.POTerror: #Detecte si la fenetre existe puis detecte si le i2c fonctionne. L'ordre est important car si la fenetre est None, le self.POTerror existe pas
-            self.window_POT['graph'].erase()
-            self.draw_axis()
-        
-            if self.correctSin:
-                sg.popup_auto_close("Find the corresponding sine wave")
-                self.amplitudeGoal = randint(0,50)
-                self.periodeGoal = randint(10,25)
-                self.posYGoal = randint(-10,10)
-                if self.DEBUG:
-                    print(self.amplitudeGoal, self.periodeGoal, self.posYGoal)
-                self.correctSin = False
 
-            prev_x = prev_y = None
-            for x in range(int(-self.SIZE_X/2),int(self.SIZE_X/2)):
-                #f(x)=a*sin(p(x))+pY
-                y = self.scale(int(self.msg_POT['JsonData']['Pot1']), (0, 4096), (0, 50)) * math.sin(self.scale(int(self.msg_POT['JsonData']['Pot2']), (0, 4096), (10, 25))/100 * x) + self.scale(int(self.msg_POT['JsonData']['Pot3']), (0, 4096), (-10, 10))
-                if prev_x is not None:
-                    self.window_POT['graph'].draw_line((prev_x, prev_y), (x,y), color='red')
-                prev_x, prev_y = x, y
-                
-                #if self.amplitudeGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot1']), (0, 4096), (0, 50)) <= self.amplitudeGoal+self.MARGINS and self.periodeGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot2'], (0, 4096), (10, 25)) <= self.periodeGoal+self.MARGINS and self.posYGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot3']), (0, 4096), (-10, 10)) <= self.posYGoal+self.MARGINS:
-                if self.amplitudeGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot1']), (0, 4096), (0, 50)) <= self.amplitudeGoal+self.MARGINS:
-                    if self.periodeGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot2']), (0, 4096), (10, 25)) <= self.periodeGoal+self.MARGINS:
-                        if self.posYGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot3']), (0, 4096), (-10, 10)) <= self.posYGoal+self.MARGINS:
-                            self.correctSin = True
-                            moduleDEL.colorWipe(self.strip, Color(0, 255, 0), 0)  # change la couleur des strips à vert
+
+        return sg.Window('Une fenetre de labyrinthe', layout, return_keyboard_events=True, use_default_focus=False)
+
+    """
+    Brief : Une fonction qui envoit une demande de donnée à l'adresse d'un esp32
+    Param : slaveAdr = L'adresse i2c du esp32
+    """
+    def getMazeJSON(self, slaveAdr):
+        strReceived = ''
+        #Demande le json du esp32 et reçoit une liste de byte
+        with SMBus(1) as bus:
+            msg = i2c_msg.read(slaveAdr, 125) #Demande 125 bytes à l'addresse du sub
+            bus.i2c_rdwr(msg) #retourne par pointer la liste de byte dans msg
+        #Transforme la ligne de byte en string
+        for value in msg:
+            if(value == 0x00): #Signifie la fin de la string
+                break
+            else:
+                strReceived += chr(value) #Accumule les caractères pour faire un string Json complet
+        if self.DEBUG:
+            print(strReceived)
+        return json.loads(strReceived) #Transforme la string JSON en dict pour l'utiliser en dictionnaire
+
+
+    """
+    Brief : Met les information d'un dictionnaire de caractere dans la boite de texte sur la fenetre windowMaze
+    Param : maze = un dictionnaire de caractere dont l'index est la position et la valeur est soit un mur, un espace vide ou une porte ouverte ou ferme
+    """    
+    def displayMaze(self, maze):
+        if self.DEBUG:
+            print(self.maze)
+            print(self.HEIGHT)
+            print(self.WIDTH)
+        tempMazeString = ""
+        # Display the maze:
+        for y in range(self.HEIGHT):
+            for x in range(self.WIDTH):
+                if (x, y) == (self.playerx, self.playery):
+                    tempMazeString += self.PLAYER
+                elif (x, y) == (self.exitx, self.exity):
+                    tempMazeString += self.EXIT
+
+
+                elif maze[(x, y)] == self.WALL and (x,y) in self.listGatePos.values():
+                    tempMazeString += self.CLOSED_GATE
+                elif maze[(x, y)] == self.WALL:
+                    tempMazeString += self.BLOCK
+                elif maze[(x, y)] == self.EMPTY and (x,y) in self.listGatePos.values():
+                    tempMazeString += self.OPEN_GATE
+                elif maze[(x, y)] == self.EMPTY:
+                    tempMazeString += self.EMPTY
+            tempMazeString += '\n'  # Print a newline after printing the row.
+        self.window_maze["mazeTxtBox"].update(tempMazeString)
+
+    """
+    Brief : Change l'etat d'une des paires de portes et reconstruit le labyrinthe
+    Param : nameGate = une lettre en miniscule
+    """  
+    def changeGateState(self, nameGate):
+        y = 0
+        self.listGateState[nameGate] = not self.listGateState[nameGate]
+        self.listGateState[nameGate.upper()] = not self.listGateState[nameGate.upper()]
+
+        for line in self.lines:
+            self.WIDTH = len(line.rstrip())
+            for x, character in enumerate(line.rstrip()):
+                if character in self.listGateState:
+                    if self.listGateState[character]:
+                        self.maze[(x, y)] = self.WALL
+                    else:
+                        self.maze[(x, y)] = self.EMPTY
+                    self.listGatePos[character] = (x, y)
+                elif character == self.WALL:
+                    self.maze[(x, y)] = character
+                elif character == self.EMPTY:
+                    self.maze[(x, y)] = character
+                elif character == self.PLAYER:
+                    self.playerx, self.playery = x, y
+                    self.maze[(x, y)] = self.EMPTY
+                elif character == self.START:
+                    self.maze[(x, y)] = self.EMPTY
+                elif character == self.EXIT:
+                    self.maze[(x, y)] = self.EMPTY
+            y += 1
+        self.HEIGHT = y
+
+
+    """
+    Brief : Commence l'interface graphique du labyrinthe. Prend les touches du clavier directement pour se deplacer dans le labyrinthe
+    """  
+    def startMaze(self):
+        # Load the maze from a file:
+        y = 0
+        for line in self.lines:
+            if self.DEBUG:
+                print(line)
+            self.WIDTH = len(line.rstrip())
+            for x, character in enumerate(line.rstrip()):
+                if character in self.listGateState:
+                    if self.listGateState[character]:
+                        self.maze[(x, y)] = self.WALL
+                    else:
+                        self.maze[(x, y)] = self.EMPTY
+                    self.listGatePos[character] = (x, y)
+                elif character == self.WALL:
+                    self.maze[(x, y)] = character
+                elif character == self.EMPTY:
+                    self.maze[(x, y)] = character
+                elif character == self.START:
+                    self.playerx, self.playery = x, y
+                    self.maze[(x, y)] = self.EMPTY
+                elif character == self.EXIT:
+                    self.exitx, self.exity = x, y
+                    self.maze[(x, y)] = self.EMPTY
+            y += 1
+        self.HEIGHT = y        
+
+
+        self.window_maze = self.make_winMaze()
+        self.window_maze.Location = (100,100)
+        event, values = self.window_maze.read(timeout=0)
+        mazeCompleted = False
+        self.displayMaze(self.maze)
+
+
+        while not mazeCompleted:  # Main game loop.
+
+                while True:  # Get user move.
+                    #Essaye de lire les json des esp32 et met un message d'erreur s'il n'y parvient pas
+                    if self.window_maze:
+                        try:
+                            msgMaze = self.getMazeJSON(self.SLAVE_ADDRESS_MAZE)
+                            self.mazeError = False
+                            self.window_maze["title_Maze"].update(text_color = "white")
+                        except:
+                            self.window_maze["title_Maze"].update(text_color = "red")
+                            self.mazeError = True
+                            if self.DEBUG:
+                                print("Maze i2c ERROR")
+                    
+                    i = 0
+                    for switch in msgMaze['JsonData']:
+                        if i >= self.nbGate:
+                            break 
+                        if int(msgMaze['JsonData'][switch]) == self.listGateState[chr(97 + i)]:
+                            self.changeGateState(chr(97 + i))
+                            self.displayMaze(self.maze)
+                        i += 1
+                    
+                    
+                    self.displayMaze(self.maze)
+                    event, values = self.window_maze.read(timeout=50)
                             
+                    if event == sg.WIN_CLOSED:
+                        self.window_maze.close()
+                        mazeCompleted = True
+                        move = ''
+                        break
+                    elif event != "__TIMEOUT__" and event.isalpha():
+                        self.window_maze["input"].update(event)
+                        move = event.upper()
+                        if move not in ['W', 'A', 'S', 'D']:
+                            continue
+                        elif self.DEBUG:
+                            print(self.listGateState)
+                            print(msgMaze['JsonData'])
+                    elif event == "__TIMEOUT__" or not event.isalpha():
+                        move = ''
+                       
+                    # Check if the player can move in that direction:
+                    if move == 'W' and self.maze[(self.playerx, self.playery - 1)] == self.EMPTY:
+                        break
+                    elif move == 'S' and self.maze[(self.playerx, self.playery + 1)] == self.EMPTY:
+                        break
+                    elif move == 'A' and self.maze[(self.playerx - 1, self.playery)] == self.EMPTY:
+                        break
+                    elif move == 'D' and self.maze[(self.playerx + 1, self.playery)] == self.EMPTY:
+                        break
 
-            prev_x_goal = prev_y_goal = None
-            for x in range(int(-self.SIZE_X/2),int(self.SIZE_X/2)):
-                #f(x)=a*sin(p(x−pX))+pY
-                #y = math.sin(x)
-                y = self.amplitudeGoal * math.sin((self.periodeGoal/100)*(x)) + self.posYGoal
-                if prev_x_goal is not None:
-                    self.window_POT['graph'].draw_line((prev_x_goal, prev_y_goal), (x,y), color='black')
-                prev_x_goal, prev_y_goal = x, y
+
+                # Keep moving in this direction until you encounter a branch point.
+                if move == 'W':
+                    while True:
+                        self.playery -= 1
+                        if (self.playerx, self.playery) == (self.exitx, self.exity):
+                            break
+                        if self.maze[(self.playerx, self.playery - 1)] == self.WALL:
+                            break  # Break if we've hit a wall.
+                        if (self.maze[(self.playerx - 1, self.playery)] == self.EMPTY
+                            or self.maze[(self.playerx + 1, self.playery)] == self.EMPTY):
+                            break  # Break if we've reached a branch point.
+                elif move == 'S':
+                    while True:
+                        self.playery += 1
+                        if (self.playerx, self.playery) == (self.exitx, self.exity):
+                            break
+                        if self.maze[(self.playerx, self.playery + 1)] == self.WALL:
+                            break  # Break if we've hit a wall.
+                        if (self.maze[(self.playerx - 1, self.playery)] == self.EMPTY
+                            or self.maze[(self.playerx + 1, self.playery)] == self.EMPTY):
+                            break  # Break if we've reached a branch point.
+                elif move == 'A':
+                    while True:
+                        self.playerx -= 1
+                        if (self.playerx, self.playery) == (self.exitx, self.exity):
+                            break
+                        if self.maze[(self.playerx - 1, self.playery)] == self.WALL:
+                            break  # Break if we've hit a wall.
+                        if (self.maze[(self.playerx, self.playery - 1)] == self.EMPTY
+                            or self.maze[(self.playerx, self.playery + 1)] == self.EMPTY):
+                            break  # Break if we've reached a branch point.
+                elif move == 'D':
+                    while True:
+                        self.playerx += 1
+                        if (self.playerx, self.playery) == (self.exitx, self.exity):
+                            break
+                        if self.maze[(self.playerx + 1, self.playery)] == self.WALL:
+                            break  # Break if we've hit a wall.
+                        if (self.maze[(self.playerx, self.playery - 1)] == self.EMPTY
+                            or self.maze[(self.playerx, self.playery + 1)] == self.EMPTY):
+                            break  # Break if we've reached a branch point.
+
+                if (self.playerx, self.playery) == (self.exitx, self.exity):
+                    self.displayMaze(self.maze)
+                    print('You have reached the exit! Good job!')
+                    mazeCompleted = True
+                    break
+
+        self.window_maze.close()
+
+
+if __name__ == "__main__":
+    DEBUG = False
+    testClass = mazeClass(mazeFile=open("/home/pi/Desktop/programMallette/maze1.txt"), nbGate=4, SLAVE_ADDRESS_MAZE=0x0a, DEBUG=DEBUG)
+    testClass.make_winMaze()
+    testClass.startMaze()
+   
+
+
+
+
+
+
+
 
 
 

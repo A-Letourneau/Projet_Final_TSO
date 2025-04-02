@@ -76,7 +76,7 @@ class SW_MODULE:
             except:
                 self.window_SW["titleSW"].update(text_color = "red")
                 self.SWerror = True
-                if DEBUG:
+                if self.DEBUG:
                     print("SW i2c ERROR")
 
             # portion de code qui permet d'update l'affichage

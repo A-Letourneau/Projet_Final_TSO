@@ -14,24 +14,28 @@ Finalement, on envoit cette liste au Raspberry PI 4 en forme de Json.
 #include <Wire.h> //Communication I2C entre les esp32 et le PI
 #include <Arduino.h> //Pour la programmation arduino
 #include <string.h> //Pour la manipulation des string
+#include <Adafruit_NeoPixel.h> 
 
 #define SLAVE_ADDR 0x0b  // Adresse de l'esclave 
 
 #define SDA_PIN 6
 #define SCL_PIN 7
 
-#define PIN_CROCO_0 0
-#define PIN_CROCO_1 1
-#define PIN_CROCO_2 2
-#define PIN_CROCO_3 3
-#define PIN_CROCO_4 4
-#define PIN_CROCO_5 5
+#define PIN_CROCO_0 1
+#define PIN_CROCO_1 0
+#define PIN_CROCO_2 4
+#define PIN_CROCO_3 5
+#define PIN_CROCO_4 2
+#define PIN_CROCO_5 3
 #define PIN_CROCO_6 18
 #define PIN_CROCO_7 19
+ 
 
 #define NB_CROCO 8 
 
 #define noConnectionFound NB_CROCO //Si on ne trouve pas de connection, on met un nombre qui est plus que le nombre total de Croco
+
+#define BRIGHTNESS 50 
 
 void requestData(); //Prototype de fonction de réception du i2c 
 
@@ -42,6 +46,8 @@ int g_pairDeCroco[NB_CROCO] = {};
 
 String g_stringOfAllData = "";
 
+Adafruit_NeoPixel uniDEL(1, 8, NEO_GRBW + NEO_KHZ800);
+
 void setup() { 
 
   for(int curCroco = 0; curCroco < NB_CROCO; curCroco++)   //Mettre toutes les pattes "Croco" en entrée avec une pull-down
@@ -49,6 +55,10 @@ void setup() {
 
   // Initialisation du port série pour le debug 
   Serial.begin(9600); 
+
+  uniDEL.setBrightness(BRIGHTNESS);
+  uniDEL.begin();
+  uniDEL.show(); // Initialize all pixels to 'off' only run once, it runs right when you turn it on
 
   // Initialisation de l'I2C en tant qu'esclave avec l'adresse définie 
   Wire.setPins(SDA_PIN, SCL_PIN);
@@ -58,6 +68,15 @@ void setup() {
   Wire.onRequest(requestData); 
 
   Serial.println("Slave prêt, en attente de requêtes du maître..."); 
+  for (int i = 0; i < 3; i++)
+  {
+    uniDEL.setPixelColor(0, 0, 0, 255);
+    uniDEL.show();
+    delay(100);
+    uniDEL.setPixelColor(0, 0, 0, 0);
+    uniDEL.show();
+    delay(100);
+  }
 } 
  
 void loop() 
@@ -68,7 +87,8 @@ Brief : Fonction appelée lorsque le maître fait la demande des données.
 Renvoit un JSON contenant les paires de connection sur les pattes "Croco" connectées au esp32 sur la ligne i2c.
 */
 void requestData() { 
-
+  uniDEL.setPixelColor(0, 255, 0, 0);
+  uniDEL.show();
   bool foundConnection = false; //Flag si on a detecte une connection
 
   //Chaques pattes "Croco" va être mit en sortie pour sondées les autres pattes en entrée
@@ -112,6 +132,7 @@ void requestData() {
     Wire.write(g_stringOfAllData[i]);  // Envoyer chaque caractère en byte
   
   Wire.write(0x00);  // Le Master repete le dernier byte recu, donc le dernier byte est NULL pour signaler la fin de la string
-
+  uniDEL.setPixelColor(0, 0, 0, 0);
+  uniDEL.show();
 } 
 

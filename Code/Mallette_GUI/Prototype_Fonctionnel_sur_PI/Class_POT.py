@@ -37,8 +37,6 @@ class POT:
     NUMBER_MARKER_FREQUENCY = 25
     MARGINS = 2
     
-    #Valeur max des potentiomètres		Variables pas utilisé, mais toujours pratique à savoir
-    MAX_POT_VAL = 4095
     
     #------------------- les varibles qui dépendent du 'main.py' ou/et qui sont utilisés dans plus d'une fonction -------------------#
     def __init__(self, SLAVE_ADDRESS_POT, DEBUG, strip):
@@ -48,11 +46,15 @@ class POT:
         self.window_POT = None
         self.correctSin = True
         self.strip = strip
+        self.TEMP_POT_MIN1 = 50
+        self.TEMP_POT_MIN2 = 1100
+        self.TEMP_POT_MIN3 = 3400
+        self.MAX_POT_VAL = 4000
         
     
     def scale(self, val, src, dst):
         """
-        scale the given value from the scale of src to the scale of dst.
+        self.scale the given value from the self.scale of src to the self.scale of dst.
         """
         return ((val - src[0]) / (src[1]-src[0])) * (dst[1]-dst[0]) + dst[0]
 
@@ -84,8 +86,9 @@ class POT:
                     [sg.Text('a')],
                     [sg.Text('p')],
                     [sg.Text('pY')],
+                    [sg.Button('Exit')]
                 ]
-        return sg.Window('POT window', layout_POT, default_element_size=(12, 1), auto_size_text=False, finalize=True)
+        return sg.Window('POT window', layout_POT, default_element_size=(12, 1), auto_size_text=False, finalize=True, keep_on_top=True)
     
     
     def POT_Json(self):
@@ -105,7 +108,7 @@ class POT:
         return self.msg_POT
     
     
-    def Start_WinPOT(self):
+    def doWinPot(self):
         
         #-----------Fenêtre Interface_POT-----------#
         if self.window_POT and not self.POTerror: #Detecte si la fenetre existe puis detecte si le i2c fonctionne. L'ordre est important car si la fenetre est None, le self.POTerror existe pas
@@ -124,15 +127,15 @@ class POT:
             prev_x = prev_y = None
             for x in range(int(-self.SIZE_X/2),int(self.SIZE_X/2)):
                 #f(x)=a*sin(p(x))+pY
-                y = self.scale(int(self.msg_POT['JsonData']['Pot1']), (0, 4096), (0, 50)) * math.sin(self.scale(int(self.msg_POT['JsonData']['Pot2']), (0, 4096), (10, 25))/100 * x) + self.scale(int(self.msg_POT['JsonData']['Pot3']), (0, 4096), (-10, 10))
+                y = self.scale(int(self.msg_POT['JsonData']['Pot1']), (self.TEMP_POT_MIN1, self.MAX_POT_VAL), (0, 50)) * math.sin(self.scale(int(self.msg_POT['JsonData']['Pot2']), (self.TEMP_POT_MIN2, 4096), (10, 25))/100 * x) + self.scale(int(self.msg_POT['JsonData']['Pot3']), (self.TEMP_POT_MIN3, 4096), (-10, 10))
                 if prev_x is not None:
                     self.window_POT['graph'].draw_line((prev_x, prev_y), (x,y), color='red')
                 prev_x, prev_y = x, y
                 
                 #if self.amplitudeGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot1']), (0, 4096), (0, 50)) <= self.amplitudeGoal+self.MARGINS and self.periodeGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot2'], (0, 4096), (10, 25)) <= self.periodeGoal+self.MARGINS and self.posYGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot3']), (0, 4096), (-10, 10)) <= self.posYGoal+self.MARGINS:
-                if self.amplitudeGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot1']), (0, 4096), (0, 50)) <= self.amplitudeGoal+self.MARGINS:
-                    if self.periodeGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot2']), (0, 4096), (10, 25)) <= self.periodeGoal+self.MARGINS:
-                        if self.posYGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot3']), (0, 4096), (-10, 10)) <= self.posYGoal+self.MARGINS:
+                if self.amplitudeGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot1']), (self.TEMP_POT_MIN1, self.MAX_POT_VAL), (0, 50)) <= self.amplitudeGoal+self.MARGINS:
+                    if self.periodeGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot2']), (self.TEMP_POT_MIN2, self.MAX_POT_VAL), (10, 25)) <= self.periodeGoal+self.MARGINS:
+                        if self.posYGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot3']), (self.TEMP_POT_MIN3, self.MAX_POT_VAL), (-10, 10)) <= self.posYGoal+self.MARGINS:
                             self.correctSin = True
                             moduleDEL.colorWipe(self.strip, Color(0, 255, 0), 0)  # change la couleur des strips à vert
                             

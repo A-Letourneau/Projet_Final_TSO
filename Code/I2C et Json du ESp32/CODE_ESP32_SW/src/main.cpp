@@ -11,13 +11,16 @@ Finalement, on envoit ce dictionnaire au Raspberry PI 4 en forme de Json.
 #include <Wire.h> //Communication I2C entre les esp32 et le PI
 #include <Arduino.h> //Pour la programmation arduino
 #include <string.h> //Pour la manipulation des string
- 
+#include <Adafruit_NeoPixel.h> 
+
 #define SLAVE_ADDR 0x0a  // Adresse de l'esclave 
 
 #define SDA_PIN 6
 #define SCL_PIN 7
 
 #define NUM_SWITCHES 8  // Number of switches
+
+#define BRIGHTNESS 50 
 
 void requestData(); //Prototype de fonction
 
@@ -30,6 +33,8 @@ String const ESP32_NAME = "I2C_Sw"; //L'ID du ESP 32
 bool switchstates[NUM_SWITCHES] = {0}; 
 
 String stringOfAllData = "";
+
+Adafruit_NeoPixel uniDEL(1, 8, NEO_GRBW + NEO_KHZ800);
 
 void setup() { 
 
@@ -47,7 +52,17 @@ void setup() {
 
   for(int i = 0; i < NUM_SWITCHES; i++) 
     pinMode(SWITCH_PINS[i], INPUT); // Initialise les pins des interrupteurs en entrée
-} 
+
+  for (int i = 0; i < 3; i++)
+    {
+      uniDEL.setPixelColor(0, 0, 0, 255);
+      uniDEL.show();
+      delay(100);
+      uniDEL.setPixelColor(0, 0, 0, 0);
+      uniDEL.show();
+      delay(100);
+    }
+  } 
  
 
 void loop() 
@@ -59,6 +74,8 @@ Brief : Fonction appelée lorsque le maître fait la demande des données.
 Renvoit un JSON contenant les état des boutons connectés au esp32 sur la ligne i2c.
 */
 void requestData() { 
+  uniDEL.setPixelColor(0, 255, 0, 0);
+  uniDEL.show();
   for(int i = 0; i < NUM_SWITCHES; i++)
     switchstates[i] = digitalRead(SWITCH_PINS[i]); // Lit l'état du bouton et le stocke dans le tableau
 
@@ -85,4 +102,6 @@ void requestData() {
     Wire.write(stringOfAllData[i]);  // Envoyer chaque caractère en byte
 
   Wire.write(0x00);  // Le Master repete le dernier byte recu, donc le dernier byte est NULL pour signaler la fin de la string
+  uniDEL.setPixelColor(0, 0, 0, 0);
+  uniDEL.show();
 } 
