@@ -72,10 +72,10 @@ void setup() {
   {
     uniDEL.setPixelColor(0, 0, 0, 255);
     uniDEL.show();
-    delay(100);
+    delay(250);
     uniDEL.setPixelColor(0, 0, 0, 0);
     uniDEL.show();
-    delay(100);
+    delay(250);
   }
 } 
  
@@ -87,7 +87,7 @@ Brief : Fonction appelée lorsque le maître fait la demande des données.
 Renvoit un JSON contenant les paires de connection sur les pattes "Croco" connectées au esp32 sur la ligne i2c.
 */
 void requestData() { 
-  uniDEL.setPixelColor(0, 255, 0, 0);
+  uniDEL.setPixelColor(0, 0, 0, 255);
   uniDEL.show();
   bool foundConnection = false; //Flag si on a detecte une connection
 

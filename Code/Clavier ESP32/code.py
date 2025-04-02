@@ -116,9 +116,9 @@ xxxxxxx = KC.NO
 keyboard.keymap = [
     # NUMPAD
     [
-        KC.A,  KC.B, KC.C,  KC.BSPACE,
-        KC.MS_UP,  KC.MB_LMB, KC.E,  KC.PPLS,
-        KC.MS_DOWN,  KC.KP_2, KC.KP_3,  KC.PMNS,
+        KC.A,  KC.MS_UP, KC.MS_UP,  KC.BSPACE,
+        KC.MS_LEFT,  KC.MB_LMB, KC.MS_RIGHT,  KC.PPLS,
+        KC.MS_DOWN,  KC.MS_DOWN, KC.KP_3,  KC.PMNS,
     ],
 ]
 

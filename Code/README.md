@@ -25,7 +25,7 @@ Note : Même si le MQTT est disponible, nous avons décidé de ne pas l'utiliser
 
 ## 📂 Clavier esp32
 Ce dossier contient :  
-- Le code main qui va dans un clavier esp32 qui utilise la librairie kmk_firmware .  
+- Le code "main.py" qui va dans un clavier esp32 qui utilise la librairie kmk_firmware .  
 
 ---
 

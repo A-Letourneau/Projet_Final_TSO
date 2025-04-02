@@ -55,12 +55,12 @@ void setup() {
   Serial.println("Slave prêt, en attente de requêtes du maître..."); 
   for (int i = 0; i < 3; i++)
   {
-    uniDEL.setPixelColor(0, 0, 0, 255);
+    uniDEL.setPixelColor(0, 0, 255, 0);
     uniDEL.show();
-    delay(100);
+    delay(250);
     uniDEL.setPixelColor(0, 0, 0, 0);
     uniDEL.show();
-    delay(100);
+    delay(250);
   }
   //Initialise les pattes en entrée
   for (int i = 0; i <NUM_POT; i++)
@@ -81,7 +81,7 @@ Brief : Fonction appelée lorsque le maître fait la demande des données.
 Renvoit un JSON contenant les état des interrupteurs et des potentiomètres connectés au esp32 sur la ligne i2c.
 */
 void requestData() { 
-  uniDEL.setPixelColor(0, 255, 0, 0);
+  uniDEL.setPixelColor(0, 0, 0, 255);
   uniDEL.show();
   for (int i = 0; i < NUM_POT; i++)
     Potstates[i] = analogRead(POT_PINS[i]);
