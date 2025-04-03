@@ -3,13 +3,11 @@ from time import sleep
 from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
 import json                         #Pour la manipulation des json
 
-
 class mazeClass:
-    def __init__(self, mazeFile, nbGate, SLAVE_ADDRESS_MAZE, DEBUG, strip = None):
+    def __init__(self, mazeFile, nbGate, SLAVE_ADDRESS_MAZE, DEBUG, DEL_ACTIVE, strip = None):
         self.mazeFile = mazeFile
         self.nbGate = nbGate
         self.SLAVE_ADDRESS_MAZE = SLAVE_ADDRESS_MAZE
-        self.DEBUG = DEBUG
         self.mazeError = False
         self.windowMaze = None
         self.strip = strip
@@ -21,6 +19,9 @@ class mazeClass:
         self.playery = 0
         self.exitx = 0
         self.exity = 0
+       
+        self.DEBUG = DEBUG
+        self.DEL_ACTIVE = DEL_ACTIVE       
        
         # Maze file constants:
         self.WALL = '#'
@@ -36,7 +37,7 @@ class mazeClass:
         self.listGateState = {'a' : 1, 'A' : 0,'b' : 1, 'B' : 0,'c' : 1, 'C' : 0,'d' : 1, 'D' : 0}
         self.listGatePos = {}
 
-
+        self.mazeCompleted = False
         self.window_maze = None
 
 
@@ -48,13 +49,10 @@ class mazeClass:
     """
     def make_winMaze(self):
         layout = [
-                    [sg.Text('A maze', text_color="white", key="title_Maze")],
+                    [sg.Text('Un labyrinthe', text_color="white", key="title_Maze")],
                     [sg.Text("", size=(30,25), background_color='white', text_color='black', key="mazeTxtBox", font="FreeMono"),],
-                    [sg.Text(key="input")],
-                    [sg.Button(button_text='gateA', key='gateA')]
+                    [sg.Text(key="input")]
                 ]
-
-
         return sg.Window('Une fenetre de labyrinthe', layout, return_keyboard_events=True, use_default_focus=False)
 
     """
@@ -171,127 +169,116 @@ class mazeClass:
             y += 1
         self.HEIGHT = y        
 
-
         self.window_maze = self.make_winMaze()
         self.window_maze.Location = (100,100)
         event, values = self.window_maze.read(timeout=0)
         mazeCompleted = False
         self.displayMaze(self.maze)
+        
+        
+    def doMaze(self):
+        #Essaye de lire les json des esp32 et met un message d'erreur s'il n'y parvient pas
+        if self.window_maze:
+            try:
+                msgMaze = self.getMazeJSON(self.SLAVE_ADDRESS_MAZE)
+                self.mazeError = False
+                self.window_maze["title_Maze"].update(text_color = "white")
+            except:
+                self.window_maze["title_Maze"].update(text_color = "red")
+                self.mazeError = True
+                if self.DEBUG:
+                    print("Maze i2c ERROR")
+        
+        #------------ Verifie que les Gates 
+        i = 0 
+        for switch in msgMaze['JsonData']:
+            if i >= self.nbGate:
+                break 
+            if int(msgMaze['JsonData'][switch]) == self.listGateState[chr(97 + i)]:
+                self.changeGateState(chr(97 + i))
+                self.displayMaze(self.maze)
+            i += 1
+        
+        
+        self.displayMaze(self.maze)
+        event, values = self.window_maze.read(timeout=50)
+                
+        if event == sg.WIN_CLOSED:
+            self.window_maze = None
+            self.mazeCompleted = True
+            move = ''
+        elif event != "__TIMEOUT__" and event.isalpha():
+            self.window_maze["input"].update(event)
+            move = event.upper()
+            if self.DEBUG:
+                print(self.listGateState)
+                print(msgMaze['JsonData'])
+        elif event == "__TIMEOUT__" or not event.isalpha():
+            move = ''
+           
 
-
-        while not mazeCompleted:  # Main game loop.
-
-                while True:  # Get user move.
-                    #Essaye de lire les json des esp32 et met un message d'erreur s'il n'y parvient pas
-                    if self.window_maze:
-                        try:
-                            msgMaze = self.getMazeJSON(self.SLAVE_ADDRESS_MAZE)
-                            self.mazeError = False
-                            self.window_maze["title_Maze"].update(text_color = "white")
-                        except:
-                            self.window_maze["title_Maze"].update(text_color = "red")
-                            self.mazeError = True
-                            if self.DEBUG:
-                                print("Maze i2c ERROR")
-                    
-                    i = 0
-                    for switch in msgMaze['JsonData']:
-                        if i >= self.nbGate:
-                            break 
-                        if int(msgMaze['JsonData'][switch]) == self.listGateState[chr(97 + i)]:
-                            self.changeGateState(chr(97 + i))
-                            self.displayMaze(self.maze)
-                        i += 1
-                    
-                    
-                    self.displayMaze(self.maze)
-                    event, values = self.window_maze.read(timeout=50)
-                            
-                    if event == sg.WIN_CLOSED:
-                        self.window_maze.close()
-                        mazeCompleted = True
-                        move = ''
-                        break
-                    elif event != "__TIMEOUT__" and event.isalpha():
-                        self.window_maze["input"].update(event)
-                        move = event.upper()
-                        if move not in ['W', 'A', 'S', 'D']:
-                            continue
-                        elif self.DEBUG:
-                            print(self.listGateState)
-                            print(msgMaze['JsonData'])
-                    elif event == "__TIMEOUT__" or not event.isalpha():
-                        move = ''
-                       
-                    # Check if the player can move in that direction:
-                    if move == 'W' and self.maze[(self.playerx, self.playery - 1)] == self.EMPTY:
-                        break
-                    elif move == 'S' and self.maze[(self.playerx, self.playery + 1)] == self.EMPTY:
-                        break
-                    elif move == 'A' and self.maze[(self.playerx - 1, self.playery)] == self.EMPTY:
-                        break
-                    elif move == 'D' and self.maze[(self.playerx + 1, self.playery)] == self.EMPTY:
-                        break
-
-
-                # Keep moving in this direction until you encounter a branch point.
-                if move == 'W':
-                    while True:
-                        self.playery -= 1
-                        if (self.playerx, self.playery) == (self.exitx, self.exity):
-                            break
-                        if self.maze[(self.playerx, self.playery - 1)] == self.WALL:
-                            break  # Break if we've hit a wall.
-                        if (self.maze[(self.playerx - 1, self.playery)] == self.EMPTY
-                            or self.maze[(self.playerx + 1, self.playery)] == self.EMPTY):
-                            break  # Break if we've reached a branch point.
-                elif move == 'S':
-                    while True:
-                        self.playery += 1
-                        if (self.playerx, self.playery) == (self.exitx, self.exity):
-                            break
-                        if self.maze[(self.playerx, self.playery + 1)] == self.WALL:
-                            break  # Break if we've hit a wall.
-                        if (self.maze[(self.playerx - 1, self.playery)] == self.EMPTY
-                            or self.maze[(self.playerx + 1, self.playery)] == self.EMPTY):
-                            break  # Break if we've reached a branch point.
-                elif move == 'A':
-                    while True:
-                        self.playerx -= 1
-                        if (self.playerx, self.playery) == (self.exitx, self.exity):
-                            break
-                        if self.maze[(self.playerx - 1, self.playery)] == self.WALL:
-                            break  # Break if we've hit a wall.
-                        if (self.maze[(self.playerx, self.playery - 1)] == self.EMPTY
-                            or self.maze[(self.playerx, self.playery + 1)] == self.EMPTY):
-                            break  # Break if we've reached a branch point.
-                elif move == 'D':
-                    while True:
-                        self.playerx += 1
-                        if (self.playerx, self.playery) == (self.exitx, self.exity):
-                            break
-                        if self.maze[(self.playerx + 1, self.playery)] == self.WALL:
-                            break  # Break if we've hit a wall.
-                        if (self.maze[(self.playerx, self.playery - 1)] == self.EMPTY
-                            or self.maze[(self.playerx, self.playery + 1)] == self.EMPTY):
-                            break  # Break if we've reached a branch point.
-
+        # Keep moving in this direction until you encounter a branch point.
+        if move == 'W' and self.maze[(self.playerx, self.playery - 1)] == self.EMPTY:
+            while True:
+                self.playery -= 1
                 if (self.playerx, self.playery) == (self.exitx, self.exity):
-                    self.displayMaze(self.maze)
-                    print('You have reached the exit! Good job!')
-                    mazeCompleted = True
                     break
+                if self.maze[(self.playerx, self.playery - 1)] == self.WALL:
+                    break  # Break if we've hit a wall.
+                if (self.maze[(self.playerx - 1, self.playery)] == self.EMPTY
+                    or self.maze[(self.playerx + 1, self.playery)] == self.EMPTY):
+                    break  # Break if we've reached a branch point.
+        elif move == 'S' and self.maze[(self.playerx, self.playery + 1)] == self.EMPTY:
+            while True:
+                self.playery += 1
+                if (self.playerx, self.playery) == (self.exitx, self.exity):
+                    break
+                if self.maze[(self.playerx, self.playery + 1)] == self.WALL:
+                    break  # Break if we've hit a wall.
+                if (self.maze[(self.playerx - 1, self.playery)] == self.EMPTY
+                    or self.maze[(self.playerx + 1, self.playery)] == self.EMPTY):
+                    break  # Break if we've reached a branch point.
+        elif move == 'A' and self.maze[(self.playerx - 1, self.playery)] == self.EMPTY:
+            while True:
+                self.playerx -= 1
+                if (self.playerx, self.playery) == (self.exitx, self.exity):
+                    break
+                if self.maze[(self.playerx - 1, self.playery)] == self.WALL:
+                    break  # Break if we've hit a wall.
+                if (self.maze[(self.playerx, self.playery - 1)] == self.EMPTY
+                    or self.maze[(self.playerx, self.playery + 1)] == self.EMPTY):
+                    break  # Break if we've reached a branch point.
+        elif move == 'D' and self.maze[(self.playerx + 1, self.playery)] == self.EMPTY:
+            while True:
+                self.playerx += 1
+                if (self.playerx, self.playery) == (self.exitx, self.exity):
+                    break
+                if self.maze[(self.playerx + 1, self.playery)] == self.WALL:
+                    break  # Break if we've hit a wall.
+                if (self.maze[(self.playerx, self.playery - 1)] == self.EMPTY
+                    or self.maze[(self.playerx, self.playery + 1)] == self.EMPTY):
+                    break  # Break if we've reached a branch point.
 
-        self.window_maze.close()
+        if (self.playerx, self.playery) == (self.exitx, self.exity):
+            self.displayMaze(self.maze)
+            print('You have reached the exit! Good job!')
+            self.window_maze.close()
+            self.window_maze = None
+            self.mazeCompleted = True
+            
+
+
 
 
 if __name__ == "__main__":
     DEBUG = False
-    testClass = mazeClass(mazeFile=open("/home/pi/Desktop/programMallette/maze1.txt"), nbGate=4, SLAVE_ADDRESS_MAZE=0x0a, DEBUG=DEBUG)
-    testClass.make_winMaze()
+    DEL_ACTIVE = False
+    testClass = mazeClass(mazeFile=open("maze1.txt"), nbGate=4, SLAVE_ADDRESS_MAZE=0x0a, DEBUG=DEBUG, DEL_ACTIVE=DEL_ACTIVE)
     testClass.startMaze()
-   
-
+    while not testClass.mazeCompleted:
+        testClass.doMaze()
+    if testClass.window_maze:
+        testClass.window_maze.close()
 
 
 

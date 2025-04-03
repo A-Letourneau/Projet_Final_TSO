@@ -37,15 +37,13 @@ class Croco:
     #Nombre d'entrées Croco
     NB_CROCO = 8
     #Couleur des paires de Croco
-    listColor = ["purple","pink","yellow","cyan"]
+    listColor = ["red","pink","yellow","cyan"]
     
     
     #------------------- les varibles qui dépendent du 'main.py' ou/et qui sont utilisés dans plus d'une fonction -------------------#
-    def __init__(self, SLAVE_ADDRESS_Croco, DEBUG, strip):
+    def __init__(self, SLAVE_ADDRESS_Croco, LIST_OPERATIVE, DEBUG, strip):
         #Liste les operations des question en ordre
-        self.LIST_OPERATIVE = ["+","-","x","/"] #exemple de quatre questions possibles
-        #self.LIST_OPERATIVE = ["/","/"]
-        
+        self.LIST_OPERATIVE = LIST_OPERATIVE      
         self.SLAVE_ADDRESS_Croco = SLAVE_ADDRESS_Croco
         self.DEBUG = DEBUG
         self.Crocoerror = False
@@ -104,7 +102,7 @@ class Croco:
                         [sg.Text('Croco 5'),  sg.Text('Croco 6'),  sg.Text('Croco 7'), sg.Text('Croco 8')],
                         [sg.Button('Exit')]
                       ]
-        return sg.Window('Croco window', layout_Croco, default_element_size=(12, 1), auto_size_text=False, finalize=True, keep_on_top=True)
+        return sg.Window('Fenetre enigme equation', layout_Croco, default_element_size=(12, 1), auto_size_text=False, finalize=True, keep_on_top=True)
 
 
     #cette fonction est le coeur de l'énigme. c'est ici que l'utilisateur va pouvoir essayer de résoudre l'énigme.
@@ -116,6 +114,8 @@ class Croco:
             colorCpt = 0 #la couleur de paire actuel
             dictOfPairsColor = {} #Pour mettre la couleur en memoire pour la deuxieme fois qu'on voit la paire
             answer = 0 #Reponse de l'usager
+            firstNum = 0
+            secondNum =0
             
             #Pour chaque connection du Json, on met un rond de couleur pour l'associer avec sa paire
             for pairs in self.msg_Croco['JsonData']:
@@ -127,12 +127,20 @@ class Croco:
                     colorCpt = colorCpt + 1 #On passe a la prochaine couleur
                     
                     if self.LIST_OPERATIVE[self.goodAnswer] == "+": #Fait la bonne operation selon l'operation, mais additionne toujours les paires
+                        firstNum  = (int(pairs) + 1)
+                        secondNum = (curCroco + 1)
                         answer += (curCroco + 1) + (int(pairs) + 1)
                     elif self.LIST_OPERATIVE[self.goodAnswer] == "-":
+                        firstNum  = (int(pairs) + 1)
+                        secondNum = (curCroco + 1)
                         answer += (int(pairs) + 1) - (curCroco + 1)
                     elif self.LIST_OPERATIVE[self.goodAnswer] == "x":
+                        firstNum  = (int(pairs) + 1)
+                        secondNum = (curCroco + 1)
                         answer += (curCroco + 1) * (int(pairs) + 1)
                     elif self.LIST_OPERATIVE[self.goodAnswer] == "/":
+                        firstNum  = (int(pairs) + 1)
+                        secondNum = (curCroco + 1)
                         answer += (int(pairs) + 1) / (curCroco + 1)
                     
                 else:  #Si c'est la deuxieme fois qu'on voit cette paire
@@ -145,16 +153,27 @@ class Croco:
                 curCroco = curCroco + 1
 
             self.window_Croco["equationGraph"].erase()
-            if self.LIST_OPERATIVE[self.goodAnswer] != "/": #Pour afficher la reponse voulu, la reponse de l'utilisateur et l'operation actuelle
-                self.window_Croco["equationGraph"].draw_text(f"{self.randomAnswer}={answer} ({self.LIST_OPERATIVE[self.goodAnswer]})", (200,50), font=("Comic", 50))
-            else: #Pour afficher un bon nombre de decimal des float
-                self.window_Croco["equationGraph"].draw_text(f"{self.randomAnswer:5.3f}={answer:5.3f} ({self.LIST_OPERATIVE[self.goodAnswer]})", (200,50), font=("Comic", 30))        
-                    
+            if self.LIST_OPERATIVE[self.goodAnswer] != '/':
+                self.window_Croco["equationGraph"].draw_text(f"{self.randomAnswer}={firstNum}{self.LIST_OPERATIVE[self.goodAnswer]}{secondNum}", (200,50), font=("Comic", 50), color="black")
+            else:
+                self.window_Croco["equationGraph"].draw_text(f"{self.randomAnswer:.3f}={firstNum}{self.LIST_OPERATIVE[self.goodAnswer]}{secondNum}", (200,50), font=("Comic", 50), color="black")
+                                  
+                
             if self.firstEquation or answer == self.randomAnswer: 
                 if not self.firstEquation:
                     self.goodAnswer += 1
-                    sg.popup_no_titlebar('CORRECT', auto_close_duration = 1, auto_close = True)
+
                     self.window_Croco["titleCroco"].update(f"Nombre d'équation restante {self.goodAnswer}/{len(self.LIST_OPERATIVE)}")
+                    #On met les bonnes connections a vert
+                    curCroco = 0
+                    for pairs in self.msg_Croco['JsonData']:
+                        if int(pairs) == self.NB_CROCO: #Le 8 signifit qu'il n'y pas de connection
+                            self.SetRGB(self.window_Croco, str(curCroco), 'white')
+                        else: #Si c'est la premiere fois qu'on voit cette paire
+                            self.SetRGB(self.window_Croco, str(curCroco), 'green') #On met le rond de couleur a la position curCroco en une des 4 couleurs possible en ordre
+                        curCroco = curCroco + 1
+                    self.window_Croco.read(timeout=0)
+                    time.sleep(2)
                 else:
                     self.firstEquation = False
 

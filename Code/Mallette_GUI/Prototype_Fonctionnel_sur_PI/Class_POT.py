@@ -29,16 +29,7 @@ import moduleDEL
 
 
 class POT:
-    
-    #------------------- les variables statiques utilisés par l'énigme des potentiomètres -------------------#
-    #Pour le graph
-    SIZE_X = 200
-    SIZE_Y = 100
-    NUMBER_MARKER_FREQUENCY = 25
-    MARGINS = 2
-    
-    
-    #------------------- les varibles qui dépendent du 'main.py' ou/et qui sont utilisés dans plus d'une fonction -------------------#
+    #------------------- les variables qui dépendent du 'main.py' ou/et qui sont utilisés dans plus d'une fonction -------------------#
     def __init__(self, SLAVE_ADDRESS_POT, DEBUG, strip):
         self.SLAVE_ADDRESS_POT = SLAVE_ADDRESS_POT
         self.DEBUG = DEBUG
@@ -47,9 +38,24 @@ class POT:
         self.correctSin = True
         self.strip = strip
         self.TEMP_POT_MIN1 = 50
-        self.TEMP_POT_MIN2 = 1100
-        self.TEMP_POT_MIN3 = 3400
+        self.TEMP_POT_MIN2 = 50
+        self.TEMP_POT_MIN3 = 50
         self.MAX_POT_VAL = 4000
+        
+        self.MAX_AMPLITUDE = 50
+        self.MIN_AMPLITUDE = 0
+        
+        self.MAX_PERIODE = 10
+        self.MIN_PERIODE = 1
+        
+        self.MAX_POSY = 10
+        self.MIN_POSY = -10
+        
+        #Pour le graph
+        self.SIZE_X = 200
+        self.SIZE_Y = 100
+        self.NUMBER_MARKER_FREQUENCY = 50
+        self.MARGINS_PERCENT = 0.1 #En pourcentage
         
     
     def scale(self, val, src, dst):
@@ -82,10 +88,7 @@ class POT:
                       graph_top_right=(self.SIZE_X+5, self.SIZE_Y+5),
                       background_color='white',
                       key='graph')],
-                    [sg.Text('f(x)=a*sin(p*x)+pY', font='Algerian 18')],
-                    [sg.Text('a')],
-                    [sg.Text('p')],
-                    [sg.Text('pY')],
+                    [sg.Text('f(x)=a*sin(p*x)+pY', font='Algerian 18', key='equation', size=(50,1))],
                     [sg.Button('Exit')]
                 ]
         return sg.Window('POT window', layout_POT, default_element_size=(12, 1), auto_size_text=False, finalize=True, keep_on_top=True)
@@ -112,14 +115,20 @@ class POT:
         
         #-----------Fenêtre Interface_POT-----------#
         if self.window_POT and not self.POTerror: #Detecte si la fenetre existe puis detecte si le i2c fonctionne. L'ordre est important car si la fenetre est None, le self.POTerror existe pas
+            
+            
+            amplitude = self.scale(int(self.msg_POT['JsonData']['Pot1']), (self.TEMP_POT_MIN1, self.MAX_POT_VAL), (self.MIN_AMPLITUDE, self.MAX_AMPLITUDE))
+            periode = self.scale(int(self.msg_POT['JsonData']['Pot2']), (self.TEMP_POT_MIN2, self.MAX_POT_VAL), (self.MIN_PERIODE, self.MAX_PERIODE))
+            posY = self.scale(int(self.msg_POT['JsonData']['Pot3']), (self.TEMP_POT_MIN3, self.MAX_POT_VAL), (self.MIN_POSY, self.MAX_POSY))
+            
+            self.window_POT['equation'].update(f"f(x)={int(amplitude)}*sin({int(periode)}*x)+{int(posY)}")
             self.window_POT['graph'].erase()
             self.draw_axis()
-        
+
             if self.correctSin:
-                sg.popup_auto_close("Find the corresponding sine wave")
-                self.amplitudeGoal = randint(0,50)
-                self.periodeGoal = randint(10,25)
-                self.posYGoal = randint(-10,10)
+                self.amplitudeGoal = randint(self.MIN_AMPLITUDE, self.MAX_AMPLITUDE)
+                self.periodeGoal = randint(self.MIN_PERIODE, self.MAX_PERIODE)
+                self.posYGoal = randint(self.MIN_POSY, self.MAX_POSY)
                 if self.DEBUG:
                     print(self.amplitudeGoal, self.periodeGoal, self.posYGoal)
                 self.correctSin = False
@@ -127,15 +136,15 @@ class POT:
             prev_x = prev_y = None
             for x in range(int(-self.SIZE_X/2),int(self.SIZE_X/2)):
                 #f(x)=a*sin(p(x))+pY
-                y = self.scale(int(self.msg_POT['JsonData']['Pot1']), (self.TEMP_POT_MIN1, self.MAX_POT_VAL), (0, 50)) * math.sin(self.scale(int(self.msg_POT['JsonData']['Pot2']), (self.TEMP_POT_MIN2, 4096), (10, 25))/100 * x) + self.scale(int(self.msg_POT['JsonData']['Pot3']), (self.TEMP_POT_MIN3, 4096), (-10, 10))
+                y = amplitude * math.sin(periode/100 * x) + posY
                 if prev_x is not None:
                     self.window_POT['graph'].draw_line((prev_x, prev_y), (x,y), color='red')
                 prev_x, prev_y = x, y
                 
-                #if self.amplitudeGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot1']), (0, 4096), (0, 50)) <= self.amplitudeGoal+self.MARGINS and self.periodeGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot2'], (0, 4096), (10, 25)) <= self.periodeGoal+self.MARGINS and self.posYGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot3']), (0, 4096), (-10, 10)) <= self.posYGoal+self.MARGINS:
-                if self.amplitudeGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot1']), (self.TEMP_POT_MIN1, self.MAX_POT_VAL), (0, 50)) <= self.amplitudeGoal+self.MARGINS:
-                    if self.periodeGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot2']), (self.TEMP_POT_MIN2, self.MAX_POT_VAL), (10, 25)) <= self.periodeGoal+self.MARGINS:
-                        if self.posYGoal-self.MARGINS <= self.scale(int(self.msg_POT['JsonData']['Pot3']), (self.TEMP_POT_MIN3, self.MAX_POT_VAL), (-10, 10)) <= self.posYGoal+self.MARGINS:
+                #if self.amplitudeGoal-self.MARGINS_PERCENT <= self.scale(int(self.msg_POT['JsonData']['Pot1']), (0, 4096), (0, 50)) <= self.amplitudeGoal+self.MARGINS_PERCENT and self.periodeGoal-self.MARGINS_PERCENT <= self.scale(int(self.msg_POT['JsonData']['Pot2'], (0, 4096), (10, 25)) <= self.periodeGoal+self.MARGINS_PERCENT and self.posYGoal-self.MARGINS_PERCENT <= self.scale(int(self.msg_POT['JsonData']['Pot3']), (0, 4096), (-10, 10)) <= self.posYGoal+self.MARGINS_PERCENT:
+                if self.amplitudeGoal * (1 - self.MARGINS_PERCENT) <= amplitude <= self.amplitudeGoal * (1 + self.MARGINS_PERCENT):
+                    if self.periodeGoal * (1 - self.MARGINS_PERCENT) <= periode <= self.periodeGoal * (1 + self.MARGINS_PERCENT):
+                        if self.posYGoal * (1 - self.MARGINS_PERCENT) <= posY <= self.posYGoal * (1 + self.MARGINS_PERCENT):
                             self.correctSin = True
                             moduleDEL.colorWipe(self.strip, Color(0, 255, 0), 0)  # change la couleur des strips à vert
                             

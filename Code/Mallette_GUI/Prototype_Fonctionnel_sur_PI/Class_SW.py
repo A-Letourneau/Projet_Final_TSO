@@ -48,7 +48,7 @@ class SW_MODULE:
     # Crée l'interface des interrupteurs.       va futurement faire le labyrinthe
     def Make_WinSW(self):
         layout_SW = [
-                    [sg.Text('My SW Status Indicators', size=(20,1), key = "titleSW")],
+                    [sg.Text("Indicateurs de l'etat de mes interrupteurs", size=(20,1), key = "titleSW")],
                     [sg.Text('Sw1'),  sg.Text('Sw2'),  sg.Text('Sw3'),  sg.Text('Sw4'),   sg.Text('Sw5'),   sg.Text('Sw6'),   sg.Text('Sw7'),   sg.Text('Sw8'),],
                     [
                         sg.Image(source=self.TOGGLE_SW_OFF, key="Sw1"),sg.Image(source=self.TOGGLE_SW_OFF, key="Sw2"),sg.Image(source=self.TOGGLE_SW_OFF, key="Sw3"),sg.Image(source=self.TOGGLE_SW_OFF, key="Sw4"),
@@ -58,7 +58,7 @@ class SW_MODULE:
                  ]
 
 
-        return sg.Window('SW window', layout_SW, default_element_size=(12, 1), auto_size_text=False, finalize=True)
+        return sg.Window('Fenetre interrupteurs', layout_SW, default_element_size=(12, 1), auto_size_text=False, finalize=True)
 
 
     #lecture de Json et Update de l'affichage
