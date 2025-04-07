@@ -105,6 +105,7 @@ def make_winSelect():
 
 #ouvre le menu principal
 window_winSelect = make_winSelect()
+#window_winSelect.maximize()
 
 #-------------------------------------fonction pour la library Del-------------------------------------#
 
