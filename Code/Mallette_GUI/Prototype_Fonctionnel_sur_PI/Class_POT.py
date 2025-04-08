@@ -36,11 +36,13 @@ class POT:
         self.POTerror = False
         self.window_POT = None
         self.correctSin = True
+        self.firstTime = True
         self.strip = strip
-        self.TEMP_POT_MIN1 = 50
-        self.TEMP_POT_MIN2 = 50
-        self.TEMP_POT_MIN3 = 50
+        
         self.MAX_POT_VAL = 4000
+        self.POT_MIN_1 = 50
+        self.POT_MIN_2 = 50
+        self.POT_MIN_3 = 50
         
         self.MAX_AMPLITUDE = 50
         self.MIN_AMPLITUDE = 0
@@ -55,7 +57,7 @@ class POT:
         self.SIZE_X = 200
         self.SIZE_Y = 100
         self.NUMBER_MARKER_FREQUENCY = 50
-        self.MARGINS_PERCENT = 0.1 #En pourcentage
+        self.MARGINS = 2
         
     
     def scale(self, val, src, dst):
@@ -117,21 +119,50 @@ class POT:
         if self.window_POT and not self.POTerror: #Detecte si la fenetre existe puis detecte si le i2c fonctionne. L'ordre est important car si la fenetre est None, le self.POTerror existe pas
             
             
-            amplitude = self.scale(int(self.msg_POT['JsonData']['Pot1']), (self.TEMP_POT_MIN1, self.MAX_POT_VAL), (self.MIN_AMPLITUDE, self.MAX_AMPLITUDE))
-            periode = self.scale(int(self.msg_POT['JsonData']['Pot2']), (self.TEMP_POT_MIN2, self.MAX_POT_VAL), (self.MIN_PERIODE, self.MAX_PERIODE))
-            posY = self.scale(int(self.msg_POT['JsonData']['Pot3']), (self.TEMP_POT_MIN3, self.MAX_POT_VAL), (self.MIN_POSY, self.MAX_POSY))
+            amplitude = self.scale(int(self.msg_POT['JsonData']['Pot2']), (self.POT_MIN_1, self.MAX_POT_VAL), (self.MIN_AMPLITUDE, self.MAX_AMPLITUDE))
+            periode = self.scale(int(self.msg_POT['JsonData']['Pot3']), (self.POT_MIN_2, self.MAX_POT_VAL), (self.MIN_PERIODE, self.MAX_PERIODE))
+            posY = self.scale(int(self.msg_POT['JsonData']['Pot1']), (self.POT_MIN_3, self.MAX_POT_VAL), (self.MIN_POSY, self.MAX_POSY))
             
             self.window_POT['equation'].update(f"f(x)={int(amplitude)}*sin({int(periode)}*x)+{int(posY)}")
             self.window_POT['graph'].erase()
             self.draw_axis()
 
-            if self.correctSin:
+            if self.correctSin or self.firstTime:
                 self.amplitudeGoal = randint(self.MIN_AMPLITUDE, self.MAX_AMPLITUDE)
                 self.periodeGoal = randint(self.MIN_PERIODE, self.MAX_PERIODE)
                 self.posYGoal = randint(self.MIN_POSY, self.MAX_POSY)
                 if self.DEBUG:
                     print(self.amplitudeGoal, self.periodeGoal, self.posYGoal)
                 self.correctSin = False
+                if not self.firstTime:
+                    prev_x = prev_y = None
+                    for x in range(int(-self.SIZE_X/2),int(self.SIZE_X/2)):
+                        #f(x)=a*sin(p(x))+pY
+                        y = amplitude * math.sin(periode/100 * x) + posY
+                        if prev_x is not None:
+                            self.window_POT['graph'].draw_line((prev_x, prev_y), (x,y), color='green', width=5)
+                        prev_x, prev_y = x, y
+                    self.window_POT.read(timeout=0)
+                    time.sleep(3)
+                    moduleDEL.colorWipe(self.strip, Color(0, 0, 0), 0)  # change la couleur des strips à vert
+                else:
+                    self.firstTime = False
+            
+            if self.amplitudeGoal - self.MARGINS <= amplitude <= self.amplitudeGoal + self.MARGINS:
+                if self.periodeGoal - self.MARGINS <= periode <= self.periodeGoal  + self.MARGINS:
+                    if self.posYGoal - self.MARGINS <= posY <= self.posYGoal + self.MARGINS:
+                        self.correctSin = True
+                        moduleDEL.colorWipe(self.strip, Color(0, 255, 0), 0)  # change la couleur des strips à vert
+
+            prev_x_goal = prev_y_goal = None
+            for x in range(int(-self.SIZE_X/2),int(self.SIZE_X/2)):
+                #f(x)=a*sin(p(x−pX))+pY
+                #y = math.sin(x)
+                y = self.amplitudeGoal * math.sin((self.periodeGoal/100)*(x)) + self.posYGoal
+                if prev_x_goal is not None:
+                    self.window_POT['graph'].draw_line((prev_x_goal, prev_y_goal), (x,y), color='black', width=5)
+                prev_x_goal, prev_y_goal = x, y
+
 
             prev_x = prev_y = None
             for x in range(int(-self.SIZE_X/2),int(self.SIZE_X/2)):
@@ -140,22 +171,3 @@ class POT:
                 if prev_x is not None:
                     self.window_POT['graph'].draw_line((prev_x, prev_y), (x,y), color='red')
                 prev_x, prev_y = x, y
-                
-                #if self.amplitudeGoal-self.MARGINS_PERCENT <= self.scale(int(self.msg_POT['JsonData']['Pot1']), (0, 4096), (0, 50)) <= self.amplitudeGoal+self.MARGINS_PERCENT and self.periodeGoal-self.MARGINS_PERCENT <= self.scale(int(self.msg_POT['JsonData']['Pot2'], (0, 4096), (10, 25)) <= self.periodeGoal+self.MARGINS_PERCENT and self.posYGoal-self.MARGINS_PERCENT <= self.scale(int(self.msg_POT['JsonData']['Pot3']), (0, 4096), (-10, 10)) <= self.posYGoal+self.MARGINS_PERCENT:
-                if self.amplitudeGoal * (1 - self.MARGINS_PERCENT) <= amplitude <= self.amplitudeGoal * (1 + self.MARGINS_PERCENT):
-                    if self.periodeGoal * (1 - self.MARGINS_PERCENT) <= periode <= self.periodeGoal * (1 + self.MARGINS_PERCENT):
-                        if self.posYGoal * (1 - self.MARGINS_PERCENT) <= posY <= self.posYGoal * (1 + self.MARGINS_PERCENT):
-                            self.correctSin = True
-                            moduleDEL.colorWipe(self.strip, Color(0, 255, 0), 0)  # change la couleur des strips à vert
-                            
-
-            prev_x_goal = prev_y_goal = None
-            for x in range(int(-self.SIZE_X/2),int(self.SIZE_X/2)):
-                #f(x)=a*sin(p(x−pX))+pY
-                #y = math.sin(x)
-                y = self.amplitudeGoal * math.sin((self.periodeGoal/100)*(x)) + self.posYGoal
-                if prev_x_goal is not None:
-                    self.window_POT['graph'].draw_line((prev_x_goal, prev_y_goal), (x,y), color='black')
-                prev_x_goal, prev_y_goal = x, y
-
-
