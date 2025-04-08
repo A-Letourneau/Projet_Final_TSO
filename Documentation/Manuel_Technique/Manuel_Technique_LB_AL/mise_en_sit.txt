@@ -1,0 +1,31 @@
+InXtremis est un centre d'évasion situé au cœur du centre-ville de Sherbrooke, dirigé par un ancien étudiant en Technologie des Systèmes Ordinés (TSO). Le propriétaire aspire à concevoir une nouvelle salle intégrant des éléments interactifs grâce à des dispositifs électroniques dissimulés dans les énigmes. Plusieurs de ses salles actuelles utilisent déjà un ou deux dispositifs électroniques permettant d'ouvrir des portes et de suivre le progrès des joueurs. Cependant, il souhaite aller encore plus loin en créant une salle entièrement interconnectée, sans cadenas pour rythmer la progression.
+
+Parallèlement, des enseignants en génie électrique ont exprimé leur désir d'obtenir un jeu d'évasion modulaire multifonctionnel avec des objectifs pédagogiques intégrés. Cet outil d’apprentissage permettrait aux étudiants d'appliquer la théorie de manière pratique et interactive. Pour concrétiser cette vision, il fait appel aux finissants du programme TSO.. Cette mallette servirait non seulement d'outil d'apprentissage, mais également de vitrine pour mettre en valeur le programme lors des journées portes ouvertes.
+
+Cette initiative constitue une opportunité unique pour InXtremis d'ajouter un concept innovant à son offre actuelle. En intégrant cette mallette à une nouvelle salle d’évasion, l’objectif est de créer une expérience immersive et récréative en intégrant des éléments électroniques et tangibles. Cette approche permettrait également de développer plusieurs scénarios de jeu adaptés tant au divertissement qu'à l’apprentissage.
+
+L’objectif est de concevoir un module sous la forme d’une mallette renfermant une série de quatre énigmes. Le temps nécessaire pour résoudre ces énigmes devra être compris entre 5 et 10 minutes. Le module devra également offrir une remise en état quasi-instantanée (temps de réinitialisation de 5 à 10 secondes) pour accueillir rapidement la prochaine équipe.
+
+La mallette devra être robuste pour résister à une mauvaise manipulation ou à une utilisation intensive. Le circuit électronique devra être facilement accessible pour les interventions de maintenance, de dépannage ou de démonstration. De plus, il devra pouvoir communiquer avec les autres éléments de la salle pour suivre la progression des joueurs et détecter des problèmes éventuels, comme la tentative de contourner une énigme.
+
+En combinant la pédagogie et le divertissement, cette collaboration entre InXtremis et l'équipe entrepreneuriale pourrait donner naissance à une expérience innovante, à la fois captivante pour les joueurs et enrichissante pour les étudiants en formation.
+
+
+
+
+# Dossier pour les schémas Altium
+
+Ce document contient les schémas électriques relatifs à la partie électronique du jeu d'évasion dans une malette. Ces schémas décrivent les connexions entre les différents composants électroniques utilisés pour ajouter des interactions dynamiques au jeu (écrans LED, capteurs, etc.).
+
+## Schémas des Circuits
+
+### 1. **Circuit d'Alimentation Général**
+Ce schéma montre comment distribuer l'alimentation dans toute la malette. Il inclut les connexions de la batterie ou de l'alimentation externe qui alimente les circuits, ainsi que les régulateurs de tension si nécessaire pour les composants à faible consommation.
+
+- **Composants principaux** : 
+  - Source d'alimentation (batterie ou adaptateur secteur)
+  - Régulateur de tension (si nécessaire)
+  - Connecteurs pour distribution de l'alimentation vers chaque composant
+
+```plaintext
+[Source d'Alimentation] → [Régulateur de Tension (si nécessaire)] → [Composants (LED, capteurs, etc.)]

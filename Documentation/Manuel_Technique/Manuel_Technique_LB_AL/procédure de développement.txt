@@ -1,0 +1,80 @@
+Description technique qui expliquera les prochaines parties:
+
+bla bla bla
+
+comment brancher le circuit:
+micro HDMI à HDMI
+micro USB
+USB-C
+
++ image 
+
+
+
+Initialisation d'une nouvelle carte microSD pour un Raspberry Pi:
+https://www.raspberrypi.com/documentation/computers/getting-started.html
+
+
+
+
+
+connexion SSH:
+
+Activation de la permission de connexion SSH sur le raspberry Pi 4b avec la commande suivante: sudo raspi-config. 
+
+Changement du mot de passe SSH du Raspberry Pi 4b avec la commande **sudo passwd** pour le mot de passe nous recommandons: tge3!Mallette	mdp actuel:tge
+ 
+
+
+Installer et utiliser pysimpleGUI sur PI:
+
+Create a virtual environment using : python3 -m venv path/to/venv.
+
+Write : source .venv/bin/activate, in CMD
+//Write : python3 -m pip install XYZ, in CMD ( XYZ dans notre cas est pysimplegui) 
+//In thorny editor, select your virtual environment
+
+
+
+installation des library:
+
+entrés ces commandes ci-dessous dans votre environnement virtuel créer précédemment
+
+smbus2:	pip install smbus2				https://pypi.org/project/smbus2/
+Pysimple GUI: python -m pip install pysimplegui		https://www.pysimplegui.com/
+json: la library Json est installer de base dans python
+random: la library random est installer de base dans python
+math: la library math est installer de base dans python
+board: 	cd ~						https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/installing-circuitpython-on-raspberry-pi
+	pip3 install --upgrade adafruit-python-shell
+	wget https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/raspi-blinka.py
+	sudo -E env PATH=$PATH python3 raspi-blinka.py
+neopixel: pip3 install adafruit-circuitpython-neopixel	https://docs.circuitpython.org/projects/neopixel/en/latest/
+time: la library time est installer de base dans python	https://docs.python.org/3/library/time.html
+RPi WS281x: sudo pip install rpi_ws281x			https://github.com/rpi-ws281x/rpi-ws281x-python
+
+
+				3SECTION PI ESP CLAVIER
+
+
+Guide communication I2C:
+
+1 : Connecter les pins 3 (SDA) et 5 (SCL) avec des pins pas strapped du esp32 (dans notre cas 17 (SDA) et 18 (SCL))
+2 : Mettre le code d'exemple de Benoit dans le ESP32, mais avec la ligne "Wire.setPins(17, 18);" avant le "Wire.begin()"
+//3 : Suivre les étapes de pysimpleGUI mais remplacer XYZ avec "smbus"
+//4 : Mettre le code d'exemple dans Thorny sur le PI
+
+
+ 
+Mode programmation du clavier:
+
+Pour entrer en mode programmation:
+Appuyer sur le bouton RESET
+En restant appuyé, appuyer sur le potentionmètre
+Puis relacher le bouton RESET
+Un répertoire devrait s'ouvrir sur l'ordi
+ 
+Le fichier important est code.py qui peut être modifié selon les informations sur : https://github.com/KMKfw/kmk_firmware
+
+
+
