@@ -24,13 +24,13 @@ Finalement, on envoit ce dictionnaire au Raspberry PI 4 en forme de Json.
 
 void requestData(); //Prototype de fonction
 
-// l'ordre des interrupteurs est de gauche à droites de haunt en bas 
+// l'ordre des interrupteurs est de gauche à droites de haut en bas 
 const int SWITCH_PINS[NUM_SWITCHES] = {4, 5, 1, 0, 19, 18, 3, 2}; // Pins des interrupteurs
 const String SWITCH_NAMES[NUM_SWITCHES] = {"Sw1", "Sw2", "Sw3", "Sw4", "Sw5", "Sw6", "Sw7", "Sw8"}; // Noms des interrupteurs
 
 String const ESP32_NAME = "I2C_Sw"; //L'ID du ESP 32
 
-bool switchstates[NUM_SWITCHES] = {0}; 
+bool switchStates[NUM_SWITCHES] = {0}; 
 
 String stringOfAllData = "";
 
@@ -53,6 +53,8 @@ void setup() {
   for(int i = 0; i < NUM_SWITCHES; i++) 
     pinMode(SWITCH_PINS[i], INPUT); // Initialise les pins des interrupteurs en entrée
 
+
+  //Hearbeat qui indique que le esp32 à bien démarré
   for (int i = 0; i < 3; i++)
     {
       uniDEL.setPixelColor(0, 0, 0, 255);
@@ -74,22 +76,24 @@ Brief : Fonction appelée lorsque le maître fait la demande des données.
 Renvoit un JSON contenant les état des boutons connectés au esp32 sur la ligne i2c.
 */
 void requestData() { 
+  //Indique avec la DEL que le esp32 est entrain de résoudre une requête, s'éteint à la fin de la requête
   uniDEL.setPixelColor(0, 255, 0, 0);
   uniDEL.show();
+  
   for(int i = 0; i < NUM_SWITCHES; i++)
-    switchstates[i] = digitalRead(SWITCH_PINS[i]); // Lit l'état du bouton et le stocke dans le tableau
+    switchStates[i] = digitalRead(SWITCH_PINS[i]); // Lit l'état du bouton et le stocke dans le tableau
 
   //Crée une string json pour contenir les boutons
   String stringOfInteractable = "{";
-  for (int i = 0; i < NUM_SWITCHES; i++)  //cette boucle devrait ajouter toutes les interrupteurs et leurs états à une string
+  for (int i = 0; i < NUM_SWITCHES; i++)  //cette boucle ajoute toutes les interrupteurs et leurs états à une string
   {
     if(i == NUM_SWITCHES-1)
     {
-      stringOfInteractable += "\"" + SWITCH_NAMES[i] + "\":\"" + switchstates[i] + "\""; //enlève la virgule à la fin
+      stringOfInteractable += "\"" + SWITCH_NAMES[i] + "\":\"" + switchStates[i] + "\""; //enlève la virgule à la fin
     }
     else
     {
-      stringOfInteractable += "\"" + SWITCH_NAMES[i] + "\":\"" + switchstates[i] + "\",";
+      stringOfInteractable += "\"" + SWITCH_NAMES[i] + "\":\"" + switchStates[i] + "\",";
     }
   }
 

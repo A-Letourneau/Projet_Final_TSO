@@ -34,7 +34,7 @@ const String POT_NAMES[NUM_POT] = {"Pot1", "Pot2", "Pot3"}; // Noms des interrup
 
 const String ESP32_NAME = "I2C_Pot"; //L'ID du ESP 32
   
-int Potstates[NUM_POT] = {0};  //Init toutes les valeurs à 0
+int potStates[NUM_POT] = {0};  //Init toutes les valeurs à 0
 
 String stringOfAllData = "";
 
@@ -53,6 +53,8 @@ void setup() {
   Wire.onRequest(requestData); 
 
   Serial.println("Slave prêt, en attente de requêtes du maître..."); 
+
+  //Hearbeat qui indique que le esp32 à bien démarré
   for (int i = 0; i < 3; i++)
   {
     uniDEL.setPixelColor(0, 0, 255, 0);
@@ -81,10 +83,11 @@ Brief : Fonction appelée lorsque le maître fait la demande des données.
 Renvoit un JSON contenant les état des interrupteurs et des potentiomètres connectés au esp32 sur la ligne i2c.
 */
 void requestData() { 
+  //Indique avec la DEL que le esp32 est entrain de résoudre une requête, s'éteint à la fin de la requête
   uniDEL.setPixelColor(0, 0, 0, 255);
   uniDEL.show();
   for (int i = 0; i < NUM_POT; i++)
-    Potstates[i] = analogRead(POT_PINS[i]);
+    potStates[i] = analogRead(POT_PINS[i]);
 
   //cette boucle crée une string json pour contenir les interrupteurs et potentiomètres
   String stringOfInteractable = "{";
@@ -92,11 +95,11 @@ void requestData() {
   {
     if( i == NUM_POT-1) //permet de ne pas avoir de virgule à la fin du json
     {
-      stringOfInteractable += "\"" + POT_NAMES[i] + "\":\"" + Potstates[i] +"\"";
+      stringOfInteractable += "\"" + POT_NAMES[i] + "\":\"" + potStates[i] +"\"";
     }
     else
     {
-      stringOfInteractable += "\"" + POT_NAMES[i] + "\":\"" + Potstates[i] +"\",";
+      stringOfInteractable += "\"" + POT_NAMES[i] + "\":\"" + potStates[i] +"\",";
     }
   }
 

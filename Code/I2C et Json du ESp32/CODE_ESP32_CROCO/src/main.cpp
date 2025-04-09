@@ -68,6 +68,8 @@ void setup() {
   Wire.onRequest(requestData); 
 
   Serial.println("Slave prêt, en attente de requêtes du maître..."); 
+
+  //Hearbeat qui indique que le esp32 à bien démarré
   for (int i = 0; i < 3; i++)
   {
     uniDEL.setPixelColor(0, 0, 0, 255);
@@ -87,6 +89,7 @@ Brief : Fonction appelée lorsque le maître fait la demande des données.
 Renvoit un JSON contenant les paires de connection sur les pattes "Croco" connectées au esp32 sur la ligne i2c.
 */
 void requestData() { 
+  //Indique avec la DEL que le esp32 est entrain de résoudre une requête, s'éteint à la fin de la requête
   uniDEL.setPixelColor(0, 0, 0, 255);
   uniDEL.show();
   bool foundConnection = false; //Flag si on a detecte une connection
