@@ -143,9 +143,16 @@ layout3 = [[sg.Text('This is layout 3 - It is all Radio Buttons')],
 """
 # Pour permettre au logiciel de savoir qu'elle bouton a ete appuyer, il faut leur definir un nom (qui sera afficher et une key qui sera envoyer
 # Sinon, il va simplement ecrire le nom du bouton et un numeros automatiquement
-layout = [[sg.Frame('-COL1-',layout1, key = '-COL1-',background_color='green'), sg.VPush(),sg.VerticalSeparator(color='red'),sg.Push(), sg.Frame('-COL2-',layout2,key='-COL2-')],
+
+
+Frame1 = sg.Frame('-Enigme 1-',layout1, key ='-COL1-',background_color='green')
+Frame2 = sg.Frame('-Enigme 2-',layout2, key ='-COL2-',background_color='red')
+Frame3 = sg.Frame('-Enigme 3-',layout3, key ='-COL3-',background_color='red')
+Frame4 = sg.Frame('-Enigme 4-',layout4, key ='-COL4-',background_color='red')
+
+layout = [[Frame1, sg.VPush(),sg.VerticalSeparator(color='red'),sg.Push(), Frame2],
           [sg.HorizontalSeparator(color='red')],
-          [ sg.Frame('-COL3-',layout3,key='-COL3-'), sg.VPush(),sg.VerticalSeparator(color='red'),sg.Push(), sg.Frame('-COL4-',layout4,key='-COL4-')],
+          [Frame3 , sg.VPush(),sg.VerticalSeparator(color='red'),sg.Push(), Frame4],
           [sg.Push(),sg.Button('Cycle Layout'), sg.Button('Switch',key ='1'), sg.Button('Pot',key ='2'),sg.Button('Croco',key ='3'), sg.Button('Labyrinthe',key ='4'), sg.Button('Exit',key = 'Exit0'),sg.Push()]]
 
 
@@ -172,17 +179,26 @@ while True:
         window[f'-COL{layout}-'].update(visible=True)
         #window[f'-COL{layout}-'].disable()
     elif event in '1234':
-        window[f'-COL{layout}-'].update(visible=False)	#pour permettre d'afficher plusieurs fenetre en meme temps
+        #window[f'-COL{layout}-'].update(visible=False)	#pour permettre d'afficher plusieurs fenetre en meme temps
         layout = int(event)
         
         #window[f'-COL{layout}-'].update([[layoutX(color)]])
-        
-        window[f'-COL{layout}-'].update(visible=True)
+        #window[f'-COL{layout}-'].update(visible=True)
         #window.background_color='red'
         #window[f'-COL{layout}-'].background_color='red'
         #window[f'-COL{layout}-'].update()
-        
         #window.disable()
+        
+        #"""Test changement de couleur"""
+        #Frame1 = sg.Frame('-FRA1-',layout1, key ='-COL1-',background_color='red')
+        #Frame2 = sg.Frame('-FRA2-',layout2, key ='-COL2-',background_color='red')
+        #Frame3 = sg.Frame('-FRA3-',layout3, key ='-COL3-',background_color='red')
+        #Frame4 = sg.Frame('-FRA4-',layout4, key ='-COL4-',background_color='red')
+        
+        #window[f'-COL{layout}-'].update(background_color='yellow')
+        #window[f'-FRA{layout}-'].update(background_color='red')
+        
+        #Frame{layout} = sg.Frame(f'-FRA{layout}-',layout1, key =f'-COL{layout}-',background_color='green')
         
     
     if my_SW.window_SW: 
