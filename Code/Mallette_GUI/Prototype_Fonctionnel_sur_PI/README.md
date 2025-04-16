@@ -21,6 +21,9 @@ Voici la liste des librairies custom qui faut mettre dans le même répertoire d
 'Class_SW'
 'Class_POT'
 'MazeModule'
+'I2c_COMM.py'
+
+Le fichier monautostart.desktop est différent car il demande d'être installé dans le fichier /etc/xdg/autostart/
 
 # Contient
 - 'venv' l'environnement virtuel

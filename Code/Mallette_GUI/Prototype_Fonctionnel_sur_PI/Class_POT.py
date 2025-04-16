@@ -12,7 +12,7 @@ de l'énigme des potentiomètre. Elle consiste à reproduire l'onde qui est affi
 
 """
 
-#importation des library standard
+#importation des librarie standard
 from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
 import PySimpleGUI as sg            #Pour l'interface graphique
 import json                         #Pour la manipulation des json
@@ -23,7 +23,7 @@ import math
 import time
 from rpi_ws281x import PixelStrip, Color
 
-#importation des library créer
+#importation des librarie créé
 import I2c_Comm
 import moduleDEL
 
@@ -100,10 +100,10 @@ class POT:
         self.msg_POT = ""
         global POTerror
         
-        if self.window_POT:    
-            try:
-                self.msg_POT = I2c_Comm.sendRequest(self.SLAVE_ADDRESS_POT, self.DEBUG)
-                self.POTerror = False
+        if self.window_POT: #Vérifie que la fenêtre est ouverte
+            try:        #Si la communication est interrompu ou le JSON est incomplet, on change la couleur du titre et empeche le traitement de l'énigme
+                self.msg_POT = I2c_Comm.sendRequest(self.SLAVE_ADDRESS_POT, self.DEBUG) #Fait la rêquete au esp32 avec l'adresse correspondante
+                self.POTerror = False                                                   
                 self.window_POT["titlePOT"].update(text_color = "white")
             except:
                 self.window_POT["titlePOT"].update(text_color = "red")
