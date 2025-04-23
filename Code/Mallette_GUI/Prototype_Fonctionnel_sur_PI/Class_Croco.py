@@ -11,10 +11,6 @@ les informations du esp32 servant à l'énigme Croco
 - la fonction "Start_WinCroco" est la portion de code qui va gérer l'énigme grâce au
 information récupérer par "Croco_Json".
 
-Commentaire : la vérification de la réussite des utilisateur pourrait être dans
-sa propre fonction
-(Louis)
-
 """
 
 #importation des library standard

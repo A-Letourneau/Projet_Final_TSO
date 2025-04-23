@@ -84,7 +84,6 @@ resetSwitch.direction = Direction.OUTPUT
 resetPot = DigitalInOut(board.D19)
 resetPot.direction = Direction.OUTPUT
 
-
 #Reset des esp32 pour init la communication
 resetCroco.value = False
 resetSwitch.value = False
@@ -138,7 +137,6 @@ if DEL_ACTIVE:
 
 #Boucle principale
 while True: 
-
     if switch.value:
         led.value = False
         if DEBUG:
