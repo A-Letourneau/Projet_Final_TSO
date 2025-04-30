@@ -1,13 +1,19 @@
 # Dossier pour les schémas Altium
+Ce document contient les schémas électriques et le schéma des PCB.
 
-Ce document contient les schémas électriques relatifs à la partie électronique du jeu d'évasion dans une malette. Ces schémas décrivent les connexions entre les différents composants électroniques utilisés pour ajouter des interactions dynamiques au jeu (écran, LED, capteurs, etc.).
 ---
-## 📂documents de fabrication 
+## 📂Fichier de fabrication 
+Les fichiers de fabrication à envoyer au fabricant de PCB
 
-## 📂documents du reste des schémas électriques Altium
+## 📂PCB mallette Altium
+Les fichier Altium pour le schéma électrique et le PCB
 
-## 📂liste de matériel (BOM)
+## Schema_MalletteDevasion_BOM REV 1.00 (BOM)
+Liste des composants du PCB
 
-## 📂Équerre 2 inserts 
-fichier stl qui contient les supports pour tenir la vitre dans la mallette
+## Plan de test PCB mallette
+Les tests pour le bon fonctionnement du PCB et les améliorations possibles
+
+## Équerre 2 inserts 
+Fichier stl qui contient les supports pour tenir la vitre dans la mallette
 ---

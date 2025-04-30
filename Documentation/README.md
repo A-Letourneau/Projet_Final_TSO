@@ -7,22 +7,23 @@ Ce dossier regroupe les documents nécessaires pour soumettre notre participatio
 Il contient principalement des fichiers texte décrivant les raisons pour lesquelles nous avons choisi de réaliser ce projet.  
 
 ---
-## 📂 Journal de bord Alexis  
-Ce dossier contient :  
-- Un fichier word archivant le travail accompli par Alexis Létourneau
+## 📂 Devis Technique Prototype
+Ce dossier contient : 
+    - Le devis technique est le plan de base que nous avons suivi pour faire le projet. 
 
 ## 📂 Fiche technique 
+Ce dossier contient : 
+    - Une collection de fichier technique pour les composants de la mallette.
+
+## 📂 Manuel_Technique
 Ce dossier contient :  
-- Les diverses fiche technique utilisé pouvant être pertinente si un ajout est effectuer
+    - Le manuel technique contient les informations pertinent pour le fonctionnment et la continuation du projet.
 
 ## 📂 Prototype  
 Ce dossier contient :  
 - Des images illustrant les débuts du projet.  
 - Certaines idées initiales qui n’ont pas été retenues dans les versions ultérieures du prototype.  
 
-## 📂 Devis Technique Prototype 
-Ce dossier contient :  
-- Le devis technique du prototype
 
 ---
 
