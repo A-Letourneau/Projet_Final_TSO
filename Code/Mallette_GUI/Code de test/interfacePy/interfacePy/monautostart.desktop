@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=monautostart
-Exec =sudo /home/pi/path/to/venv/bin/python3 /home/pi/Desktop/Git/Projet_Final_TSO/Code/Mallette_GUI/Prototype_Fonctionnel_sur_PI/main.py
-Type=Application
-X-GNOME-Autostart-enabled=true
-
-
-
