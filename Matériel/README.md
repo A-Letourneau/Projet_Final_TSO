@@ -8,6 +8,10 @@ Les fichiers de fabrication à envoyer au fabricant de PCB
 ## 📂PCB mallette Altium
 Les fichier Altium pour le schéma électrique et le PCB
 
+## 📂Fichier la clé du savoir logo
+Les fichiers contenant l'espace de travail et quelques version du logo de la mallette.
+Le logo à été fait par Alexis Desainde.
+
 ## Schema_MalletteDevasion_BOM REV 1.00 (BOM)
 Liste des composants du PCB
 
