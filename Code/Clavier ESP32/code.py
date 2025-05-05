@@ -23,7 +23,7 @@ from kmk.extensions.display.ssd1306 import SSD1306
 # ------------------------------ KEYBOARD SETUP ------------------------------
 keyboard = KMKKeyboard()
 mouse = MouseKeys(
-    max_speed = 50,
+    max_speed = 25,
     acc_interval = 25, # Delta ms to apply acceleration. lower is faster
     move_step = 1
 )
@@ -116,9 +116,9 @@ xxxxxxx = KC.NO
 keyboard.keymap = [
     # NUMPAD
     [
-        KC.A,  KC.MS_UP, KC.MS_UP,  KC.BSPACE,
-        KC.MS_LEFT,  KC.MB_LMB, KC.MS_RIGHT,  KC.PPLS,
-        KC.MS_DOWN,  KC.MS_DOWN, KC.KP_3,  KC.PMNS,
+        KC.MB_LMB,  KC.MS_UP, KC.W,  KC.BSPACE,
+        KC.MS_LEFT,  KC.A, KC.MS_RIGHT,  KC.D,
+        KC.MS_DOWN,  KC.MS_DOWN, KC.S,  KC.PMNS,
     ],
 ]
 
