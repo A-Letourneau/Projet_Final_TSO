@@ -27,6 +27,7 @@ import board
 from digitalio import DigitalInOut, Direction, Pull
 import time
 from rpi_ws281x import PixelStrip, Color
+import os
 
 #importation des library créer
 import moduleDEL    #import Del library obselète, car elle cause des erreurs lorsqu'il y a plusieurs bandes de dels adressables
@@ -126,7 +127,8 @@ if DEL_ACTIVE:
 #fait des objets de classes des énigmes
 my_Croco = Croco(SLAVE_ADDRESS_Croco, LIST_OPERATIVE, DEBUG, strip1)
 my_SW = SW_MODULE(SLAVE_ADDRESS_SW,DEBUG)
-mazeEnigme = mazeClass(mazeFile=open("/home/pi/Desktop/Git/Projet_Final_TSO/Code/Mallette_GUI/Prototype_Fonctionnel_sur_PI/maze1.txt"), nbGate=4, SLAVE_ADDRESS_MAZE=SLAVE_ADDRESS_SW, DEBUG=DEBUG, DEL_ACTIVE=DEL_ACTIVE)
+cwd = os.getcwd()
+mazeEnigme = mazeClass(mazeFile=open(f"{cwd}/maze1.txt"), nbGate=4, SLAVE_ADDRESS_MAZE=SLAVE_ADDRESS_SW, DEBUG=DEBUG, DEL_ACTIVE=DEL_ACTIVE)
 my_POT = POT(SLAVE_ADDRESS_POT,DEBUG, strip3)
 
 
