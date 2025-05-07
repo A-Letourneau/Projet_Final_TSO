@@ -25,7 +25,8 @@ Finalement, on envoit ce dictionnaire au Raspberry PI 4 en forme de Json.
 void requestData(); //Prototype de fonction
 
 // l'ordre des interrupteurs est de gauche à droites de haut en bas 
-const int SWITCH_PINS[NUM_SWITCHES] = {4, 5, 1, 0, 19, 18, 3, 2}; // Pins des interrupteurs
+//const int SWITCH_PINS[NUM_SWITCHES] = {0, 2, 4, 19, 1, 3, 18, 5}; // Pins des interrupteurs
+const int SWITCH_PINS[NUM_SWITCHES] = {5, 4, 19, 18, 1, 0, 3, 2}; // Pins des interrupteurs
 const String SWITCH_NAMES[NUM_SWITCHES] = {"Sw1", "Sw2", "Sw3", "Sw4", "Sw5", "Sw6", "Sw7", "Sw8"}; // Noms des interrupteurs
 
 String const ESP32_NAME = "I2C_Sw"; //L'ID du ESP 32

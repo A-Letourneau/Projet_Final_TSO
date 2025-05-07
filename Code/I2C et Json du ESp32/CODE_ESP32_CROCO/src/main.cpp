@@ -21,14 +21,14 @@ Finalement, on envoit cette liste au Raspberry PI 4 en forme de Json.
 #define SDA_PIN 6
 #define SCL_PIN 7
 
-#define PIN_CROCO_0 1
-#define PIN_CROCO_1 0
-#define PIN_CROCO_2 4
-#define PIN_CROCO_3 5
-#define PIN_CROCO_4 2
-#define PIN_CROCO_5 3
-#define PIN_CROCO_6 18
-#define PIN_CROCO_7 19
+#define PIN_CROCO_0 2
+#define PIN_CROCO_1 3
+#define PIN_CROCO_2 18
+#define PIN_CROCO_3 19
+#define PIN_CROCO_4 1 
+#define PIN_CROCO_5 0 
+#define PIN_CROCO_6 4 
+#define PIN_CROCO_7 5 
  
 
 #define NB_CROCO 8 
