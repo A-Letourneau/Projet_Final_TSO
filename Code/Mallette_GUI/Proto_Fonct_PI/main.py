@@ -12,6 +12,7 @@ Celui nomme Croco est 8 entrees qui indique si deux des entrees sont interconnec
 Les lectures de ces objets sont transmises par JSON à la demande du Main à toutes les 50ms
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 Les 3 esp32 ont une interface chaque, qui contient des "widget" qui représentent leurs états.
 L'interface POT utilise deux images d'interrupteurs pointant vers la gauche ou la droite fait en base64, ce qui permet d'avoir le fichier de l'image dans le fichier py directement. 
@@ -21,6 +22,8 @@ L'interface Croco utilise des cercles de couleurs pour montrer qu'elle entrees d
 Quand on ferme une des fenêtres, les deux se ferme.
 
 =======
+=======
+>>>>>>> Stashed changes
 Le programme contient 4 fenetre, qui contient des énigmes qui intégrent les objets interactifs.
 Les fenêtres sont : 
 Croco
@@ -28,6 +31,9 @@ POT
 SW
 Maze
 Pour plus d'information sur leurs fonctionnements, veuillez lire les brief des autres modules
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 """
 
@@ -39,13 +45,19 @@ import time
 from rpi_ws281x import Color
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 #importation des library créer
 import moduleDEL    #import Del library obsolète, car elle cause des erreurs lorsqu'il y a plusieurs bandes de dels adressables
 =======
+=======
+>>>>>>> Stashed changes
 #importation des library créé
 import moduleDEL    #import Del library obselète, car elle cause des erreurs lorsqu'il y a plusieurs bandes de dels adressables
 
 #Importation des librairie custom
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 from Class_Croco import Croco
 from Class_SW import SW_MODULE
