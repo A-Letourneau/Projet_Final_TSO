@@ -21,17 +21,16 @@ Quand on ferme une des fenêtres, les deux se ferme.
 
 """
 #importation des library standard
-from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
 import PySimpleGUI as sg            #Pour l'interface graphique
 import board
-from digitalio import DigitalInOut, Direction, Pull
+from digitalio import DigitalInOut, Direction
 import time
-from rpi_ws281x import PixelStrip, Color
+from rpi_ws281x import Color
 
 #importation des library créer
 import moduleDEL    #import Del library obselète, car elle cause des erreurs lorsqu'il y a plusieurs bandes de dels adressables
 from Class_Croco import Croco
-import I2c_Comm
+
 from Class_SW import SW_MODULE
 from Class_POT import POT
 from mazeModule import mazeClass

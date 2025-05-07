@@ -1,5 +1,15 @@
+"""
+Auteur : Louis Boisvert & Alexis Létourneau
+Date : 2025-03-12
+Environnement : Python, Thonny, raspberry pi 4, ESP32-C3-WROOM-02 Devkit, 
+Brief : Une énigme qui affiche un labyrinthe avec des portes ouvertes ou fermées.
+Ces portes sont réliées avec les interrupteurs connecté à un esp32. Quand un interrupteur est actionné, une porte se ferme et une autre s'ouvre.
+L'user se déplace avec les touches wasd.
+
+Note: la manière que ce programme lit les inputs du clavier est avec son propre window.read(), il faut s'assurer que ce soit le seule window.read() ou il détecte les input la moitié du temps.
+Il faut aussi ajouter return_keyboard_events=True dans la création de la fenêtre.
+"""
 import PySimpleGUI as sg
-from time import sleep
 from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
 import json                         #Pour la manipulation des json
 from rpi_ws281x import PixelStrip, Color

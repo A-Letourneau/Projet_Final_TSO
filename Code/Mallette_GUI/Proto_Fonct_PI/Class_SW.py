@@ -2,29 +2,16 @@
 Auteur : Louis Boisvert & Alexis Létourneau
 Date : 2025-03-12
 Environnement : Python, Thonny, raspberry pi 4, ESP32-C3-WROOM-02 Devkit, 
-Brief : Cette class permet d'afficher la position des switch à l'écran.
-Elle est constituer de quelques fonctions simples.
-
-- Make_WinSW  : cette fonction permet de créer l'affichage de ce module
-- SW_Json     : cette fonction permet de demander un Json au ESP32 liée, puis de
-               modifier l'affichage en fonction de la positions des intérupteurs
-- Start_WinSW : (WORK IN PROGRESS)
-
-
-Cette class ne possède pas encore son énigmes. Elle sera un labyrinthe
-où les intérupteurs (switch) ouvrirons ou/et fermeront des passages. (Louis)
+Brief : Une énigme qui affiche l'état de 8 switch à l'écran.
+Les switch représentent chaque bit d'un octet.
+Si l'user récréer le nombre binaire qui représente ANSWER avec les interrupteurs, self.puzzleSolved est mit a True.
 """
 #importation des library standard
-from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
 import PySimpleGUI as sg            #Pour l'interface graphique
-import json                         #Pour la manipulation des json
 # library pour les strips de del		pas encore utilisé
-import time
-from rpi_ws281x import PixelStrip, Color
 
 #importation des library créer
 import I2c_Comm
-import moduleDEL
 
 
 class SW_MODULE:

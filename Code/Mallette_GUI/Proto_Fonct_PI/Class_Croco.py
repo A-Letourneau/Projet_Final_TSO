@@ -2,29 +2,19 @@
 Auteur : Louis Boisvert & Alexis Létourneau
 Date : 2025-03-11
 Environnement : Python, Thonny, raspberry pi 4, ESP32-C3-WROOM-02 Devkit, 
-Brief : Cette Class représentes l'énigmes des fils bananes que l'on a renommé à Croco
-par simplicité.
-
-- la fonction "Croco_Json" appel le fichier I2c_Comm ce qui permet de récupérer
-les informations du esp32 servant à l'énigme Croco
-- la fonction "Make_WinCroco" crée l'interface utilisateur
-- la fonction "Start_WinCroco" est la portion de code qui va gérer l'énigme grâce au
-information récupérer par "Croco_Json".
-
-Commentaire : la vérification de la réussite des utilisateur pourrait être dans
-sa propre fonction
-(Louis)
+Brief : Une énigme qui consiste a connecter des bornes bananes numéroté ensemble pour les additionner, soustraire, multiplier ou diviser entre les deux numéros.
+Plusieurs équations sont mis à la suite jusqu'à que l'user les complétent tous, ce qui met self.puzzleSolved à True.
+Pour faire la liste d'équation, il faut remplir une liste un les quatres mathématiqe suivant : ["+","-","x","/"]
+Exemple de liste d'équation : ["+","-","x","/"], ["+","+","+","+","+","+"], ["/"]
 
 """
 
 #importation des library standard
-from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
 import PySimpleGUI as sg            #Pour l'interface graphique
-import json                         #Pour la manipulation des json
 from random import randint          #Pour la generation de nombre aleatoire pour les equations
 # library pour les strips de dels
 import time
-from rpi_ws281x import PixelStrip, Color
+from rpi_ws281x import Color
 
 #importation des library créer
 import I2c_Comm

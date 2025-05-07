@@ -1,6 +1,6 @@
 # Auteur: Alexis Letourneau
 # Editeur: Louis Boisvert
-# Brief : NeoPixel librairie utilisant rpi_ws281x directement au lieu de NeoPixel
+# Brief : librairie de controle de DEL utilisant rpi_ws281x directement au lieu de NeoPixel
 # Permet d'init des strip de DEL et de faire quelques animations
 # DOIT ETRE LANCE EN SUDO AVEC LA COMMANDE "sudo thonny" DANS LE CMD
 

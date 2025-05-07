@@ -2,11 +2,8 @@
 Auteur : Louis Boisvert & Alexis Létourneau
 Date : 2025-03-11
 Environnement : Python, Thonny, raspberry pi 4, ESP32-C3-WROOM-02 Devkit, 
-Brief : Cette library permet d'envoyer une demande de données au ESP32.
+Brief : Cette library permet d'envoyer une demande de données au ESP32 et de recevoir un JSON contenant les données des objets interactifs.
 
-Commentaire : elle est sa propre library, car chacune de nos énigmes y accèdes,
-donc mieux vaut la rendre simple et accessible pour les prochains
-(Louis)
 """
 
 from smbus2 import SMBus, i2c_msg   #Pour la communication i2c

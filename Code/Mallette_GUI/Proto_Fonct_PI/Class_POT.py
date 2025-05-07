@@ -2,26 +2,19 @@
 Auteur : Louis Boisvert & Alexis Létourneau
 Date : 2025-03-12
 Environnement : Python, Thonny, raspberry pi 4, ESP32-C3-WROOM-02 Devkit, 
-Brief : Cette classe représente les parties de code servant au fonctionnement
-de l'énigme des potentiomètre. Elle consiste à reproduire l'onde qui est afficher
-à l'écran pour la réussite de cette énigme.
-
-- Make_WinPOT:   permet de créer l'affichage
-- POT_Json :     permet de demander l'envoie d'un Json au Esp32 lié.
-- Start_WinPOT : sert à la fonctionnalité de l'énigme et au calcule.
+Brief : Une énigme qui consiste à recopier une onde sinusoïdale créé aléatoirement dans un graphique à l'aide de 3 potentiomètres.
+On affiche l'équation de l'onde en dessus du graphique.
 
 """
 
 #importation des library standard
-from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
 import PySimpleGUI as sg            #Pour l'interface graphique
-import json                         #Pour la manipulation des json
 # Pour la generation de nombre aleatoire pour les equations et les calcules mathématiques
 from random import randint          
 import math
 # library pour les strips de dels
 import time
-from rpi_ws281x import PixelStrip, Color
+from rpi_ws281x import Color
 
 #importation des library créer
 import I2c_Comm
