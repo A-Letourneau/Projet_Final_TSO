@@ -2,6 +2,8 @@ import PySimpleGUI as sg
 from time import sleep
 from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
 import json                         #Pour la manipulation des json
+from rpi_ws281x import PixelStrip, Color
+import moduleDEL
 
 class mazeClass:
     def __init__(self, mazeFile, nbGate, SLAVE_ADDRESS_MAZE, DEBUG, DEL_ACTIVE, strip = None):
@@ -48,11 +50,20 @@ class mazeClass:
     
     """
     def make_winMaze(self):
-        layout = [
+        if self.DEBUG:
+            layout = [
                     [sg.VPush()],
-                    [sg.Push(), sg.Text('Un labyrinthe', text_color="white", key="title_Maze", font='Algerian 20', justification = "center"),sg.Push(),],
+                    [sg.Push(), sg.Text('Résoudre le labyrinthe avec les touches du clavier', key="title_Maze", font='Algerian 20', justification = "center"),sg.Push(),],
                     [sg.Push(),sg.Text("", size=(25,25), background_color='white', text_color='black', key="mazeTxtBox", font="FreeMono 20"),sg.Push()],
                     [sg.Push(), sg.Button("Exit"), sg.Text(key="input"), sg.Push(),],
+                    [sg.VPush()]
+                ]
+        else:
+            layout = [
+                    [sg.VPush()],
+                    [sg.Push(), sg.Text('Résoudre le labyrinthe avec les touches du clavier', key="title_Maze", font='Algerian 20', justification = "center"),sg.Push(),],
+                    [sg.Push(),sg.Text("", size=(25,25), background_color='white', text_color='black', key="mazeTxtBox", font="FreeMono 20"),sg.Push()],
+                    [sg.Push(), sg.Text(key="input"), sg.Push(),],
                     [sg.VPush()]
                 ]
         return sg.Window('Une fenetre de labyrinthe', layout, return_keyboard_events=True, use_default_focus=False)
@@ -263,6 +274,7 @@ class mazeClass:
         if (self.playerx, self.playery) == (self.exitx, self.exity):
             self.displayMaze(self.maze)
             print('You have reached the exit! Good job!')
+            moduleDEL.colorInBetween(self.strip, Color(0, 255, 0),36,53)  # Red wipe
             self.puzzleSolved = True
             
 

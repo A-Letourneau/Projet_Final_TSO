@@ -48,7 +48,7 @@ class POT:
         self.POT_MIN_3 = 50
         
         self.MAX_AMPLITUDE = 50
-        self.MIN_AMPLITUDE = 0
+        self.MIN_AMPLITUDE = 5
         
         self.MAX_PERIODE = 10
         self.MIN_PERIODE = 1
@@ -86,16 +86,24 @@ class POT:
     
     
     def Make_WinPOT(self):
-        layout_POT =[
+        if self.DEBUG:
+            layout_POT =[
                         [sg.VPush()],
-                        [sg.Push(), sg.Text(f"Forme la fonction sine correspondantes {self.curCorAnswer}/{self.GOAL_COR_ANSWER}", size=(42,1), key = 'titlePOT', font='Algerian 20', justification = "center"), sg.Push()],
-                        [sg.Push(), sg.Graph(canvas_size=(600, 600),
-                          graph_bottom_left=(-(self.SIZE_X+5), -(self.SIZE_Y+5)),
-                          graph_top_right=(self.SIZE_X+5, self.SIZE_Y+5),
-                          background_color='white',
-                          key='graph'), sg.Push(),],
+                        [sg.Push(), sg.Text(f"Forme la fonction sine correspondante {self.curCorAnswer}/{self.GOAL_COR_ANSWER}", size=(42,1), key = 'titlePOT', font='Algerian 20', justification = "center"), sg.Push()],
+                        [sg.Push(), sg.Text("Utilise les trois potentiomètres glissants\npour ajuster l'amplitude, la période et la position en y", size=(70,2), key = 'titlePOT', font='Algerian 18', justification = "center"), sg.Push()],                        
+                        [sg.Push(), sg.Graph(canvas_size=(600, 600), graph_bottom_left=(-(self.SIZE_X+5), -(self.SIZE_Y+5)), graph_top_right=(self.SIZE_X+5, self.SIZE_Y+5), background_color='white', key='graph'), sg.Push(),],
                         [sg.Push(), sg.Text('f(x)=a*sin(p*x)+pY', font='Algerian 18', key='equation', size=(30,1)), sg.Push()],
                         [sg.Push(), sg.Button('Exit'), sg.Push()],
+                        [sg.VPush()]
+                    ]
+        else:
+            layout_POT =[
+                        [sg.VPush()],
+                        [sg.Push(), sg.Text(f"Forme la fonction sine correspondante {self.curCorAnswer}/{self.GOAL_COR_ANSWER}", size=(42,1), key = 'titlePOT', font='Algerian 20', justification = "center"), sg.Push()],
+                        [sg.Push(), sg.Text("Utilise les trois potentiomètres glissants\npour ajuster l'amplitude, la période et la position en y", size=(70,2), key = 'titlePOT', font='Algerian 18', justification = "center"), sg.Push()],                        
+                        [sg.Push(), sg.Graph(canvas_size=(600, 600), graph_bottom_left=(-(self.SIZE_X+5), -(self.SIZE_Y+5)), graph_top_right=(self.SIZE_X+5, self.SIZE_Y+5), background_color='white', key='graph'), sg.Push(),],
+                        [sg.Push(), sg.Text('f(x)=a*sin(p*x)+pY', font='Algerian 18', key='equation', size=(30,1)), sg.Push()],
+#                         [sg.Push(), sg.Button('Exit'), sg.Push()],
                         [sg.VPush()]
                     ]
         return sg.Window('POT window', layout_POT, default_element_size=(12, 1), auto_size_text=False, finalize=True, keep_on_top=True)
@@ -109,7 +117,7 @@ class POT:
             try:
                 self.msg_POT = I2c_Comm.sendRequest(self.SLAVE_ADDRESS_POT, self.DEBUG)
                 self.POTerror = False
-                self.window_POT["titlePOT"].update(text_color = "white")
+                self.window_POT["titlePOT"].update(text_color = None)
             except:
                 self.window_POT["titlePOT"].update(text_color = "red")
                 self.POTerror = True
@@ -151,7 +159,7 @@ class POT:
                         
                     self.window_POT.read(timeout=0)
                     time.sleep(3)
-                    moduleDEL.colorWipe(self.strip, Color(0, 0, 0), 0)  # change la couleur des strips à vert
+#                     moduleDEL.colorWipe(self.strip, Color(0, 0, 0), 0)  # change la couleur des strips à vert
                     self.curCorAnswer += 1
                     if self.GOAL_COR_ANSWER == self.curCorAnswer:
                         self.puzzleSolved = True
@@ -162,7 +170,8 @@ class POT:
                 if self.periodeGoal - self.MARGINS <= periode * 100 <= self.periodeGoal  + self.MARGINS:
                     if self.posYGoal - self.MARGINS <= posY <= self.posYGoal + self.MARGINS:
                         self.correctSin = True
-                        moduleDEL.colorWipe(self.strip, Color(0, 255, 0), 0)  # change la couleur des strips à vert
+                        moduleDEL.colorInBetween(self.strip, Color(0, 255, 0),0,17)  # Red wipe
+#                         moduleDEL.colorWipe(self.strip, Color(0, 255, 0), 0)  # change la couleur des strips à vert
 
             prev_x_goal = prev_y_goal = None
             for x in range(int(-self.SIZE_X),int(self.SIZE_X)):
@@ -170,7 +179,7 @@ class POT:
                 #y = math.sin(x)
                 y = self.amplitudeGoal * math.sin((self.periodeGoal/100)*(x)) + self.posYGoal
                 if prev_x_goal is not None:
-                    self.window_POT['graph'].draw_line((prev_x_goal, prev_y_goal), (x,y), color='black', width=5)
+                    self.window_POT['graph'].draw_line((prev_x_goal, prev_y_goal), (x,y), color='black', width=10)
                 prev_x_goal, prev_y_goal = x, y
 
 
@@ -179,5 +188,5 @@ class POT:
                 #f(x)=a*sin(p(x))+pY
                 y = amplitude * math.sin(periode * x) + posY
                 if prev_x is not None:
-                    self.window_POT['graph'].draw_line((prev_x, prev_y), (x,y), color='red')
+                    self.window_POT['graph'].draw_line((prev_x, prev_y), (x,y), color='red', width=5)
                 prev_x, prev_y = x, y

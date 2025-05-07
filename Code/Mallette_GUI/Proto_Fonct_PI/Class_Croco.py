@@ -81,7 +81,7 @@ class Croco:
             try:
                 self.msg_Croco = I2c_Comm.sendRequest(self.SLAVE_ADDRESS_Croco, self.DEBUG)
                 Crocoerror = False
-                self.window_Croco["titleCroco"].update(text_color = "white")
+                self.window_Croco["titleCroco"].update(text_color = None)
             except:
                 self.window_Croco["titleCroco"].update(text_color = "red")
                 Crocoerror = True
@@ -92,16 +92,29 @@ class Croco:
    
     #crée l'interface utilisateur pour l'énigme Croco 
     def Make_WinCroco(self):
-        layout_Croco =[
+        if self.DEBUG:
+            layout_Croco =[
                         [sg.VPush()],
                         [sg.Push(), sg.Text(f"Nombre d'équation restante 0/{len(self.LIST_OPERATIVE)}", size=(40,1), key = 'titleCroco', font='Algerian 20', justification = "center"), sg.Push()],
+                        [sg.Push(), sg.Text("Veuillez connecter les bornes bananes avec le fil pour compléter l'équation", size=(40,1), key = 'titleCroco', font='Algerian 20', justification = "center"), sg.Push()],
                         [sg.Push(), sg.Text("", size=(10,1), key="equation", font='Algerian 50', justification = "center", ), sg.Push()],
                         [sg.Push(), self.DrawRGB('0'), self.DrawRGB('1'), self.DrawRGB('2'), self.DrawRGB('3'), sg.Push()],
                         [sg.Push(), self.DrawRGB('4'), self.DrawRGB('5'), self.DrawRGB('6'), self.DrawRGB('7'), sg.Push()],          
                         [sg.Push(), sg.Button('Exit'), sg.Push()],
                         [sg.VPush()]
                       ]
-        return sg.Window('Fenetre enigme equation', layout_Croco, default_element_size=(12, 1), auto_size_text=False, finalize=True, keep_on_top=True)
+        else:
+            layout_Croco =[
+                        [sg.VPush()],
+                        [sg.Push(), sg.Text(f"Nombre d'équation restante 0/{len(self.LIST_OPERATIVE)}", size=(40,1), key = 'titleCroco', font='Algerian 20', justification = "center"), sg.Push()],
+                        [sg.Push(), sg.Text("Veuillez connecter les bornes bananes avec le fil pour compléter l'équation", size=(40,1), key = 'titleCroco', font='Algerian 20', justification = "center"), sg.Push()],
+                        [sg.Push(), sg.Text("", size=(10,1), key="equation", font='Algerian 50', justification = "center", ), sg.Push()],
+                        [sg.Push(), self.DrawRGB('0'), self.DrawRGB('1'), self.DrawRGB('2'), self.DrawRGB('3'), sg.Push()],
+                        [sg.Push(), self.DrawRGB('4'), self.DrawRGB('5'), self.DrawRGB('6'), self.DrawRGB('7'), sg.Push()],          
+#                         [sg.Push(), sg.Button('Exit'), sg.Push()],
+                        [sg.VPush()]
+                      ]
+        return sg.Window('Fenêtre énigme equation', layout_Croco, default_element_size=(12, 1), auto_size_text=False, finalize=True, keep_on_top=True)
 
 
     #cette fonction est le coeur de l'énigme. c'est ici que l'utilisateur va pouvoir essayer de résoudre l'énigme.
@@ -176,7 +189,8 @@ class Croco:
                     self.firstEquation = False
 
                 if self.goodAnswer == len(self.LIST_OPERATIVE): #Lorsque l'user a finit les questions
-                    moduleDEL.colorWipe(self.strip, Color(0, 255, 0), 0)  # change la couleur des strips à vert
+#                    moduleDEL.colorWipe(self.strip, Color(0, 255, 0), 0)  # change la couleur des strips à vert
+                    moduleDEL.colorInBetween(self.strip, Color(0, 255, 0),54,71)  # Red wipe
                     sg.popup_no_titlebar('REUSSI', auto_close_duration = 1, auto_close = True)
                     if self.REPEAT_PUZZLE:
                         self.goodAnswer = 0

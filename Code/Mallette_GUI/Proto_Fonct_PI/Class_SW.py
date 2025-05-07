@@ -39,7 +39,7 @@ class SW_MODULE:
 
 
     #------------------- les varibles qui dépendent du 'main.py' ou/et qui sont utilisés dans plus d'une fonction -------------------#
-    def __init__(self, SLAVE_ADDRESS_SW, DEBUG, ANSWER = ""):
+    def __init__(self, SLAVE_ADDRESS_SW, DEBUG, strip, ANSWER = ""):
         self.SLAVE_ADDRESS_SW = SLAVE_ADDRESS_SW
         self.DEBUG = DEBUG
         self.SWerror = False
@@ -48,29 +48,37 @@ class SW_MODULE:
         self.puzzleSolved = False
         self.spacing = 0
         self.fontSize = 10
+        self.strip = strip
 
     # Crée l'interface des interrupteurs.       va futurement faire le labyrinthe
     def Make_WinSW(self):
-        layout_SW = [
+        if self.DEBUG:
+            layout_SW = [
                         [sg.VPush()],
-                        [sg.Push(), sg.Text("Indicateurs de l'etat des interrupteurs", size=(30,1), key = "titleSW",  font='Algerian 20', justification = "center"), sg.Push()],
-                        [sg.Push(), sg.Text('Sw1', pad=(self.spacing,0), font=f'Algerian {self.fontSize}'),  sg.Text('Sw2', pad=(self.spacing,0), font=f'Algerian {self.fontSize}'),  sg.Text('Sw3', pad=(self.spacing,0), font=f'Algerian {self.fontSize}'),  sg.Text('Sw4', pad=(self.spacing,0), font=f'Algerian {self.fontSize}'),   sg.Text('Sw5', pad=(self.spacing,0), font=f'Algerian {self.fontSize}'),   sg.Text('Sw6', pad=(self.spacing,0), font=f'Algerian {self.fontSize}'),   sg.Text('Sw7', pad=(self.spacing,0), font=f'Algerian {self.fontSize}'),   sg.Text('Sw8', pad=(self.spacing,0), font=f'Algerian {self.fontSize}'), sg.Push(),],
-                        [
-                            sg.Push(),
-                            sg.Image(source=self.TOGGLE_SW_OFF, key="Sw1"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw2"),sg.Image(source=self.TOGGLE_SW_OFF, key="Sw3"),sg.Image(source=self.TOGGLE_SW_OFF, key="Sw4"),
-                            sg.Image(source=self.TOGGLE_SW_OFF, key="Sw5"),sg.Image(source=self.TOGGLE_SW_OFF, key="Sw6"),sg.Image(source=self.TOGGLE_SW_OFF, key="Sw7"),sg.Image(source=self.TOGGLE_SW_OFF, key="Sw8"),
-                            sg.Push()
-                        ],
+                        [sg.Push(), sg.Text("Veuillez représenter le nombre 42 en binaire",  key = "titleSW", size=(50,1), font='Algerian 20', justification = "center"), sg.Push()],
+                        [sg.Push(), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw1"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw2"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw3"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw4"), sg.Push()],
+                        [sg.Push(), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw5"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw6"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw7"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw8"), sg.Push()],
                         [sg.Push(), sg.Text(key="binaryNb", font='Algerian 20', justification = "center", size=(30,1)), sg.Push()],
                         [sg.Push(), sg.Text(key="decimalNb", font='Algerian 20', justification = "center", size=(30,1)), sg.Push()],                        
                         [sg.Push(), sg.Text(key="hexNb", font='Algerian 20', justification = "center", size=(30,1)), sg.Push()],                        
                         [sg.Push(),sg.Button('Exit'), sg.Push()],
                         [sg.VPush()]
                      ]
+        else:
+            layout_SW = [
+                        [sg.VPush()],
+                        [sg.Push(), sg.Text("Veuillez représenter le nombre 42 en binaire",  key = "titleSW", size=(50,1), font='Algerian 20', justification = "center"), sg.Push()],
+                        [sg.Push(), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw1"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw2"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw3"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw4"), sg.Push()],
+                        [sg.Push(), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw5"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw6"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw7"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw8"), sg.Push()],
+                        [sg.Push(), sg.Text(key="binaryNb", font='Algerian 20', justification = "center", size=(30,1)), sg.Push()],
+                        [sg.Push(), sg.Text(key="decimalNb", font='Algerian 20', justification = "center", size=(30,1)), sg.Push()],                        
+                        [sg.Push(), sg.Text(key="hexNb", font='Algerian 20', justification = "center", size=(30,1)), sg.Push()],                        
+#                         [sg.Push(),sg.Button('Exit'), sg.Push()],
+                        [sg.VPush()]
+                     ]
 
         return sg.Window('Fenetre interrupteurs', layout_SW, default_element_size=(12, 1), auto_size_text=False, no_titlebar = True, finalize=True)
-        #return layout_SW		# ce return permet de retourner le layout de la fenetre, ce qui est pratique pour toutes les avoirs dans une meme fenetre
-
+        
 
     #lecture de Json et Update de l'affichage
     def SW_Json(self):
@@ -83,16 +91,13 @@ class SW_MODULE:
             try:
                 self.msg_SW = I2c_Comm.sendRequest(self.SLAVE_ADDRESS_SW, self.DEBUG)
                 self.SWerror = False
-                self.window_SW["titleSW"].update(text_color = "white")
+                self.window_SW["titleSW"].update(text_color = None)
             except:
                 self.window_SW["titleSW"].update(text_color = "red")
                 self.SWerror = True
                 if self.DEBUG:
                     print("SW i2c ERROR")
 
-            # portion de code qui permet d'update l'affichage
-            
-            # ceci doit être dans le if, sinon il va donner des erreurs puisque msg_SW serait vide. (Louis)
             #-----------Fenêtre Interface_SW-----------#
             userGuess = ""
             decimalNb = 0
@@ -100,15 +105,15 @@ class SW_MODULE:
             if not self.SWerror : #Detecte si la fenetre existe puis detecte si le i2c fonctionne. L'ordre est important car si la fenetre est None, le SWerror existe pas
                 for curSw in range(self.NB_SW): #Pour chaque switch, on change l'image de la switch selon son état
                     if self.msg_SW['JsonData'][f'Sw{curSw + 1}'] == '1':
-                        userGuess += "1"
-                        self.window_SW[f'Sw{curSw + 1}'].update(source=self.TOGGLE_SW_ON)
-                        decimalNb += 2**(7 - curSw)
-                    else:
                         userGuess += "0"
+                        self.window_SW[f'Sw{curSw + 1}'].update(source=self.TOGGLE_SW_ON)
+                    else:
+                        userGuess += "1"
                         self.window_SW[f'Sw{curSw + 1}'].update(source=self.TOGGLE_SW_OFF)
+                        decimalNb += 2**(7 - curSw)
+                        
                 self.window_SW['decimalNb'].update("Nombre decimal : " + str(decimalNb))
                 self.window_SW['hexNb'].update("Nombre hex : " + str(hex(decimalNb)))       
-                
                 
                 for curSw in range(self.NB_SW):
                     if decimalNb > 0:
@@ -121,6 +126,7 @@ class SW_MODULE:
                 
                 if userGuess == self.answer:
                     self.puzzleSolved = True
+                    moduleDEL.colorInBetween(self.strip, Color(0, 255, 0),18,35)  # Red wipe
                     
                         
 
