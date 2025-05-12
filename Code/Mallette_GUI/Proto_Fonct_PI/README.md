@@ -46,9 +46,9 @@ essayez d’installer PyInstaller :
 'pip install -U pyinstaller'
 
 Installer les bibliothèques nécessaires :
-'pip install zmq flask requests'
-'pip install paho-mqtt'
-'pip install pyzmq'
+- 'pip install zmq flask requests'
+- 'pip install paho-mqtt'
+- 'pip install pyzmq'
 Créer l'exécutable : Pour chacun des programmes que vous voulez compiler :
-'pyinstaller --onefile mon_programme.py'
-Note : Si vous avez oublié d’ajouter une librairie, il suffit de l’installer puis de relancer la commande pyinstaller --onefile.
+- 'pyinstaller --onefile mon_programme.py'
+- Note : Si vous avez oublié d’ajouter une librairie, il suffit de l’installer puis de relancer la commande pyinstaller --onefile.
