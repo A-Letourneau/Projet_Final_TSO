@@ -2,19 +2,29 @@
 Auteur : Louis Boisvert & Alexis Létourneau
 Date : 2025-03-11
 Environnement : Python, Thonny, raspberry pi 4, ESP32-C3-WROOM-02 Devkit, 
-Brief : Une énigme qui consiste a connecter des bornes bananes numéroté ensemble pour les additionner, soustraire, multiplier ou diviser entre les deux numéros.
-Plusieurs équations sont mis à la suite jusqu'à que l'user les complétent tous, ce qui met self.puzzleSolved à True.
-Pour faire la liste d'équation, il faut remplir une liste un les quatres mathématiqe suivant : ["+","-","x","/"]
-Exemple de liste d'équation : ["+","-","x","/"], ["+","+","+","+","+","+"], ["/"]
+Brief : Cette Class représentes l'énigmes des fils bananes que l'on a renommé à Croco
+par simplicité.
+
+- la fonction "Croco_Json" appel le fichier I2c_Comm ce qui permet de récupérer
+les informations du esp32 servant à l'énigme Croco
+- la fonction "Make_WinCroco" crée l'interface utilisateur
+- la fonction "Start_WinCroco" est la portion de code qui va gérer l'énigme grâce au
+information récupérer par "Croco_Json".
+
+Commentaire : la vérification de la réussite des utilisateur pourrait être dans
+sa propre fonction
+(Louis)
 
 """
 
 #importation des library standard
+from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
 import PySimpleGUI as sg            #Pour l'interface graphique
+import json                         #Pour la manipulation des json
 from random import randint          #Pour la generation de nombre aleatoire pour les equations
 # library pour les strips de dels
 import time
-from rpi_ws281x import Color
+from rpi_ws281x import PixelStrip, Color
 
 #importation des library créer
 import I2c_Comm
@@ -45,7 +55,9 @@ class Croco:
         self.firstEquation = True
         self.randomAnswer = 0 #La reponse aleatoire
         self.goodAnswer = 0 #Nombre de bonnes reponses
-    
+        
+        self.minDEL = 54
+        self.maxDEL = 71   
 
     #Crée un graph pour contenir un rond de couleur
     def DrawRGB(self, key=None, radius=150):
@@ -82,28 +94,15 @@ class Croco:
    
     #crée l'interface utilisateur pour l'énigme Croco 
     def Make_WinCroco(self):
-        if self.DEBUG:
-            layout_Croco =[
-                        [sg.VPush()],
-                        [sg.Push(), sg.Text(f"Nombre d'équation restante 0/{len(self.LIST_OPERATIVE)}", size=(40,1), key = 'titleCroco', font='Algerian 20', justification = "center"), sg.Push()],
-                        [sg.Push(), sg.Text("Veuillez connecter les bornes bananes avec le fil pour compléter l'équation", size=(40,1), key = 'titleCroco', font='Algerian 20', justification = "center"), sg.Push()],
-                        [sg.Push(), sg.Text("", size=(10,1), key="equation", font='Algerian 50', justification = "center", ), sg.Push()],
-                        [sg.Push(), self.DrawRGB('0'), self.DrawRGB('1'), self.DrawRGB('2'), self.DrawRGB('3'), sg.Push()],
-                        [sg.Push(), self.DrawRGB('4'), self.DrawRGB('5'), self.DrawRGB('6'), self.DrawRGB('7'), sg.Push()],          
-                        [sg.Push(), sg.Button('Exit'), sg.Push()],
-                        [sg.VPush()]
-                      ]
-        else:
-            layout_Croco =[
-                        [sg.VPush()],
-                        [sg.Push(), sg.Text(f"Nombre d'équation restante 0/{len(self.LIST_OPERATIVE)}", size=(40,1), key = 'titleCroco', font='Algerian 20', justification = "center"), sg.Push()],
-                        [sg.Push(), sg.Text("Veuillez connecter les bornes bananes avec le fil pour compléter l'équation", size=(40,1), key = 'titleCroco', font='Algerian 20', justification = "center"), sg.Push()],
-                        [sg.Push(), sg.Text("", size=(10,1), key="equation", font='Algerian 50', justification = "center", ), sg.Push()],
-                        [sg.Push(), self.DrawRGB('0'), self.DrawRGB('1'), self.DrawRGB('2'), self.DrawRGB('3'), sg.Push()],
-                        [sg.Push(), self.DrawRGB('4'), self.DrawRGB('5'), self.DrawRGB('6'), self.DrawRGB('7'), sg.Push()],          
-#                         [sg.Push(), sg.Button('Exit'), sg.Push()],
-                        [sg.VPush()]
-                      ]
+        layout_Croco =[
+                    [sg.VPush()],
+                    [sg.Push(), sg.Text(f"Nombre d'équation restante 0/{len(self.LIST_OPERATIVE)}", size=(40,1), key = 'titleCroco', font='Algerian 20', justification = "center"), sg.Push()],
+                    [sg.Push(), sg.Text("Veuillez connecter les bornes bananes\navec le fil pour compléter l'équation", size=(40,2), key = 'titleCroco', font='Algerian 20', justification = "center"), sg.Push()],
+                    [sg.Push(), sg.Text("", size=(10,1), key="equation", font='Algerian 50', justification = "center", ), sg.Push()],
+                    [sg.Push(), self.DrawRGB('0'), self.DrawRGB('1'), self.DrawRGB('2'), self.DrawRGB('3'), sg.Push()],
+                    [sg.Push(), self.DrawRGB('4'), self.DrawRGB('5'), self.DrawRGB('6'), self.DrawRGB('7'), sg.Push()],          
+                    [sg.VPush()]
+                  ]
         return sg.Window('Fenêtre énigme equation', layout_Croco, default_element_size=(12, 1), auto_size_text=False, finalize=True, keep_on_top=True)
 
 
@@ -153,7 +152,9 @@ class Croco:
                             self.SetRGB(self.window_Croco, str(curCroco), "red")
                             
                 curCroco = curCroco + 1
-
+            if firstNum == 0 and secondNum == 0:
+                firstNum = "?"
+                secondNum = "?"
             if self.LIST_OPERATIVE[self.goodAnswer] != '/':
                 self.window_Croco["equation"].update(f"{self.randomAnswer}={firstNum}{self.LIST_OPERATIVE[self.goodAnswer]}{secondNum}")
             else:
@@ -179,9 +180,7 @@ class Croco:
                     self.firstEquation = False
 
                 if self.goodAnswer == len(self.LIST_OPERATIVE): #Lorsque l'user a finit les questions
-#                    moduleDEL.colorWipe(self.strip, Color(0, 255, 0), 0)  # change la couleur des strips à vert
-                    moduleDEL.colorInBetween(self.strip, Color(0, 255, 0),54,71)  # Red wipe
-                    sg.popup_no_titlebar('REUSSI', auto_close_duration = 1, auto_close = True)
+                    moduleDEL.colorInBetween(self.strip, Color(0, 255, 0), self.minDEL, self.maxDEL)  # Red wipe
                     if self.REPEAT_PUZZLE:
                         self.goodAnswer = 0
                         self.firstEquation = True

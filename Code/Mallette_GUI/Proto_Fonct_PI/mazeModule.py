@@ -1,15 +1,5 @@
-"""
-Auteur : Louis Boisvert & Alexis Létourneau
-Date : 2025-03-12
-Environnement : Python, Thonny, raspberry pi 4, ESP32-C3-WROOM-02 Devkit, 
-Brief : Une énigme qui affiche un labyrinthe avec des portes ouvertes ou fermées.
-Ces portes sont réliées avec les interrupteurs connecté à un esp32. Quand un interrupteur est actionné, une porte se ferme et une autre s'ouvre.
-L'user se déplace avec les touches wasd.
-
-Note: la manière que ce programme lit les inputs du clavier est avec son propre window.read(), il faut s'assurer que ce soit le seule window.read() ou il détecte les input la moitié du temps.
-Il faut aussi ajouter return_keyboard_events=True dans la création de la fenêtre.
-"""
 import PySimpleGUI as sg
+from time import sleep
 from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
 import json                         #Pour la manipulation des json
 from rpi_ws281x import PixelStrip, Color
@@ -52,6 +42,8 @@ class mazeClass:
         self.puzzleSolved = False
         self.window_maze = None
 
+        self.minDEL = 36
+        self.maxDEL = 53
 
     """
     Brief : Cree une fenetre qui contient le labyrinthe
@@ -60,22 +52,13 @@ class mazeClass:
     
     """
     def make_winMaze(self):
-        if self.DEBUG:
-            layout = [
-                    [sg.VPush()],
-                    [sg.Push(), sg.Text('Résoudre le labyrinthe avec les touches du clavier', key="title_Maze", font='Algerian 20', justification = "center"),sg.Push(),],
-                    [sg.Push(),sg.Text("", size=(25,25), background_color='white', text_color='black', key="mazeTxtBox", font="FreeMono 20"),sg.Push()],
-                    [sg.Push(), sg.Button("Exit"), sg.Text(key="input"), sg.Push(),],
-                    [sg.VPush()]
-                ]
-        else:
-            layout = [
-                    [sg.VPush()],
-                    [sg.Push(), sg.Text('Résoudre le labyrinthe avec les touches du clavier', key="title_Maze", font='Algerian 20', justification = "center"),sg.Push(),],
-                    [sg.Push(),sg.Text("", size=(25,25), background_color='white', text_color='black', key="mazeTxtBox", font="FreeMono 20"),sg.Push()],
-                    [sg.Push(), sg.Text(key="input"), sg.Push(),],
-                    [sg.VPush()]
-                ]
+        layout = [
+                [sg.VPush()],
+                [sg.Push(), sg.Text('Résoudre le labyrinthe\navec les touches du clavier et les interrupteurs', size=(50,2), key="title_Maze", font='Algerian 20', justification = "center"),sg.Push(),],
+                [sg.Push(),sg.Text("", size=(25,25), background_color='white', text_color='black', key="mazeTxtBox", font="FreeMono 20"),sg.Push()],
+                [sg.Push(), sg.Text(key="input"), sg.Push(),],
+                [sg.VPush()]
+            ]
         return sg.Window('Une fenetre de labyrinthe', layout, return_keyboard_events=True, use_default_focus=False)
 
     """
@@ -284,7 +267,8 @@ class mazeClass:
         if (self.playerx, self.playery) == (self.exitx, self.exity):
             self.displayMaze(self.maze)
             print('You have reached the exit! Good job!')
-            moduleDEL.colorInBetween(self.strip, Color(0, 255, 0),36,53)  # Red wipe
+            moduleDEL.colorInBetween(self.strip, Color(0, 255, 0),self.minDEL,self.maxDEL)  # Red wipe
+            moduleDEL.colorInBetween(self.strip, Color(0, 255, 0),18,35)
             self.puzzleSolved = True
             
 

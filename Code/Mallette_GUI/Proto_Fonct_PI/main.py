@@ -7,12 +7,10 @@ Brief : Programme qui affiche les données reçu par la communication i2c de 3 e
 Ce programme communique en i2c en mode Main avec les 3 esp32 en mode Sub. 
 Les 3 esp32 ont des objets interactifs (potentiomètres, boutons, interrupteurs) différents, 
 Celui nommé SW contient quatre boutons
-Celui nommé POT contient 3 potentiomètres.
-Celui nomme Croco est 8 entrees qui indique si deux des entrees sont interconnecte.
+Celui nommé POT contient 3 potentiomètres et 2 interrupteurs.
+Celui nomme Croco est 8 entrees qui transmet si deux des entrees sont interconnecte.
 Les lectures de ces objets sont transmises par JSON à la demande du Main à toutes les 50ms
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 
 Les 3 esp32 ont une interface chaque, qui contient des "widget" qui représentent leurs états.
 L'interface POT utilise deux images d'interrupteurs pointant vers la gauche ou la droite fait en base64, ce qui permet d'avoir le fichier de l'image dans le fichier py directement. 
@@ -21,45 +19,19 @@ L'interface SW utilise des images d'interrupteurs pour démontrer l'état des in
 L'interface Croco utilise des cercles de couleurs pour montrer qu'elle entrees du esp32 est interconnectee.
 Quand on ferme une des fenêtres, les deux se ferme.
 
-=======
-=======
->>>>>>> Stashed changes
-Le programme contient 4 fenetre, qui contient des énigmes qui intégrent les objets interactifs.
-Les fenêtres sont : 
-Croco
-POT
-SW
-Maze
-Pour plus d'information sur leurs fonctionnements, veuillez lire les brief des autres modules
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 """
-
 #importation des library standard
+from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
 import PySimpleGUI as sg            #Pour l'interface graphique
 import board
-from digitalio import DigitalInOut, Direction
+from digitalio import DigitalInOut, Direction, Pull
 import time
-from rpi_ws281x import Color
+from rpi_ws281x import PixelStrip, Color
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 #importation des library créer
 import moduleDEL    #import Del library obsolète, car elle cause des erreurs lorsqu'il y a plusieurs bandes de dels adressables
-=======
-=======
->>>>>>> Stashed changes
-#importation des library créé
-import moduleDEL    #import Del library obselète, car elle cause des erreurs lorsqu'il y a plusieurs bandes de dels adressables
-
-#Importation des librairie custom
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 from Class_Croco import Croco
+import I2c_Comm
 from Class_SW import SW_MODULE
 from Class_POT import POT
 from mazeModule import mazeClass

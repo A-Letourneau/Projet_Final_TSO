@@ -21,16 +21,18 @@ Quand on ferme une des fenêtres, les deux se ferme.
 
 """
 #importation des library standard
+from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
 import PySimpleGUI as sg            #Pour l'interface graphique
 import board
-from digitalio import DigitalInOut, Direction
+from digitalio import DigitalInOut, Direction, Pull
 import time
-from rpi_ws281x import Color
+from rpi_ws281x import PixelStrip, Color
+import math
 
 #importation des library créer
 import moduleDEL    #import Del library obselète, car elle cause des erreurs lorsqu'il y a plusieurs bandes de dels adressables
 from Class_Croco import Croco
-
+import I2c_Comm
 from Class_SW import SW_MODULE
 from Class_POT import POT
 from mazeModule import mazeClass
@@ -78,6 +80,11 @@ binAnswer = "00101010"
 
 curEnigme = "SW"
 
+waveProgress = 150
+dirLED = 1
+
+startTime = time.time()
+
 # LED setup.
 led = DigitalInOut(board.D26)
 led.direction = Direction.OUTPUT
@@ -95,7 +102,6 @@ resetSwitch.direction = Direction.OUTPUT
 resetPot = DigitalInOut(board.D19)
 resetPot.direction = Direction.OUTPUT
 
-
 #Reset des esp32 pour init la communication
 resetCroco.value = False
 resetSwitch.value = False
@@ -105,9 +111,7 @@ resetCroco.value = True
 resetSwitch.value = True
 resetPot.value = True
 
-
 #-------------------------------------fonction pour la library Del-------------------------------------#
-
 #fait des objets pour modifier les dels.    (le num de la pin, le nombre de dels, luminosité si c'est GPIO13 ou 19)
 strip1 = moduleDEL.initStrip(pinStrip1, num_pixels, lumin, False)
 #strip2 = moduleDEL.initStrip(pinStrip2, num_pixels, lumin, True)
@@ -125,7 +129,7 @@ if DEL_ACTIVE:
 #fait des objets de classes des énigmes
 my_Croco = Croco(SLAVE_ADDRESS_Croco, LIST_OPERATIVE, DEBUG, strip1, REPEAT_PUZZLE)
 my_SW = SW_MODULE(SLAVE_ADDRESS_SW, DEBUG, strip1, binAnswer)
-mazeEnigme = mazeClass(mazeFile=open(f"/home/beaulibe/Desktop/Mallette_GUI/Proto_Fonct_PI/maze1.txt"), nbGate=4, SLAVE_ADDRESS_MAZE=SLAVE_ADDRESS_SW, DEBUG=DEBUG, DEL_ACTIVE=DEL_ACTIVE, strip=strip1)
+mazeEnigme = mazeClass(mazeFile=open(f"/home/beaulibe/Desktop/Mallette_GUI/Prototype_Fonctionnel_sur_PI/maze1.txt"), nbGate=4, SLAVE_ADDRESS_MAZE=SLAVE_ADDRESS_SW, DEBUG=DEBUG, DEL_ACTIVE=DEL_ACTIVE, strip=strip1)
 my_POT = POT(SLAVE_ADDRESS_POT, DEBUG, strip1, GOAL_COR_ANSWER)
 buttonEnigme = BTN_CLASS(switch, led, DEBUG, strip1)
 
@@ -133,16 +137,6 @@ buttonEnigme = BTN_CLASS(switch, led, DEBUG, strip1)
 
 if DEL_ACTIVE:
       moduleDEL.colorWipe(strip1, Color(255, 0, 0), 0)  # Red wipe
-#     moduleDEL.colorWipe(strip2, Color(0, 255, 0), 0)  # Red wipe
-#     moduleDEL.colorWipe(strip3, Color(0, 0, 255), 0)  # Red wipe
-#     moduleDEL.colorWipe(strip4, Color(255, 255, 255), 0)  # Red wipe
-
-#     moduleDEL.colorInBetween(strip1, Color(255, 0, 0),0,17)  # Red wipe
-#     moduleDEL.colorInBetween(strip1, Color(0, 255, 0),18,35)  # Red wipe
-#     moduleDEL.colorInBetween(strip1, Color(0, 0, 255),36,53)  # Red wipe
-#     moduleDEL.colorInBetween(strip1, Color(255, 0, 255),54,71)  # Red wipe
-    
-#     moduleDEL.rainbow(strip1,1)
 
 
 #Boucle principale
@@ -153,32 +147,31 @@ while True:
     if curEnigme == "SW":
         if not my_SW.window_SW:
             my_SW.window_SW = my_SW.Make_WinSW()
-            moduleDEL.colorInBetween(strip1, Color(255, 0, 255),18,35)  # Red wipe
-            my_SW.window_SW.maximize()
+            moduleDEL.colorInBetween(strip1, Color(255, 0, 255), my_SW.minDEL, my_SW.maxDEL)  # Red wipe
+#            my_SW.window_SW.maximize()
             
     if curEnigme == "POT":
         if not my_POT.window_POT:
             my_POT.window_POT = my_POT.Make_WinPOT()
-            moduleDEL.colorInBetween(strip1, Color(255, 0, 255),0,17)  # Red wipe
+            moduleDEL.colorInBetween(strip1, Color(255, 0, 255), my_POT.minDEL, my_POT.maxDEL)  # Red wipe
             my_POT.window_POT.maximize()
     
     if curEnigme == "Croco":
         if not my_Croco.window_Croco:
             my_Croco.window_Croco = my_Croco.Make_WinCroco()
-            moduleDEL.colorInBetween(strip1, Color(255, 0, 255),54,71)  # Red wipe
+            moduleDEL.colorInBetween(strip1, Color(255, 0, 255), my_Croco.minDEL, my_Croco.maxDEL)  # Red wipe
             my_Croco.window_Croco.maximize()
             
     if curEnigme == "Labyrinthe":
         if not mazeEnigme.window_maze:
             mazeEnigme.startMaze()
-            moduleDEL.colorInBetween(strip1, Color(255, 0, 255),36,53)  # Red wipe
-            moduleDEL.colorInBetween(strip1, Color(255, 0, 255),18,35)  # Red wipe
+            moduleDEL.colorInBetween(strip1, Color(255, 0, 255), mazeEnigme.minDEL, mazeEnigme.maxDEL)  # Red wipe
+            moduleDEL.colorInBetween(strip1, Color(255, 0, 255), my_SW.minDEL, my_SW.maxDEL)
             mazeEnigme.window_maze.maximize()
             
     if curEnigme == "Bouton":
         if not buttonEnigme.window:
             buttonEnigme.window = buttonEnigme.Make_WinBTN()
-            moduleDEL.colorInBetween(strip1, Color(0, 255, 0),18,35)  # Red wipe
             buttonEnigme.window.maximize()   
             
     #-------------Lecture des boutons des fenetres--------------#
@@ -202,24 +195,46 @@ while True:
             elif window == buttonEnigme.window:
                 buttonEnigme.window = None
 
+       
+    if dirLED:
+        if waveProgress >= 250:
+            dirLED = 0
+        else:
+            waveProgress += 20
             
+    if not dirLED:
+        if waveProgress <= 50:
+            dirLED = 1
+        else:
+            waveProgress -= 20
+    
+    print(waveProgress, dirLED)
+        
+    
     #Essaye de lire les json des esp32 et met un message d'erreur s'il n'y parvient pas
-    if my_SW.window_SW: 
+    if my_SW.window_SW:
+        moduleDEL.colorInBetween(strip1, Color(int(waveProgress), 0, int(waveProgress)), my_SW.minDEL, my_SW.maxDEL)
         my_SW.msg_SW = my_SW.SW_Json()
         if my_SW.puzzleSolved == True:
+            my_SW.window_SW.read(timeout = 0)
+            time.sleep(3)
             my_SW.window_SW.close()
             my_SW.window_SW = None
             curEnigme = "Croco"
 
     if my_Croco.window_Croco:
+        moduleDEL.colorInBetween(strip1, Color(int(waveProgress), 0, int(waveProgress)), my_Croco.minDEL, my_Croco.maxDEL)
         my_Croco.msg_Croco = my_Croco.Croco_Json()
         my_Croco.doWinCroco()
         if my_Croco.puzzleSolved == True:
+            my_Croco.window_Croco.read(timeout = 0)
+            time.sleep(3)
             my_Croco.window_Croco.close()
             my_Croco.window_Croco = None
             curEnigme = "POT"
         
-    if  my_POT.window_POT:    
+    if  my_POT.window_POT:
+        moduleDEL.colorInBetween(strip1, Color(int(waveProgress), 0, int(waveProgress)), my_POT.minDEL, my_POT.maxDEL)
         my_POT.msg_POT = my_POT.POT_Json()
         my_POT.doWinPot()
         if my_POT.puzzleSolved == True:
@@ -228,19 +243,24 @@ while True:
             curEnigme = "Labyrinthe"
     
     if mazeEnigme.window_maze:
+        moduleDEL.colorInBetween(strip1, Color(int(waveProgress), 0, int(waveProgress)), mazeEnigme.minDEL, mazeEnigme.maxDEL)
         mazeEnigme.doMaze()
         if mazeEnigme.puzzleSolved == True:
+            mazeEnigme.window_maze.read(timeout = 0)
+            time.sleep(3)
             mazeEnigme.window_maze.close()
             mazeEnigme.window_maze = None
             curEnigme = "Bouton"
-            
+                  
     if buttonEnigme.window:
         buttonEnigme.doButton()
         if buttonEnigme.puzzleSolved == True:
+            buttonEnigme.window.read(timeout = 0)
+            time.sleep(3)
             buttonEnigme.window.close()
             buttonEnigme.window = None
             curEnigme = "Done"
-    
+
     #débute les énigmes si leur fenêtre est présentement ouverte
     # et va changer les couleurs des strips de dels lorsque l'utilisateur va réussir
     
@@ -252,6 +272,23 @@ if my_POT.window_POT:
     my_POT.window_POT.close()            
 if my_Croco.window_Croco: 
     my_Croco.window_Croco.close()
+
+layout = [[sg.Text("Temps final", key = "time")]
+          [sg.Image(source="/home/beaulibe/Desktop/Mallette_GUI/Prototype_Fonctionnel_sur_PI", key='trophy')],
+          ]
+
+window = sg.Window("VICTOIRE", layout)
+window.maximize()
+
+while True:
+    window["time"].update(f"Temps final : {time.time() - startTime}")
+    event, values = window.read()
+    if event == sg.WIN_CLOSED:
+        break
+    
+
+
+window.close()
 
 print("closing")
 
