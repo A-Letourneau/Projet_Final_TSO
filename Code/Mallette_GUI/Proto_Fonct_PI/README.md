@@ -59,3 +59,4 @@ Créer l'exécutable pour chacun des programmes que vous voulez compiler :
 - 'pyinstaller --onefile mon_programme.py'
 
 Note : Si vous avez oublié d’ajouter une librairie, il suffit de l’installer puis de relancer la commande pyinstaller --onefile.
+Note 2 : il est à noter qu'après que le fichier exécutable soit créer, il peut être placer à n'importe quel endroit et encore être fonctionnel. Ceci peut aider si les chemins sont trop longs.
