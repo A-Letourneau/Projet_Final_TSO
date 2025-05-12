@@ -1,6 +1,11 @@
 [Desktop Entry]
+# si il ne se passe rien lorsque vous essayez de lancer l'auto start, 
+# veuillez vérifier que les chemins sont les bons.
 Name=monautostart
-Exec =sudo /home/pi/path/to/venv/bin/python3 /home/pi/Desktop/Git/Projet_Final_TSO/Code/Mallette_GUI/Prototype_Fonctionnel_sur_PI/main.py
+# si le fichier est en exécutable, prenez cette ligne de code:
+Exec =sudo /home/pi/Desktop/suiteEnigme
+# si le fichier n'est pas en exécutable, prenez une ligne de code comme ceci:
+# Exec =sudo /home/pi/path/to/venv/bin/python3 /home/pi/Desktop/Git/Projet_Final_TSO/Code/Mallette_GUI/Prototype_Fonctionnel_sur_PI/suiteEnigme.py
 Type=Application
 X-GNOME-Autostart-enabled=true
 
