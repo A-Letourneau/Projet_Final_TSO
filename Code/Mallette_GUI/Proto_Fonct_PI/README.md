@@ -35,16 +35,16 @@ Voici la liste des librairies custom qui faut mettre dans le même répertoire d
 - 'README.md'
 
 # Création d'un fichier exécutable
-activer votre environnement virtuel si ce n'est pas déjà fait :
+Activer votre environnement virtuel si ce n'est pas déjà fait :
 
 'source path/to/venv/bin/activate'
 
-assurez-vous que votre environnement virtuel est à jour :
+Assurez-vous que votre environnement virtuel est à jour :
 
 'sudo apt update'
 'sudo apt install python3-venv'
 
-essayez d’installer PyInstaller :
+Essayez d’installer PyInstaller :
 
 'pip install -U pyinstaller'
 
@@ -54,7 +54,8 @@ Installer les bibliothèques nécessaires :
 - 'pip install paho-mqtt'
 - 'pip install pyzmq'
 
-Créer l'exécutable : Pour chacun des programmes que vous voulez compiler :
+Créer l'exécutable pour chacun des programmes que vous voulez compiler :
 
 - 'pyinstaller --onefile mon_programme.py'
+
 Note : Si vous avez oublié d’ajouter une librairie, il suffit de l’installer puis de relancer la commande pyinstaller --onefile.
