@@ -9,10 +9,16 @@ Créer un environnement virtuel avec la commande 'python3 -m venv path/to/venv.'
 Activé l'environnement virtuel avec la commande 'source .venv/bin/activate' dans CMD
 Ajouter une librairie à l'environnement virtuel avec la commande 'python3 -m pip install XYZ' dans CMD (XYZ est la librairie désiré)
 Répéter la commande précédente avec la liste de librairie suivante :
+
 'smbus2'
-'PySimpleGUI'
+
 'rpi_ws281x'
+
 'Adafruit-Blinka'
+
+pour l'installation de la dernière version de PysimpleGUI : 'python -m pip install --upgrade --extra-index-url https://PysimpleGUI.net/install PySimpleGUI
+
+
 
 Le reste des import du main.py est des librairie de base ou des librairie fait par nous.
 Voici la liste des librairies custom qui faut mettre dans le même répertoire de main.py :
