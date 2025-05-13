@@ -16,7 +16,7 @@ Répéter la commande précédente avec la liste de librairie suivante :
 
 'Adafruit-Blinka'
 
-pour l'installation de la dernière version de PysimpleGUI : 'python -m pip install --upgrade --extra-index-url https://PysimpleGUI.net/install PySimpleGUI
+pour l'installation de la dernière version de PysimpleGUI : 'python -m pip install --upgrade --extra-index-url https://PysimpleGUI.net/install PySimpleGUI'
 
 
 
