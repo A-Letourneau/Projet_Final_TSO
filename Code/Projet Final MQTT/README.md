@@ -1,5 +1,5 @@
 # Dossier de Tests pour la communication MQTT et la sauvegarde de donnée
-
+Désuet depuis décembre 2024.
 Ce dossier contient plusieurs répertoire de test et un répertoire du prototype fonctionnel.
 
 # Contient
