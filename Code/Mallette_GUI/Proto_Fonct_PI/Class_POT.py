@@ -65,7 +65,13 @@ class POT:
         self.minDEL = 0
         self.maxDEL = 17
         
-    
+    def resetPuzzle(self):
+        self.POTerror = False
+        self.correctSin = True
+        self.firstTime = True
+        self.curCorAnswer = 0
+        self.puzzleSolved = False
+        
     def scale(self, val, src, dst):
         """
         self.scale the given value from the self.scale of src to the self.scale of dst.
@@ -89,26 +95,15 @@ class POT:
     
     
     def Make_WinPOT(self):
-        if self.DEBUG:
-            layout_POT =[
-                        [sg.VPush()],
-                        [sg.Push(), sg.Text(f"Forme la fonction sine correspondante {self.curCorAnswer}/{self.GOAL_COR_ANSWER}", size=(42,1), key = 'titlePOT', font='Algerian 20', justification = "center"), sg.Push()],
-                        [sg.Push(), sg.Text("Utilise les trois potentiomètres glissants\npour ajuster l'amplitude, la période et la position en y", size=(70,2), key = 'titlePOT', font='Algerian 18', justification = "center"), sg.Push()],                        
-                        [sg.Push(), sg.Graph(canvas_size=(600, 600), graph_bottom_left=(-(self.SIZE_X+5), -(self.SIZE_Y+5)), graph_top_right=(self.SIZE_X+5, self.SIZE_Y+5), background_color='white', key='graph'), sg.Push(),],
-                        [sg.Push(), sg.Text('f(x)=a*sin(p*x)+pY', font='Algerian 18', key='equation', size=(30,1)), sg.Push()],
-                        [sg.Push(), sg.Button('Exit'), sg.Push()],
-                        [sg.VPush()]
-                    ]
-        else:
-            layout_POT =[
-                        [sg.VPush()],
-                        [sg.Push(), sg.Text(f"Forme la fonction sine correspondante {self.curCorAnswer}/{self.GOAL_COR_ANSWER}", size=(42,1), key = 'titlePOT', font='Algerian 20', justification = "center"), sg.Push()],
-                        [sg.Push(), sg.Text("Utilise les trois potentiomètres glissants\npour ajuster l'amplitude, la période et la position en y", size=(70,2), key = 'titlePOT', font='Algerian 18', justification = "center"), sg.Push()],                        
-                        [sg.Push(), sg.Graph(canvas_size=(600, 600), graph_bottom_left=(-(self.SIZE_X+5), -(self.SIZE_Y+5)), graph_top_right=(self.SIZE_X+5, self.SIZE_Y+5), background_color='white', key='graph'), sg.Push(),],
-                        [sg.Push(), sg.Text('f(x)=a*sin(p*x)+pY', font='Algerian 18', key='equation', size=(30,1)), sg.Push()],
-#                         [sg.Push(), sg.Button('Exit'), sg.Push()],
-                        [sg.VPush()]
-                    ]
+        layout_POT =[
+                    [sg.VPush()],
+                    [sg.Push(), sg.Text("",  key = "countDown", size=(17,1), font='Algerian 15', justification = "center"), sg.Push()],
+                    [sg.Push(), sg.Text(f"Forme la fonction sine correspondante {self.curCorAnswer}/{self.GOAL_COR_ANSWER}", size=(42,1), key = 'titlePOT', font='Algerian 20', justification = "center"), sg.Push()],
+                    [sg.Push(), sg.Text("Utilise les trois potentiomètres glissants\npour ajuster l'amplitude, la période et la position en y", size=(70,2), key = 'titlePOT', font='Algerian 18', justification = "center"), sg.Push()],                        
+                    [sg.Push(), sg.Graph(canvas_size=(600, 600), graph_bottom_left=(-(self.SIZE_X+5), -(self.SIZE_Y+5)), graph_top_right=(self.SIZE_X+5, self.SIZE_Y+5), background_color='white', key='graph'), sg.Push(),],
+                    [sg.Push(), sg.Text('f(x)=a*sin(p*x)+pY', font='Algerian 18', key='equation', size=(30,1)), sg.Push()],
+                    [sg.VPush()]
+                ]
         return sg.Window('POT window', layout_POT, default_element_size=(12, 1), auto_size_text=False, finalize=True, keep_on_top=True)
     
     
@@ -166,6 +161,8 @@ class POT:
                     self.curCorAnswer += 1
                     if self.GOAL_COR_ANSWER == self.curCorAnswer:
                         self.puzzleSolved = True
+                        moduleDEL.colorInBetween(self.strip, Color(0, 255, 0),self.minDEL,self.maxDEL) 
+                        sg.popup_auto_close('Énigme réussi!!', auto_close_duration=3, font='Algerian 20')
                 else:
                     self.firstTime = False
             
@@ -173,7 +170,7 @@ class POT:
                 if self.periodeGoal - self.MARGINS <= periode * 100 <= self.periodeGoal  + self.MARGINS:
                     if self.posYGoal - self.MARGINS <= posY <= self.posYGoal + self.MARGINS:
                         self.correctSin = True
-                        moduleDEL.colorInBetween(self.strip, Color(0, 255, 0),self.minDEL,self.maxDEL)  # Red wipe
+
 
             prev_x_goal = prev_y_goal = None
             for x in range(int(-self.SIZE_X),int(self.SIZE_X)):

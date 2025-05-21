@@ -57,7 +57,15 @@ class Croco:
         self.goodAnswer = 0 #Nombre de bonnes reponses
         
         self.minDEL = 54
-        self.maxDEL = 71   
+        self.maxDEL = 71
+        
+    def resetPuzzle(self):
+        self.Crocoerror = False
+        self.puzzleSolved = False
+        #Initiation du jeu d'equation
+        self.firstEquation = True
+        self.randomAnswer = 0 #La reponse aleatoire
+        self.goodAnswer = 0 #Nombre de bonnes reponses
 
     #Crée un graph pour contenir un rond de couleur
     def DrawRGB(self, key=None, radius=150):
@@ -96,6 +104,7 @@ class Croco:
     def Make_WinCroco(self):
         layout_Croco =[
                     [sg.VPush()],
+                    [sg.Push(), sg.Text("",  key = "countDown", size=(17,1), font='Algerian 15', justification = "center"), sg.Push()],
                     [sg.Push(), sg.Text(f"Nombre d'équation restante 0/{len(self.LIST_OPERATIVE)}", size=(40,1), key = 'titleCroco', font='Algerian 20', justification = "center"), sg.Push()],
                     [sg.Push(), sg.Text("Veuillez connecter les bornes bananes\navec le fil pour compléter l'équation", size=(40,2), key = 'titleCroco', font='Algerian 20', justification = "center"), sg.Push()],
                     [sg.Push(), sg.Text("", size=(10,1), key="equation", font='Algerian 50', justification = "center", ), sg.Push()],
@@ -186,7 +195,8 @@ class Croco:
                         self.firstEquation = True
                         self.window_Croco["titleCroco"].update(f"Nombre d'équation restante {self.goodAnswer}/{len(self.LIST_OPERATIVE)}")
                     else:
-                        self.puzzleSolved = True 
+                        self.puzzleSolved = True
+                        sg.popup_auto_close('Énigme réussi!!', auto_close_duration=3, font='Algerian 20')
                         
                     
                 #Tout les reponses aleatoires doivent etre different de l'ancien pour ne pas resoudre immediatement

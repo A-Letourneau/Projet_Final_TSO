@@ -54,6 +54,7 @@ class mazeClass:
     def make_winMaze(self):
         layout = [
                 [sg.VPush()],
+                [sg.Push(), sg.Text("",  key = "countDown", size=(17,1), font='Algerian 15', justification = "center"), sg.Push()],
                 [sg.Push(), sg.Text('Résoudre le labyrinthe\navec les touches du clavier et les interrupteurs', size=(50,2), key="title_Maze", font='Algerian 20', justification = "center"),sg.Push(),],
                 [sg.Push(),sg.Text("", size=(25,25), background_color='white', text_color='black', key="mazeTxtBox", font="FreeMono 20"),sg.Push()],
                 [sg.Push(), sg.Text(key="input"), sg.Push(),],
@@ -212,6 +213,9 @@ class mazeClass:
             self.window_maze = None
             self.puzzleSolved = True
             move = ''
+        elif event == "-":
+            self.playerx, self.playery = self.exitx, self.exity
+            move = ''
         elif event != "__TIMEOUT__" and event.isalpha():
             self.window_maze["input"].update(event)
             move = event.upper()
@@ -269,6 +273,7 @@ class mazeClass:
             print('You have reached the exit! Good job!')
             moduleDEL.colorInBetween(self.strip, Color(0, 255, 0),self.minDEL,self.maxDEL)  # Red wipe
             moduleDEL.colorInBetween(self.strip, Color(0, 255, 0),18,35)
+            sg.popup_quick('Énigme réussi!!', auto_close_duration=3, font='Algerian 20')
             self.puzzleSolved = True
             
 

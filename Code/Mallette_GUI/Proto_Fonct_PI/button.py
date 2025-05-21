@@ -18,7 +18,7 @@ où les intérupteurs (switch) ouvrirons ou/et fermeront des passages. (Louis)
 from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
 import PySimpleGUI as sg            #Pour l'interface graphique
 import json                         #Pour la manipulation des json
-# library pour les strips de del		pas encore utilisé
+# library pour les strips de del pas encore utilisé
 import time
 from rpi_ws281x import PixelStrip, Color
 
@@ -41,14 +41,16 @@ class BTN_CLASS:
         self.startTime = 0
         self.strip = strip
         self.flash = True
+        self.maxTime = 8
 
     # Crée l'interface des interrupteurs.       va futurement faire le labyrinthe
     def Make_WinBTN(self):
         self.startTime = int(time.time())
         layout_SW = [
                         [sg.VPush()],
+                        [sg.Push(), sg.Text("",  key = "countDown", size=(17,1), font='Algerian 15', justification = "center"), sg.Push()],
                         [sg.Push(), sg.Text("Appuyez sur le bouton, vous avez :", size=(50,1), font='Algerian 20', justification = "center") ,sg.Push()],
-                        [sg.Push(), sg.Text("", key = "countDown", size=(10,1), font='Algerian 20', justification = "center") ,sg.Push()],
+                        [sg.Push(), sg.Text("", key = "countDownBTN", size=(10,1), font='Algerian 20', justification = "center") ,sg.Push()],
                         [sg.Push(), sg.Graph(canvas_size=(self.SIZE_X, self.SIZE_Y), graph_bottom_left=(0,0), graph_top_right=(self.SIZE_X, self.SIZE_Y), key='button'), sg.Push()],
                         [sg.VPush()]
                      ]
@@ -61,11 +63,10 @@ class BTN_CLASS:
         if self.window:
             self.led.value = True
             
-            if (self.startTime - int(time.time()) +8) < 0:
-                sg.popup_no_titlebar('ÉCHEC', auto_close_duration = 3, auto_close = True)
-                self.puzzleSolved = True
+            if (self.startTime - int(time.time()) + self.maxTime) < 0:
+                self.puzzleSolved = "Fail"
             
-            self.window['countDown'].update(str((self.startTime - int(time.time()) + 8)))
+            self.window['countDownBTN'].update(str((self.startTime - int(time.time()) + 8)))
             if self.switch.value:
                 self.window['button'].draw_circle((self.SIZE_X/2, self.SIZE_Y/2), 100 , fill_color="dark red", line_color="black", line_width=10)
                 self.window['button'].draw_text( "STOP" , (self.SIZE_X/2, self.SIZE_Y/2), font=20)

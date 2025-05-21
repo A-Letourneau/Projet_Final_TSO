@@ -18,7 +18,7 @@ où les intérupteurs (switch) ouvrirons ou/et fermeront des passages. (Louis)
 from smbus2 import SMBus, i2c_msg   #Pour la communication i2c
 import PySimpleGUI as sg            #Pour l'interface graphique
 import json                         #Pour la manipulation des json
-# library pour les strips de del		pas encore utilisé
+# library pour les strips de del pas encore utilisé
 import time
 from rpi_ws281x import PixelStrip, Color
 
@@ -55,30 +55,17 @@ class SW_MODULE:
 
     # Crée l'interface des interrupteurs.       va futurement faire le labyrinthe
     def Make_WinSW(self):
-        if self.DEBUG:
-            layout_SW = [
-                        [sg.VPush()],
-                        [sg.Push(), sg.Text("Veuillez représenter le nombre 42 en binaire",  key = "titleSW", size=(50,1), font='Algerian 20', justification = "center"), sg.Push()],
-                        [sg.Push(), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw1"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw2"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw3"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw4"), sg.Push()],
-                        [sg.Push(), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw5"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw6"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw7"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw8"), sg.Push()],
-                        [sg.Push(), sg.Text(key="binaryNb", font='Algerian 20', justification = "center", size=(30,1)), sg.Push()],
-                        [sg.Push(), sg.Text(key="decimalNb", font='Algerian 20', justification = "center", size=(30,1)), sg.Push()],                        
-                        [sg.Push(), sg.Text(key="hexNb", font='Algerian 20', justification = "center", size=(30,1)), sg.Push()],                        
-                        [sg.Push(),sg.Button('Exit'), sg.Push()],
-                        [sg.VPush()]
-                     ]
-        else:
-            layout_SW = [
-                        [sg.VPush()],
-                        [sg.Push(), sg.Text("Veuillez représenter le nombre 42 en binaire",  key = "titleSW", size=(50,1), font='Algerian 20', justification = "center"), sg.Push()],
-                        [sg.Push(), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw1"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw2"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw3"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw4"), sg.Push()],
-                        [sg.Push(), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw5"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw6"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw7"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw8"), sg.Push()],
-                        [sg.Push(), sg.Text(key="binaryNb", font='Algerian 20', justification = "center", size=(30,1)), sg.Push()],
-                        [sg.Push(), sg.Text(key="decimalNb", font='Algerian 20', justification = "center", size=(30,1)), sg.Push()],                        
-                        [sg.Push(), sg.Text(key="hexNb", font='Algerian 20', justification = "center", size=(30,1)), sg.Push()],                        
-#                         [sg.Push(),sg.Button('Exit'), sg.Push()],
-                        [sg.VPush()]
-                     ]
+        layout_SW = [
+                    [sg.VPush()],
+                    [sg.Push(), sg.Text("",  key = "countDown", size=(17,1), font='Algerian 25', justification = "center"), sg.Push()],
+                    [sg.Push(), sg.Text("Veuillez représenter le nombre 42 en binaire",  key = "titleSW", size=(50,1), font='Algerian 20', justification = "center"), sg.Push()],
+                    [sg.Push(), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw1"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw2"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw3"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw4"), sg.Push()],
+                    [sg.Push(), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw5"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw6"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw7"), sg.Image(source=self.TOGGLE_SW_OFF, key="Sw8"), sg.Push()],
+                    [sg.Push(), sg.Text(key="binaryNb", font='Algerian 20', justification = "center", size=(30,1)), sg.Push()],
+                    [sg.Push(), sg.Text(key="decimalNb", font='Algerian 20', justification = "center", size=(30,1)), sg.Push()],                        
+                    [sg.Push(), sg.Text(key="hexNb", font='Algerian 20', justification = "center", size=(30,1)), sg.Push()],                        
+                    [sg.VPush()]
+                    ]
 
         return sg.Window('Fenetre interrupteurs', layout_SW, default_element_size=(12, 1), auto_size_text=False, no_titlebar = True, finalize=True)
         
@@ -129,7 +116,9 @@ class SW_MODULE:
                 
                 if userGuess == self.answer:
                     self.puzzleSolved = True
-                    moduleDEL.colorInBetween(self.strip, Color(0, 255, 0),self.minDEL,self.maxDEL)  # Red wipe
+                    moduleDEL.colorInBetween(self.strip, Color(0, 255, 0),self.minDEL,self.maxDEL) 
+                    sg.popup_quick('Énigme réussi!!', auto_close_duration=3, font='Algerian 20')
+
                     
                         
 
