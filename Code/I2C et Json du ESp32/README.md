@@ -6,8 +6,6 @@ Les programmes de CODE_ESP32_POT, CODE_ESP32_SW et CODE_ESP32_CROCO permet d’e
 Le maître utilisé dans notre projet est un **Raspberry Pi 4**.  
 Les sub (esclaves) utilisés dans notre projet est le **esp32 c3 devkit 02**
 
-'esp32 protoboard' est une archive de l'ancien planche d'essai avec les anciens objets interactifs.
-
 ## Configuration d’un Nouveau Module d’Énigme avec un ESP32  
 
 Pour ajouter un nouveau module, suivez ces étapes :  
