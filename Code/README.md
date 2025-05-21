@@ -15,14 +15,6 @@ Ce dossier contient :
 
 ---
 
-## 📂 Projet Final MQTT  
-Ce dossier contient :  
-- Les bases de données SQLite utilisées dans le projet.  
-- Les codes Python responsables de la gestion de la réception des données via MQTT provenant du raspberry PI.  
-Note : Même si le MQTT est disponible, nous avons décidé de ne pas l'utiliser.
-
----
-
 ## 📂 Clavier esp32
 Ce dossier contient :  
 - Le code "main.py" qui va dans un clavier esp32 qui utilise la librairie kmk_firmware .  
