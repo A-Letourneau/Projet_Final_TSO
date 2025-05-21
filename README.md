@@ -14,8 +14,7 @@ et les matières vues en classe. Explorez une mallette remplit de mystère et d�
 ---
 
 ## 🛠️ Technologies utilisées
-- **Backend** : [Python3, MQTT, C++]
-- **Base de données** : [SQLite]
+- **Backend** : [Python3, C++]
 - **Interface utilisateur** : Design intuitif avec [SimpleGUI]
 
 ---
